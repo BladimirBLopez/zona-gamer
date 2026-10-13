@@ -1,0 +1,85 @@
+'use client';
+import { useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { X, MessageCircle } from 'lucide-react';
+import { fmt, waLink, orderMsg, stockInfo } from '../lib/utils';
+
+export default function ProductModal({ p, onClose }) {
+  useEffect(() => {
+    if (!p) return;
+    const onKey = (e) => e.key === 'Escape' && onClose();
+    document.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [p, onClose]);
+
+  return (
+    <AnimatePresence>
+      {p ? (
+        <motion.div
+          key="backdrop"
+          className="fixed inset-0 z-[60] flex items-end justify-center bg-black/70 backdrop-blur-sm sm:items-center sm:p-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+        >
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label={p.name}
+            onClick={(e) => e.stopPropagation()}
+            initial={{ y: 60, opacity: 0, scale: 0.98 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: 60, opacity: 0 }}
+            transition={{ type: 'spring', damping: 26, stiffness: 300 }}
+            className="relative w-full max-w-lg overflow-hidden rounded-t-3xl border border-white/10 bg-[#0b1322] sm:rounded-3xl"
+          >
+            <div className="relative flex h-48 items-center justify-center bg-gradient-to-br from-accent/30 via-card to-neon/20 text-8xl sm:h-60">
+              {p.image ? <img src={p.image} alt={p.name} className="h-full w-full object-cover" /> : p.emoji}
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label="Cerrar"
+                className="absolute right-3 top-3 rounded-full bg-black/50 p-2 backdrop-blur transition hover:bg-black/70"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="p-5" style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}>
+              <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
+                {p.badge ? <span className="rounded-full bg-fuchsia-500 px-2.5 py-0.5 text-white">{p.badge}</span> : null}
+                <span className={`rounded-full px-2.5 py-0.5 ${stockInfo(p.stock).cls}`}>{stockInfo(p.stock).label}</span>
+                <span className="text-gray-500">{p.category}</span>
+              </div>
+              <h3 className="mt-3 font-display text-xl font-bold">{p.name}</h3>
+              <div className="mt-2 flex items-baseline gap-2">
+                <span className="text-2xl font-extrabold text-neon">Bs {fmt(p.price)}</span>
+                {p.oldPrice ? <span className="text-sm text-gray-500 line-through">Bs {fmt(p.oldPrice)}</span> : null}
+              </div>
+              {p.description ? <p className="mt-3 text-sm leading-relaxed text-gray-400">{p.description}</p> : null}
+
+              {p.stock > 0 ? (
+                <a
+                  href={waLink(orderMsg(p))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-5 flex items-center justify-center gap-2 rounded-xl bg-emerald-500 py-3 font-bold text-black transition hover:bg-emerald-400 active:scale-95"
+                >
+                  <MessageCircle size={18} /> Pedir por WhatsApp
+                </a>
+              ) : (
+                <span className="mt-5 block rounded-xl bg-white/5 py-3 text-center text-gray-500">No disponible por ahora</span>
+              )}
+              <p className="mt-3 text-center text-xs text-gray-500">El pago y la entrega se coordinan por chat.</p>
+            </div>
+          </motion.div>
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
+  );
+}

@@ -9,6 +9,10 @@ module.exports = {
         accent: '#8b5cf6',
         neon: '#22d3ee',
       },
+      fontFamily: {
+        display: ['var(--font-display)', 'system-ui', 'sans-serif'],
+        body: ['var(--font-body)', 'system-ui', 'sans-serif'],
+      },
     },
   },
   plugins: [],

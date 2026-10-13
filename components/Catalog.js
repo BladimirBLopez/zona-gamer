@@ -1,50 +1,84 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import { Search, SearchX } from 'lucide-react';
 import { products, categories } from '../data/products';
 import { config } from '../data/config';
+import { waLink } from '../lib/utils';
+import ProductCard from './ProductCard';
+import ProductModal from './ProductModal';
 
-function waLink(p) {
-  const msg = `Hola ${config.name} 👋 Quiero pedir: ${p.name} (Bs ${p.price}). ¿Está disponible?`;
-  return `https://wa.me/${config.whatsapp}?text=${encodeURIComponent(msg)}`;
-}
+const sorts = [
+  { id: 'default', label: 'Destacados' },
+  { id: 'asc', label: 'Menor precio' },
+  { id: 'desc', label: 'Mayor precio' },
+];
 
-function stockInfo(stock) {
-  if (stock <= 0) return { label: 'Agotado', cls: 'bg-red-500/15 text-red-300' };
-  if (stock <= 3) return { label: 'Últimas unidades', cls: 'bg-amber-500/15 text-amber-300' };
-  return { label: 'Disponible', cls: 'bg-emerald-500/15 text-emerald-300' };
-}
-
-export default function Catalog() {
-  const [q, setQ] = useState('');
-  const [cat, setCat] = useState('Todos');
+export default function Catalog({ q, setQ, cat, setCat }) {
+  const [sort, setSort] = useState('default');
+  const [open, setOpen] = useState(null);
+  const close = useCallback(() => setOpen(null), []);
 
   const list = useMemo(() => {
     const term = q.trim().toLowerCase();
-    return products.filter(
+    let r = products.filter(
       (p) => (cat === 'Todos' || p.category === cat) && p.name.toLowerCase().includes(term)
     );
-  }, [q, cat]);
+    if (sort === 'asc') r = [...r].sort((a, b) => a.price - b.price);
+    else if (sort === 'desc') r = [...r].sort((a, b) => b.price - a.price);
+    else r = [...r].sort((a, b) => (b.stock > 0) - (a.stock > 0));
+    return r;
+  }, [q, cat, sort]);
+
+  const reset = () => {
+    setQ('');
+    setCat('Todos');
+  };
 
   return (
-    <section id="catalogo" className="mx-auto max-w-6xl px-4 py-14">
-      <h2 className="text-2xl font-bold sm:text-3xl">Catálogo</h2>
-      <p className="mt-1 text-sm text-gray-400">Elige tu producto y pídelo por WhatsApp.</p>
+    <section id="catalogo" className="mx-auto max-w-7xl scroll-mt-28 px-4 py-12">
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-neon">Catálogo</p>
+          <h2 className="mt-1 font-display text-3xl font-bold sm:text-4xl">Elige y pide por WhatsApp</h2>
+        </div>
+        <p className="text-sm text-gray-500">
+          {list.length} {list.length === 1 ? 'producto' : 'productos'}
+        </p>
+      </div>
 
-      <input
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder="Buscar producto..."
-        className="mt-5 w-full rounded-xl border border-white/10 bg-card px-4 py-3 text-sm outline-none focus:border-accent"
-      />
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+        <div className="glass flex flex-1 items-center gap-2 rounded-xl px-3">
+          <Search size={18} className="shrink-0 text-gray-400" />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Buscar producto..."
+            className="min-w-0 flex-1 bg-transparent py-3 text-sm outline-none placeholder:text-gray-500"
+          />
+        </div>
+        <select
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+          aria-label="Ordenar"
+          className="glass rounded-xl px-3 py-3 text-sm outline-none"
+        >
+          {sorts.map((s) => (
+            <option key={s.id} value={s.id} className="bg-[#0d1626]">
+              {s.label}
+            </option>
+          ))}
+        </select>
+      </div>
 
-      <div className="mt-4 flex gap-2 overflow-x-auto pb-2">
+      <div className="no-scrollbar mt-4 flex gap-2 overflow-x-auto pb-2">
         {categories.map((c) => (
           <button
             key={c}
+            type="button"
             onClick={() => setCat(c)}
             className={`whitespace-nowrap rounded-full border px-4 py-1.5 text-sm transition ${
               cat === c
-                ? 'border-accent bg-accent text-white'
+                ? 'border-accent bg-accent text-white shadow-lg shadow-accent/30'
                 : 'border-white/10 bg-card text-gray-300 hover:border-accent/60'
             }`}
           >
@@ -54,43 +88,33 @@ export default function Catalog() {
       </div>
 
       {list.length === 0 ? (
-        <p className="mt-10 text-center text-gray-400">No encontramos productos con esa búsqueda.</p>
+        <div className="glass mx-auto mt-10 max-w-md rounded-2xl p-8 text-center">
+          <SearchX size={36} className="mx-auto text-gray-500" />
+          <p className="mt-3 font-semibold">No encontramos ese producto</p>
+          <p className="mt-1 text-sm text-gray-500">Prueba con otra búsqueda o pregúntanos directo.</p>
+          <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-center">
+            <button type="button" onClick={reset} className="rounded-xl border border-white/10 px-4 py-2 text-sm hover:border-accent/60">
+              Limpiar filtros
+            </button>
+            <a
+              href={waLink(`Hola ${config.name} 👋 Estoy buscando: ${q || 'un producto'}`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-xl bg-emerald-500 px-4 py-2 text-sm font-bold text-black hover:bg-emerald-400"
+            >
+              Preguntar por WhatsApp
+            </a>
+          </div>
+        </div>
       ) : (
-        <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
-          {list.map((p) => {
-            const s = stockInfo(p.stock);
-            const out = p.stock <= 0;
-            return (
-              <article key={p.id} className="flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-card">
-                <div className="flex h-32 items-center justify-center bg-gradient-to-br from-accent/20 to-neon/10 text-5xl sm:h-44">
-                  {p.image ? (
-                    <img src={p.image} alt={p.name} loading="lazy" className="h-full w-full object-cover" />
-                  ) : (
-                    <span>{p.emoji}</span>
-                  )}
-                </div>
-                <div className="flex flex-1 flex-col p-3 sm:p-4">
-                  <span className={`w-fit rounded-full px-2 py-0.5 text-[11px] font-medium ${s.cls}`}>{s.label}</span>
-                  <h3 className="mt-2 text-sm font-semibold sm:text-base">{p.name}</h3>
-                  <p className="mt-1 text-lg font-bold text-neon">Bs {p.price}</p>
-                  {out ? (
-                    <span className="mt-3 rounded-xl bg-white/5 py-2 text-center text-sm text-gray-500">No disponible</span>
-                  ) : (
-                    <a
-                      href={waLink(p)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-3 rounded-xl bg-emerald-500 py-2 text-center text-sm font-semibold text-black transition hover:bg-emerald-400"
-                    >
-                      Pedir por WhatsApp
-                    </a>
-                  )}
-                </div>
-              </article>
-            );
-          })}
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+          {list.map((p, i) => (
+            <ProductCard key={p.id} p={p} i={i} onOpen={setOpen} />
+          ))}
         </div>
       )}
+
+      <ProductModal p={open} onClose={close} />
     </section>
   );
 }
