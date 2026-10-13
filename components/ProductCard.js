@@ -31,7 +31,7 @@ export default function ProductCard({ p, i, onOpen }) {
         className="relative block aspect-square w-full overflow-hidden bg-gradient-to-br from-accent/20 via-card to-neon/10 sm:aspect-[4/3]"
       >
         {p.image ? (
-          <img src={p.image} alt={p.name} loading="lazy" className="h-full w-full object-cover" />
+          <img src={p.image} alt={p.name} loading="lazy" className="h-full w-full object-contain p-3 transition duration-300 group-hover:scale-105" />
         ) : (
           <span className="flex h-full w-full items-center justify-center text-6xl transition duration-300 group-hover:scale-110 sm:text-7xl">
             {p.emoji}

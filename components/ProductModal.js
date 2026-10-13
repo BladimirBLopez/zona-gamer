@@ -39,7 +39,7 @@ export default function ProductModal({ p, onClose }) {
             className="relative max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-white/10 bg-[#0b1322] sm:rounded-3xl"
           >
             <div className="relative flex h-44 items-center justify-center bg-gradient-to-br from-accent/30 via-card to-neon/20 text-8xl sm:h-56">
-              {p.image ? <img src={p.image} alt={p.name} className="h-full w-full object-cover" /> : p.emoji}
+              {p.image ? <img src={p.image} alt={p.name} className="h-full w-full object-contain p-3" /> : p.emoji}
               <button
                 type="button"
                 onClick={onClose}

@@ -1,4 +1,4 @@
-import { Gamepad2, MessageCircle } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 import { config } from '../data/config';
 import { waLink } from '../lib/utils';
 
@@ -13,16 +13,13 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40">
       <div className="bg-gradient-to-r from-accent/25 via-neon/15 to-accent/25 py-1.5 text-center text-[11px] font-medium text-gray-200 sm:text-xs">
-        🇧🇴 {config.city} <span className="mx-1.5 text-neon">•</span> Stock real{' '}
+        🇧🇴 {config.city} <span className="mx-1.5 text-neon">•</span> Productos originales{' '}
         <span className="mx-1.5 text-neon">•</span> Atención por WhatsApp
       </div>
       <div className="border-b border-white/5 bg-bg/80 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-          <a href="#inicio" className="flex items-center gap-2.5">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-neon shadow-lg shadow-accent/30">
-              <Gamepad2 size={22} className="text-white" />
-            </span>
-            <span className="font-display text-lg font-bold tracking-tight">{config.name}</span>
+          <a href="#inicio" aria-label={config.name} className="flex items-center">
+            <img src="/logo.webp" alt={config.name} width={223} height={84} className="h-11 w-auto" />
           </a>
           <nav className="hidden items-center gap-7 md:flex">
             {links.map(([label, href]) => (

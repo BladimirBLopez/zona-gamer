@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Hero from './Hero';
+import Showcase from './Showcase';
 import Categories from './Categories';
 import Catalog from './Catalog';
 
@@ -14,6 +15,7 @@ export default function Shop() {
   return (
     <>
       <Hero q={q} setQ={setQ} onExplore={goCatalog} />
+      <Showcase />
       <Categories
         cat={cat}
         onPick={(c) => {

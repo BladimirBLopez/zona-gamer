@@ -10,7 +10,7 @@ const item = (id, name, brand, category, colors, price, stock, features, soporta
   oldPrice: 0,
   stock,
   emoji: category === 'Sillones gamer' ? '🛋️' : '🪑',
-  image: '',
+  image: `/sillas/${String(id).padStart(2, '0')}.webp`,
   badge: '',
   description: '',
   features,
