@@ -180,19 +180,43 @@ export function Support() {
             <ArrowRight size={20} className="text-emerald-400 transition group-hover:translate-x-1" />
           </a>
         </Reveal>
-        {socials.map(([name, url], i) => (
-          <Reveal key={name} delay={(i + 1) * 0.08}>
+      </div>
+    </section>
+  );
+}
+
+export function Community() {
+  const cards = [
+    { label: 'Videos y lives', name: '@zonasgamer5', cta: 'Ver nuestro TikTok', href: config.tiktok },
+    { label: 'Novedades y contacto', name: config.name, cta: 'Visitar nuestra página de Facebook', href: config.facebook },
+  ].filter((c) => c.href);
+
+  if (cards.length === 0) return null;
+
+  return (
+    <section id="comunidad" className="mx-auto max-w-4xl scroll-mt-24 px-4 py-12">
+      <Reveal>
+        <p className="text-center text-xs font-bold uppercase tracking-[0.2em] text-neon">Referencias y comunidad</p>
+        <h2 className="mt-2 text-center font-display text-3xl font-bold sm:text-4xl">Síguenos y conoce nuestra tienda</h2>
+        <p className="mx-auto mt-2 max-w-xl text-center text-sm text-gray-400">
+          En nuestras redes publicamos novedades, productos y todo lo que pasa en {config.name}.
+        </p>
+      </Reveal>
+      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        {cards.map((c, i) => (
+          <Reveal key={c.label} delay={i * 0.08} className="h-full">
             <a
-              href={url}
+              href={c.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="glass group flex items-center justify-between gap-4 rounded-2xl p-5 transition hover:border-accent/50"
+              className="glass group flex h-full items-center justify-between gap-4 rounded-2xl p-5 transition hover:border-accent/50"
             >
               <span>
-                <span className="block font-display text-lg font-semibold">{name}</span>
-                <span className="block text-sm text-gray-400">Síguenos</span>
+                <span className="block text-[11px] font-bold uppercase tracking-[0.15em] text-neon">{c.label}</span>
+                <span className="mt-1 block font-display text-lg font-semibold">{c.name}</span>
+                <span className="mt-0.5 block text-sm italic text-gray-400">{c.cta}</span>
               </span>
-              <ArrowRight size={20} className="text-neon transition group-hover:translate-x-1" />
+              <ArrowRight size={20} className="shrink-0 text-neon transition group-hover:translate-x-1" />
             </a>
           </Reveal>
         ))}

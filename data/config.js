@@ -4,6 +4,6 @@ export const config = {
   city: 'Bolivia',
   schedule: 'Lun a Sáb · 10:00 a 20:00',
   instagram: '',
-  facebook: '',
-  tiktok: '',
+  facebook: 'https://www.facebook.com/share/19YFhPD9xS/',
+  tiktok: 'https://www.tiktok.com/@zonasgamer5',
 };
