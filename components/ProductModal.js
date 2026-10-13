@@ -1,7 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { X, MessageCircle } from 'lucide-react';
+import { X, MessageCircle, Check } from 'lucide-react';
 import { fmt, waLink, orderMsg, stockInfo } from '../lib/utils';
 
 export default function ProductModal({ p, onClose }) {
@@ -36,9 +36,9 @@ export default function ProductModal({ p, onClose }) {
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 60, opacity: 0 }}
             transition={{ type: 'spring', damping: 26, stiffness: 300 }}
-            className="relative w-full max-w-lg overflow-hidden rounded-t-3xl border border-white/10 bg-[#0b1322] sm:rounded-3xl"
+            className="relative max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-white/10 bg-[#0b1322] sm:rounded-3xl"
           >
-            <div className="relative flex h-48 items-center justify-center bg-gradient-to-br from-accent/30 via-card to-neon/20 text-8xl sm:h-60">
+            <div className="relative flex h-44 items-center justify-center bg-gradient-to-br from-accent/30 via-card to-neon/20 text-8xl sm:h-56">
               {p.image ? <img src={p.image} alt={p.name} className="h-full w-full object-cover" /> : p.emoji}
               <button
                 type="button"
@@ -57,11 +57,35 @@ export default function ProductModal({ p, onClose }) {
                 <span className="text-gray-500">{p.category}</span>
               </div>
               <h3 className="mt-3 font-display text-xl font-bold">{p.name}</h3>
+              {p.colors ? <p className="mt-0.5 text-sm text-gray-400">{p.colors}</p> : null}
               <div className="mt-2 flex items-baseline gap-2">
+                {p.from ? <span className="text-sm font-semibold text-gray-400">Desde</span> : null}
                 <span className="text-2xl font-extrabold text-neon">Bs {fmt(p.price)}</span>
                 {p.oldPrice ? <span className="text-sm text-gray-500 line-through">Bs {fmt(p.oldPrice)}</span> : null}
               </div>
               {p.description ? <p className="mt-3 text-sm leading-relaxed text-gray-400">{p.description}</p> : null}
+
+              {p.features && p.features.length ? (
+                <ul className="mt-4 grid gap-2 text-sm text-gray-300">
+                  {p.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2">
+                      <Check size={16} className="mt-0.5 shrink-0 text-neon" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+
+              {p.specs ? (
+                <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+                  {[['Soporta', p.specs.soporta], ['Reclina', p.specs.reclina], ['Brazos', p.specs.brazos]].map(([k, v]) => (
+                    <div key={k} className="rounded-xl border border-white/10 bg-white/5 px-2 py-2">
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-500">{k}</p>
+                      <p className="mt-0.5 text-xs font-bold text-neon">{v}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
 
               {p.stock > 0 ? (
                 <a

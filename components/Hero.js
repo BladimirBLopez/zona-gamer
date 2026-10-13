@@ -64,7 +64,7 @@ export default function Hero({ q, setQ, onExplore }) {
         </motion.h1>
 
         <motion.p {...up(0.2)} className="mx-auto mt-5 max-w-xl text-base text-gray-400 sm:text-lg">
-          Consolas, periféricos, juegos y gift cards. Compara precio y stock, y pide directo por WhatsApp.
+          Sillas y sillones gamer originales Cougar y Sharkoon. Compara precio y stock, y pide directo por WhatsApp.
         </motion.p>
 
         <motion.form

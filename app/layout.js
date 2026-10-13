@@ -6,7 +6,7 @@ const body = Inter({ subsets: ['latin'], variable: '--font-body' });
 
 export const metadata = {
   title: 'Zona Gamer | Tienda gamer en Bolivia',
-  description: 'Consolas, periféricos, juegos y accesorios. Pide por WhatsApp.',
+  description: 'Sillas y sillones gamer originales Cougar y Sharkoon. Pide por WhatsApp.',
 };
 
 export const viewport = { themeColor: '#060c16' };

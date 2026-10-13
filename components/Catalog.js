@@ -21,7 +21,7 @@ export default function Catalog({ q, setQ, cat, setCat }) {
   const list = useMemo(() => {
     const term = q.trim().toLowerCase();
     let r = products.filter(
-      (p) => (cat === 'Todos' || p.category === cat) && p.name.toLowerCase().includes(term)
+      (p) => (cat === 'Todos' || p.category === cat || p.brand === cat) && p.name.toLowerCase().includes(term)
     );
     if (sort === 'asc') r = [...r].sort((a, b) => a.price - b.price);
     else if (sort === 'desc') r = [...r].sort((a, b) => b.price - a.price);

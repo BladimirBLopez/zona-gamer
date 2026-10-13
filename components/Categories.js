@@ -1,36 +1,33 @@
 'use client';
 import { motion } from 'framer-motion';
-import { Gamepad2, Keyboard, Disc, Headphones, Gift } from 'lucide-react';
-import { products, categories } from '../data/products';
+import { Armchair, Sofa, Crown, Zap } from 'lucide-react';
+import { products } from '../data/products';
 
-const icons = {
-  Consolas: Gamepad2,
-  Periféricos: Keyboard,
-  Juegos: Disc,
-  Accesorios: Headphones,
-  'Gift cards': Gift,
-};
+const cards = [
+  { name: 'Sillas gamer', Icon: Armchair },
+  { name: 'Sillones gamer', Icon: Sofa },
+  { name: 'Cougar', Icon: Crown },
+  { name: 'Sharkoon', Icon: Zap },
+];
 
 export default function Categories({ cat, onPick }) {
-  const list = categories.filter((c) => c !== 'Todos');
   return (
     <section className="mx-auto max-w-7xl px-4 pb-6">
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-        {list.map((c, i) => {
-          const Icon = icons[c] || Gamepad2;
-          const count = products.filter((p) => p.category === c).length;
-          const on = cat === c;
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        {cards.map(({ name, Icon }, i) => {
+          const count = products.filter((p) => p.category === name || p.brand === name).length;
+          const on = cat === name;
           return (
             <motion.button
-              key={c}
+              key={name}
               type="button"
-              onClick={() => onPick(c)}
+              onClick={() => onPick(name)}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.06 }}
               whileTap={{ scale: 0.97 }}
-              className={`glass group flex items-center gap-3 rounded-2xl p-4 text-left transition hover:border-accent/50 last:col-span-2 sm:last:col-span-1 ${
+              className={`glass group flex items-center gap-3 rounded-2xl p-4 text-left transition hover:border-accent/50 ${
                 on ? 'border-accent/70 bg-accent/10' : ''
               }`}
             >
@@ -38,9 +35,9 @@ export default function Categories({ cat, onPick }) {
                 <Icon size={22} />
               </span>
               <span>
-                <span className="block text-sm font-semibold">{c}</span>
+                <span className="block text-sm font-semibold">{name}</span>
                 <span className="block text-xs text-gray-500">
-                  {count} {count === 1 ? 'producto' : 'productos'}
+                  {count} {count === 1 ? 'modelo' : 'modelos'}
                 </span>
               </span>
             </motion.button>

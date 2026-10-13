@@ -50,8 +50,9 @@ export default function ProductCard({ p, i, onOpen }) {
       <div className="flex flex-1 flex-col p-3 sm:p-4">
         <span className="text-[11px] font-medium uppercase tracking-wider text-gray-500">{p.category}</span>
         <h3 className="mt-1 line-clamp-2 min-h-[2.5rem] text-sm font-semibold leading-snug sm:text-base">{p.name}</h3>
+        {p.colors ? <p className="mt-0.5 line-clamp-1 text-[11px] text-gray-500">{p.colors}</p> : null}
         <div className="mt-2 flex items-baseline gap-2">
-          <span className="text-lg font-extrabold text-neon sm:text-xl">Bs {fmt(p.price)}</span>
+          <span className="text-lg font-extrabold text-neon sm:text-xl">{p.from ? <span className="mr-1 text-xs font-medium text-gray-400">Desde</span> : null}Bs {fmt(p.price)}</span>
           {p.oldPrice ? <span className="text-xs text-gray-500 line-through">Bs {fmt(p.oldPrice)}</span> : null}
         </div>
         {out ? (
