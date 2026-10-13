@@ -1,4 +1,5 @@
 import Catalog from '../components/Catalog';
+import BottomNav from '../components/BottomNav';
 import { config } from '../data/config';
 
 const steps = [
@@ -31,7 +32,7 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="mx-auto max-w-6xl px-4 pb-6 pt-14 text-center sm:pt-20">
+      <section id="inicio" className="mx-auto max-w-6xl px-4 pb-6 pt-14 text-center sm:pt-20">
         <h1 className="text-4xl font-extrabold leading-tight sm:text-6xl">
           Todo para tu <span className="bg-gradient-to-r from-accent to-neon bg-clip-text italic text-transparent">setup gamer</span>
         </h1>
@@ -53,7 +54,7 @@ export default function Home() {
 
       <Catalog />
 
-      <section className="mx-auto max-w-6xl px-4 py-12">
+      <section id="como-pedir" className="mx-auto max-w-6xl px-4 py-12">
         <h2 className="text-2xl font-bold sm:text-3xl">Cómo pedir</h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           {steps.map((s) => (
@@ -78,7 +79,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="border-t border-white/5 py-10 text-center text-sm text-gray-400">
+      <footer className="border-t border-white/5 py-10 pb-28 text-center text-sm text-gray-400 md:pb-10">
         <p className="font-semibold text-gray-200">{config.name}</p>
         <p className="mt-1">{config.city} · {config.schedule}</p>
         {socials.length > 0 && (
@@ -96,10 +97,11 @@ export default function Home() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Escribir por WhatsApp"
-        className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500 text-2xl shadow-lg shadow-emerald-500/30 transition hover:scale-105"
+        className="fixed bottom-5 right-5 z-50 hidden h-14 w-14 md:flex items-center justify-center rounded-full bg-emerald-500 text-2xl shadow-lg shadow-emerald-500/30 transition hover:scale-105"
       >
         💬
       </a>
+    <BottomNav />
     </main>
   );
 }
