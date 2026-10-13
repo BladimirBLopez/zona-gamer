@@ -1,12 +1,15 @@
 import { MessageCircle } from 'lucide-react';
 import { config } from '../data/config';
 import { waLink } from '../lib/utils';
+import ThemeToggle from './ThemeToggle';
+import MobileMenu from './MobileMenu';
 
 const links = [
   ['Inicio', '#inicio'],
   ['Catálogo', '#catalogo'],
   ['Cómo pedir', '#como-pedir'],
   ['Preguntas', '#faq'],
+  ['Soporte', '#soporte'],
 ];
 
 export default function Header() {
@@ -28,15 +31,20 @@ export default function Header() {
               </a>
             ))}
           </nav>
-          <a
-            href={waLink(`Hola ${config.name} 👋`)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 rounded-xl bg-emerald-500 px-3 py-2.5 text-sm font-bold text-black transition hover:bg-emerald-400 sm:px-4"
-          >
-            <MessageCircle size={17} />
-            <span className="hidden sm:inline">Escríbenos</span>
-          </a>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <a
+              href={waLink(`Hola ${config.name} 👋`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Escribir por WhatsApp"
+              className="flex h-10 items-center gap-2 rounded-xl bg-emerald-500 px-3 text-sm font-bold text-black transition hover:bg-emerald-400 sm:px-4"
+            >
+              <MessageCircle size={17} />
+              <span className="hidden sm:inline">Escríbenos</span>
+            </a>
+            <MobileMenu />
+          </div>
         </div>
       </div>
     </header>

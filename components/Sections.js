@@ -144,3 +144,59 @@ export function FloatingWhatsApp() {
     </a>
   );
 }
+
+export function Support() {
+  const phone = `+${config.whatsapp.slice(0, 3)} ${config.whatsapp.slice(3)}`;
+  const socials = [
+    ['Instagram', config.instagram],
+    ['Facebook', config.facebook],
+    ['TikTok', config.tiktok],
+  ].filter(([, url]) => url);
+
+  return (
+    <section id="soporte" className="mx-auto max-w-4xl scroll-mt-24 px-4 py-16">
+      <Reveal>
+        <p className="text-center text-xs font-bold uppercase tracking-[0.2em] text-neon">Soporte oficial</p>
+        <h2 className="mt-2 text-center font-display text-3xl font-bold sm:text-4xl">Elige cómo quieres contactarnos</h2>
+        <p className="mt-2 text-center text-sm text-gray-400">{config.schedule}</p>
+      </Reveal>
+      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        <Reveal className="sm:col-span-2">
+          <a
+            href={waLink(`Hola ${config.name} 👋 Necesito ayuda con un pedido.`)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="glass group flex items-center justify-between gap-4 rounded-2xl border-emerald-500/40 p-5 transition hover:border-emerald-400"
+          >
+            <span className="flex items-center gap-4">
+              <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500 text-black">
+                <MessageCircle size={24} />
+              </span>
+              <span>
+                <span className="block font-display text-lg font-semibold">WhatsApp</span>
+                <span className="block text-sm text-gray-400">{phone}</span>
+              </span>
+            </span>
+            <ArrowRight size={20} className="text-emerald-400 transition group-hover:translate-x-1" />
+          </a>
+        </Reveal>
+        {socials.map(([name, url], i) => (
+          <Reveal key={name} delay={(i + 1) * 0.08}>
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass group flex items-center justify-between gap-4 rounded-2xl p-5 transition hover:border-accent/50"
+            >
+              <span>
+                <span className="block font-display text-lg font-semibold">{name}</span>
+                <span className="block text-sm text-gray-400">Síguenos</span>
+              </span>
+              <ArrowRight size={20} className="text-neon transition group-hover:translate-x-1" />
+            </a>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}

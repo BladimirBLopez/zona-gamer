@@ -1,7 +1,7 @@
 import Header from '../components/Header';
 import Shop from '../components/Shop';
 import BottomNav from '../components/BottomNav';
-import { HowTo, Faq, CtaBand, Footer, FloatingWhatsApp } from '../components/Sections';
+import { HowTo, Faq, Support, Footer, FloatingWhatsApp } from '../components/Sections';
 
 export default function Home() {
   return (
@@ -10,7 +10,7 @@ export default function Home() {
       <Shop />
       <HowTo />
       <Faq />
-      <CtaBand />
+      <Support />
       <Footer />
       <FloatingWhatsApp />
       <BottomNav />

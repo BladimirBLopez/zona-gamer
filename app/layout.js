@@ -11,9 +11,14 @@ export const metadata = {
 
 export const viewport = { themeColor: '#060c16' };
 
+const themeScript = `try{var t=localStorage.getItem('zg-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t)}}catch(e){}`;
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" className={`${display.variable} ${body.variable}`}>
+    <html lang="es" data-theme="dark" suppressHydrationWarning className={`${display.variable} ${body.variable}`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="font-body">{children}</body>
     </html>
   );
