@@ -1,11 +1,10 @@
 'use client';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Search, SearchX } from 'lucide-react';
 import { products, categories } from '../data/products';
 import { config } from '../data/config';
 import { waLink } from '../lib/utils';
 import ProductCard from './ProductCard';
-import ProductModal from './ProductModal';
 import Filters from './Filters';
 
 const sorts = [
@@ -26,8 +25,6 @@ export default function Catalog({ q, setQ, cat, setCat }) {
   const [range, setRange] = useState('all');
   const [color, setColor] = useState('');
   const [material, setMaterial] = useState('');
-  const [open, setOpen] = useState(null);
-  const close = useCallback(() => setOpen(null), []);
 
   const list = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -135,12 +132,11 @@ export default function Catalog({ q, setQ, cat, setCat }) {
       ) : (
         <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
           {list.map((p, i) => (
-            <ProductCard key={p.id} p={p} i={i} onOpen={setOpen} />
+            <ProductCard key={p.id} p={p} i={i} />
           ))}
         </div>
       )}
 
-      <ProductModal p={open} onClose={close} />
     </section>
   );
 }
