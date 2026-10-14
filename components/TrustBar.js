@@ -1,9 +1,9 @@
 import { Tag, PackageCheck, MessageCircle } from 'lucide-react';
 
 const items = [
-  { Icon: Tag, text: 'Precios en Bs' },
-  { Icon: PackageCheck, text: 'Stock visible' },
-  { Icon: MessageCircle, text: 'Atención por WhatsApp' },
+  { Icon: Tag, text: 'Precios en bolivianos' },
+  { Icon: PackageCheck, text: 'Disponibilidad confirmada al pedir' },
+  { Icon: MessageCircle, text: 'Asesoría personalizada por WhatsApp' },
 ];
 
 export default function TrustBar() {
