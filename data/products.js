@@ -1,4 +1,4 @@
-import { imageFor } from './temp-images';
+import { imageFor, galleryFor } from './temp-images';
 
 export const categories = ['Todos', 'Sillas gamer', 'Sillones gamer', 'Cougar', 'Sharkoon'];
 
@@ -14,6 +14,7 @@ const item = (id, name, brand, category, colors, price, stock, features, soporta
   stock,
   emoji: category === 'Sillones gamer' ? '🛋️' : '🪑',
   image: imageFor(id, name, brand),
+  gallery: galleryFor(id),
   badge: '',
   description: '',
   features,
