@@ -67,7 +67,7 @@ export default function ProductDetail({ p }) {
             type="button"
             onClick={() => setZoom(true)}
             aria-label="Ampliar imagen"
-            className="glass relative block aspect-square w-full overflow-hidden rounded-3xl"
+            className="relative block aspect-square w-full overflow-hidden rounded-3xl border border-white/10 bg-[#f1f1f4]"
           >
             <img src={images[idx]} alt={p.name} className={`h-full w-full object-contain p-4 ${out ? 'opacity-60 grayscale' : ''}`} />
             <span className="absolute bottom-3 right-3 flex items-center gap-1.5 rounded-full bg-black/70 px-3 py-1.5 text-xs font-semibold text-white">
@@ -82,11 +82,11 @@ export default function ProductDetail({ p }) {
                   type="button"
                   onClick={() => setIdx(i)}
                   aria-label={`Foto ${i + 1}`}
-                  className={`h-16 w-16 overflow-hidden rounded-xl border-2 bg-card transition ${
+                  className={`h-16 w-16 overflow-hidden rounded-xl border-2 bg-[#f1f1f4] transition ${
                     idx === i ? 'border-accent' : 'border-white/10'
                   }`}
                 >
-                  <img src={src} alt="" className="h-full w-full object-cover" />
+                  <img src={src} alt="" className="h-full w-full object-contain p-1" />
                 </button>
               ))}
             </div>
@@ -198,7 +198,7 @@ export default function ProductDetail({ p }) {
           >
             <X size={20} />
           </button>
-          <img src={images[idx]} alt={p.name} className="max-h-full max-w-full object-contain" />
+          <img src={images[idx]} alt={p.name} className="max-h-full max-w-full rounded-2xl bg-[#f1f1f4] object-contain" />
         </div>
       ) : null}
     </section>
