@@ -17,7 +17,8 @@ export default function Header() {
   return (
     <>
       <div className="border-b border-white/10 bg-bg py-1.5 text-center text-[11px] font-medium text-gray-400 sm:text-xs">
-        🇧🇴 {config.city} <span className="mx-1.5 text-accent">•</span> Pedidos directos por WhatsApp
+        🇧🇴 {config.city} <span className="mx-1.5 text-accent">•</span> Productos originales{' '}
+        <span className="mx-1.5 text-accent">•</span> Atención por WhatsApp
       </div>
       <header className="nav-surface sticky top-0 z-40">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
