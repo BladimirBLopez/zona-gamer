@@ -15,11 +15,11 @@ const links = [
 export default function Header() {
   return (
     <header className="sticky top-0 z-40">
-      <div className="bg-gradient-to-r from-accent/25 via-neon/15 to-accent/25 py-1.5 text-center text-[11px] font-medium text-gray-200 sm:text-xs">
+      <div className="bg-bg bg-gradient-to-r from-accent/25 via-neon/15 to-accent/25 py-1.5 text-center text-[11px] font-medium text-gray-200 sm:text-xs">
         🇧🇴 {config.city} <span className="mx-1.5 text-neon">•</span> Productos originales{' '}
         <span className="mx-1.5 text-neon">•</span> Atención por WhatsApp
       </div>
-      <div className="border-b border-white/5 bg-bg/80 backdrop-blur-xl">
+      <div className="border-b border-white/5 bg-bg">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
           <a href="/#inicio" aria-label={config.name} className="flex items-center">
             <img src="/logo.webp" alt={config.name} width={223} height={84} className="h-11 w-auto" />
