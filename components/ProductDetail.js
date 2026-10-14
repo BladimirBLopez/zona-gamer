@@ -114,7 +114,7 @@ export default function ProductDetail({ p }) {
           {p.colors ? <p className="mt-1 text-gray-400">{p.colors}</p> : null}
 
           <p className="mt-5 font-display text-4xl font-extrabold">{priceText}</p>
-          <p className="mt-1 text-xs text-gray-500">{copied ? 'Link copiado.' : 'El pago y la entrega se coordinan por chat.'}</p>
+          {copied ? <p className="mt-1 text-xs text-accent">Link copiado.</p> : null}
 
           {p.description ? <p className="mt-4 text-sm leading-relaxed text-gray-400">{p.description}</p> : null}
 

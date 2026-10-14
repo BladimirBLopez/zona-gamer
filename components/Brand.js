@@ -3,26 +3,23 @@ import { config } from '../data/config';
 // Cuando tengas el logo: ponlo en public/ y escribe aquí su ruta, ej. '/logo.webp'
 export const LOGO_SRC = '';
 
-export default function Brand({ size = 'md' }) {
+export default function Brand({ size = 'md', tagline = false }) {
   if (LOGO_SRC) {
-    return (
-      <img
-        src={LOGO_SRC}
-        alt={config.name}
-        className={size === 'sm' ? 'h-11 w-auto' : 'h-14 w-auto'}
-      />
-    );
+    return <img src={LOGO_SRC} alt={config.name} className={size === 'sm' ? 'h-11 w-auto' : 'h-14 w-auto'} />;
   }
   const box = size === 'sm' ? 'h-10 w-10 text-base' : 'h-14 w-14 text-xl';
-  const txt = size === 'sm' ? 'text-lg' : 'text-2xl';
+  const txt = size === 'sm' ? 'text-base' : 'text-xl';
   return (
-    <span className="inline-flex items-center gap-2.5">
-      <span
-        className={`flex ${box} items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-accent/40 to-neon/20 font-display font-extrabold`}
-      >
+    <span className="inline-flex items-center gap-3">
+      <span className={`flex ${box} shrink-0 items-center justify-center rounded-xl bg-accent font-display font-extrabold text-black`}>
         ZG
       </span>
-      <span className={`font-display ${txt} font-bold tracking-tight`}>{config.name}</span>
+      <span className="leading-none">
+        <span className={`block font-display ${txt} font-bold uppercase tracking-wide`}>{config.name}</span>
+        {tagline ? (
+          <span className="mt-1 block text-[10px] font-medium tracking-wider text-gray-500">Sillas y sillones gamer</span>
+        ) : null}
+      </span>
     </span>
   );
 }
