@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, MessageCircle, Check } from 'lucide-react';
+import Link from 'next/link';
 import { fmt, waLink, orderMsg, stockInfo } from '../lib/utils';
 
 export default function ProductModal({ p, onClose }) {
@@ -60,7 +61,7 @@ export default function ProductModal({ p, onClose }) {
               {p.colors ? <p className="mt-0.5 text-sm text-gray-400">{p.colors}</p> : null}
               <div className="mt-2 flex items-baseline gap-2">
                 {p.from ? <span className="text-sm font-semibold text-gray-400">Desde</span> : null}
-                <span className="text-2xl font-extrabold text-neon">Bs {fmt(p.price)}</span>
+                <span className="text-2xl font-extrabold text-neon">{p.price > 0 ? `Bs ${fmt(p.price)}` : 'Consultar precio'}</span>
                 {p.oldPrice ? <span className="text-sm text-gray-500 line-through">Bs {fmt(p.oldPrice)}</span> : null}
               </div>
               {p.description ? <p className="mt-3 text-sm leading-relaxed text-gray-400">{p.description}</p> : null}
@@ -99,6 +100,13 @@ export default function ProductModal({ p, onClose }) {
               ) : (
                 <span className="mt-5 block rounded-xl bg-white/5 py-3 text-center text-gray-500">No disponible por ahora</span>
               )}
+              <Link
+                href={`/producto/${p.slug}`}
+                onClick={onClose}
+                className="mt-2 block rounded-xl border border-white/10 py-3 text-center text-sm font-semibold transition hover:border-accent/50"
+              >
+                Ver detalles completos
+              </Link>
               <p className="mt-3 text-center text-xs text-gray-500">El pago y la entrega se coordinan por chat.</p>
             </div>
           </motion.div>

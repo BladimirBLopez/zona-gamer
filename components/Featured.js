@@ -58,7 +58,7 @@ export default function Featured() {
                   <p className="text-[11px] font-medium uppercase tracking-wider text-gray-500">{p.brand}</p>
                   <h3 className="line-clamp-1 font-semibold">{p.name}</h3>
                   <p className="mt-1 font-extrabold text-neon">
-                    {p.from ? 'Desde ' : ''}Bs {fmt(p.price)}
+                    {p.price > 0 ? `${p.from ? 'Desde ' : ''}Bs ${fmt(p.price)}` : 'Consultar precio'}
                   </p>
                 </div>
               </button>

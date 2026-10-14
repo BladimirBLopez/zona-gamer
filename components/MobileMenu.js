@@ -7,11 +7,11 @@ import { config } from '../data/config';
 import { waLink } from '../lib/utils';
 
 const items = [
-  ['Inicio', '#inicio', Home],
-  ['Catálogo', '#catalogo', Search],
-  ['Cómo pedir', '#como-pedir', ListChecks],
-  ['Preguntas', '#faq', Info],
-  ['Soporte', '#soporte', Headset],
+  ['Inicio', '/#inicio', Home],
+  ['Catálogo', '/#catalogo', Search],
+  ['Cómo pedir', '/#como-pedir', ListChecks],
+  ['Preguntas', '/#faq', Info],
+  ['Soporte', '/#soporte', Headset],
 ];
 
 export default function MobileMenu() {

@@ -15,7 +15,7 @@ const sorts = [
 
 const ranges = [
   { id: 'all', label: 'Todos los precios', min: 0, max: Infinity },
-  { id: 'low', label: 'Hasta Bs 2.500', min: 0, max: 2500 },
+  { id: 'low', label: 'Hasta Bs 2.500', min: 1, max: 2500 },
   { id: 'mid', label: 'Bs 2.500 – 3.500', min: 2501, max: 3500 },
   { id: 'high', label: 'Más de Bs 3.500', min: 3501, max: Infinity },
 ];
@@ -33,7 +33,7 @@ export default function Catalog({ q, setQ, cat, setCat }) {
     let r = products.filter(
       (p) => (cat === 'Todos' || p.category === cat || p.brand === cat) && p.name.toLowerCase().includes(term) && inRange(p.price)
     );
-    if (sort === 'asc') r = [...r].sort((a, b) => a.price - b.price);
+    if (sort === 'asc') r = [...r].sort((a, b) => (a.price || Infinity) - (b.price || Infinity));
     else if (sort === 'desc') r = [...r].sort((a, b) => b.price - a.price);
     else r = [...r].sort((a, b) => (b.stock > 0) - (a.stock > 0));
     return r;

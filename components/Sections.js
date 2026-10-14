@@ -114,9 +114,9 @@ export function Footer() {
         <div className="text-sm text-gray-400">
           <p className="font-semibold text-gray-200">Enlaces</p>
           <div className="mt-2 flex flex-col gap-1">
-            <a href="#catalogo" className="hover:text-neon">Catálogo</a>
-            <a href="#como-pedir" className="hover:text-neon">Cómo pedir</a>
-            <a href="#faq" className="hover:text-neon">Preguntas frecuentes</a>
+            <a href="/#catalogo" className="hover:text-neon">Catálogo</a>
+            <a href="/#como-pedir" className="hover:text-neon">Cómo pedir</a>
+            <a href="/#faq" className="hover:text-neon">Preguntas frecuentes</a>
             {socials.map(([name, url]) => (
               <a key={name} href={url} target="_blank" rel="noopener noreferrer" className="hover:text-neon">{name}</a>
             ))}

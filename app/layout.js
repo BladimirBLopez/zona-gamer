@@ -1,4 +1,5 @@
 import './globals.css';
+import { Analytics } from '@vercel/analytics/next';
 import { Space_Grotesk, Inter } from 'next/font/google';
 
 const display = Space_Grotesk({ subsets: ['latin'], weight: ['500', '700'], variable: '--font-display' });
@@ -30,7 +31,10 @@ export default function RootLayout({ children }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="font-body">{children}</body>
+      <body className="font-body">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

@@ -8,6 +8,7 @@ const item = (id, name, brand, category, colors, price, stock, features, soporta
   colors,
   price,
   oldPrice: 0,
+  slug: slugify(name),
   stock,
   emoji: category === 'Sillones gamer' ? '🛋️' : '🪑',
   image: `/sillas/${String(id).padStart(2, '0')}.webp`,
@@ -18,10 +19,17 @@ const item = (id, name, brand, category, colors, price, stock, features, soporta
   ...extra,
 });
 
+const slugify = (s) =>
+  s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+const CLD = 'https://res.cloudinary.com/dkq95jus0/image/upload';
+const TITAN = 'v1791961738/IMG-20261014-WA0000_msslce.jpg';
+const CROP = 'c_crop,x_0.35,y_0.02,w_0.58,h_0.76';
+
 const S = 'Sillas gamer';
 const L = 'Sillones gamer';
 
-export const products = [
+const raw = [
   item(1, 'Sharkoon Elbrus 1', 'Sharkoon', S, 'Negro · Verde / Negro / Azul', 1800, 5,
     ['Tela transpirable', 'Reposabrazos acolchados abatibles', 'Mecanismo basculante regulable', 'Pistón de gas clase 4'],
     '120 kg', '3°–18°', 'Abatibles'),
@@ -73,7 +81,21 @@ export const products = [
   item(17, 'Cougar Overlord', 'Cougar', L, 'Negro · Naranja', 4300, 5,
     ['Cuero sintético PVC', 'Balanceo, reclinación y giro', 'Soporte ergonómico por zonas', 'Espuma de alta densidad'],
     '150 kg', '95°–160°', 'Trimotion'),
+  item(19, 'Cougar Armor Titan', 'Cougar', S, 'Negro · Naranja', 0, 5,
+    ['Cuero PVC premium transpirable y resistente', 'Cojín cervical ajustable con correa', 'Soporte lumbar ergonómico', 'Tapizado premium de alta durabilidad'],
+    '160 kg', 'Hasta 170° con bloqueo', '4D',
+    {
+      image: `${CLD}/${CROP}/f_auto,q_auto,w_700/${TITAN}`,
+      gallery: [`${CLD}/f_auto,q_auto,w_1400/${TITAN}`, `${CLD}/${CROP}/f_auto,q_auto,w_900/${TITAN}`],
+      og: `${CLD}/f_jpg,q_auto,w_1200/${TITAN}`,
+    }),
   item(18, 'Cougar Titan Pro V2 Gold F', 'Cougar', S, 'Terciopelo · Negro / Dorado', 5016, 5,
     ['Terciopelo premium', 'Soporte lumbar LiftBack', 'Almohada cervical magnética', 'Espuma de memoria'],
     '160 kg', '90°–155°', '4D'),
 ];
+
+const dup = {};
+raw.forEach((p) => {
+  dup[p.slug] = (dup[p.slug] || 0) + 1;
+});
+export const products = raw.map((p) => (dup[p.slug] > 1 ? { ...p, slug: `${p.slug}-${p.id}` } : p));
