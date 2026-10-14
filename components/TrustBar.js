@@ -1,31 +1,22 @@
-import { ShieldCheck, Tag, PackageCheck, MessageCircle } from 'lucide-react';
-import Reveal from './Reveal';
+import { Tag, PackageCheck, MessageCircle } from 'lucide-react';
 
 const items = [
-  { Icon: ShieldCheck, t: 'Productos originales', d: 'Cougar y Sharkoon' },
-  { Icon: Tag, t: 'Precio claro', d: 'Todo en bolivianos' },
-  { Icon: PackageCheck, t: 'Stock visible', d: 'Disponible o agotado' },
-  { Icon: MessageCircle, t: 'Ayuda real', d: 'Atención por WhatsApp' },
+  { Icon: Tag, text: 'Precios en Bs' },
+  { Icon: PackageCheck, text: 'Stock visible' },
+  { Icon: MessageCircle, text: 'Atención por WhatsApp' },
 ];
 
 export default function TrustBar() {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-6">
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {items.map(({ Icon, t, d }, i) => (
-          <Reveal key={t} delay={i * 0.06} className="h-full">
-            <div className="glass flex h-full items-center gap-3 rounded-2xl p-4">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent">
-                <Icon size={20} />
-              </span>
-              <span>
-                <span className="block text-sm font-semibold leading-tight">{t}</span>
-                <span className="mt-0.5 block text-xs text-gray-500">{d}</span>
-              </span>
-            </div>
-          </Reveal>
+    <section className="border-y border-white/10 bg-white/[0.02]">
+      <ul className="no-scrollbar mx-auto flex max-w-7xl items-center gap-6 overflow-x-auto px-4 py-3 md:justify-center md:gap-10">
+        {items.map(({ Icon, text }) => (
+          <li key={text} className="flex shrink-0 items-center gap-2 text-xs font-medium text-gray-300 sm:text-sm">
+            <Icon size={16} className="text-accent" />
+            {text}
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }
