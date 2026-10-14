@@ -35,7 +35,7 @@ export default function ProductCard({ p, i }) {
               src={p.image}
               alt={p.name}
               loading="lazy"
-              className={`h-full w-full object-contain p-1.5 transition duration-300 group-hover:scale-105 ${out ? 'opacity-60 grayscale' : ''}`}
+              className={`h-full w-full object-contain scale-[1.1] transition duration-300 group-hover:scale-[1.15] ${out ? 'opacity-60 grayscale' : ''}`}
             />
           ) : (
             <span className="flex h-full w-full items-center justify-center text-6xl sm:text-7xl">{p.emoji}</span>
@@ -54,9 +54,9 @@ export default function ProductCard({ p, i }) {
 
         <div className="flex flex-1 flex-col p-3 sm:p-4">
           <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-neon">{p.brand}</span>
-          <h3 className="mt-1 line-clamp-2 min-h-[2.5rem] text-sm font-semibold leading-snug sm:text-base">{p.name}</h3>
+          <h3 className="mt-1 line-clamp-2 text-sm font-semibold leading-snug sm:text-base">{p.name}</h3>
           {p.colors ? <p className="mt-0.5 line-clamp-1 text-[11px] text-gray-500">{p.colors}</p> : null}
-          <div className="mt-2 flex flex-wrap items-baseline gap-x-2">
+          <div className="mt-auto flex flex-wrap items-baseline gap-x-2 pt-3">
             <span className="text-lg font-extrabold sm:text-xl">
               {p.price > 0 ? (
                 <>
