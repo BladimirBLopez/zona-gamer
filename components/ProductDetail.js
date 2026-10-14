@@ -1,10 +1,11 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, MessageCircle, Share2, Check, X, ZoomIn, Weight, Armchair, Move, Layers } from 'lucide-react';
+import { ChevronRight, Share2, Check, X, ZoomIn, Weight, Armchair, Move, Layers } from 'lucide-react';
 import { products } from '../data/products';
 import { config } from '../data/config';
 import { fmt, waLink, orderMsg, stockInfo, productUrl } from '../lib/utils';
+import WhatsAppIcon from './WhatsAppIcon';
 
 export default function ProductDetail({ p }) {
   const images = p.gallery && p.gallery.length ? p.gallery : [p.image];
@@ -15,7 +16,6 @@ export default function ProductDetail({ p }) {
   const out = p.stock <= 0;
   const related = products.filter((x) => x.id !== p.id && x.category === p.category).slice(0, 4);
   const priceText = p.price > 0 ? `${p.from ? 'Desde ' : ''}Bs ${fmt(p.price)}` : 'Consultar precio';
-  const ctaText = p.price > 0 ? 'Pedir por WhatsApp' : 'Consultar por WhatsApp';
 
   const specs = [
     { Icon: Weight, k: 'Soporta', v: p.specs && p.specs.soporta },
@@ -37,25 +37,29 @@ export default function ProductDetail({ p }) {
     } catch (e) {}
   };
 
-  const Cta = ({ className }) =>
+  const cta = (className, label, outLabel) =>
     out ? (
-      <span className={`rounded-xl bg-white/5 py-3.5 text-center text-sm text-gray-500 ${className}`}>No disponible por ahora</span>
+      <span className={`rounded-xl bg-white/5 py-3.5 text-center text-sm text-gray-500 ${className}`}>{outLabel}</span>
     ) : (
       <a
         href={waLink(orderMsg(p))}
         target="_blank"
         rel="noopener noreferrer"
-        className={`items-center justify-center gap-2 rounded-xl bg-emerald-500 py-3.5 font-bold text-black transition hover:bg-emerald-400 active:scale-95 ${className}`}
+        className={`items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[#25D366] py-3.5 font-bold text-white transition hover:bg-[#1ebe5b] active:scale-95 ${className}`}
       >
-        <MessageCircle size={18} /> {ctaText}
+        <WhatsAppIcon size={20} /> {label}
       </a>
     );
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-6 sm:py-10">
-      <Link href="/#catalogo" className="inline-flex items-center gap-2 text-sm text-gray-400 transition hover:text-accent">
-        <ArrowLeft size={16} /> Volver al catálogo
-      </Link>
+      <nav aria-label="Ruta" className="flex flex-wrap items-center gap-1.5 text-sm text-gray-400">
+        <Link href="/#catalogo" className="transition hover:text-accent">Catálogo</Link>
+        <ChevronRight size={14} />
+        <span>{p.category}</span>
+        <ChevronRight size={14} />
+        <span className="text-gray-200">{p.name}</span>
+      </nav>
 
       <div className="mt-5 grid gap-8 lg:grid-cols-2">
         <div className="lg:sticky lg:top-24 lg:self-start">
@@ -78,7 +82,7 @@ export default function ProductDetail({ p }) {
                   type="button"
                   onClick={() => setIdx(i)}
                   aria-label={`Foto ${i + 1}`}
-                  className={`h-16 w-16 overflow-hidden rounded-xl border bg-card transition ${
+                  className={`h-16 w-16 overflow-hidden rounded-xl border-2 bg-card transition ${
                     idx === i ? 'border-accent' : 'border-white/10'
                   }`}
                 >
@@ -92,7 +96,6 @@ export default function ProductDetail({ p }) {
         <div>
           <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
             <span className="uppercase tracking-[0.2em] text-accent">{p.brand}</span>
-            <span className="text-gray-500">· {p.category}</span>
             {p.badge ? <span className="rounded-full bg-accent px-2.5 py-0.5 text-white">{p.badge}</span> : null}
             <span className={`rounded-full px-2.5 py-0.5 ${s.cls}`}>{s.label}</span>
           </div>
@@ -113,7 +116,7 @@ export default function ProductDetail({ p }) {
           <p className="mt-5 font-display text-4xl font-extrabold">{priceText}</p>
           <p className="mt-1 text-xs text-gray-500">{copied ? 'Link copiado.' : 'El pago y la entrega se coordinan por chat.'}</p>
 
-          <Cta className="mt-5 hidden w-full md:flex" />
+          {cta('mt-5 hidden w-full md:flex', p.price > 0 ? 'Pedir por WhatsApp' : 'Consultar por WhatsApp', 'No disponible por ahora')}
 
           {specs.length ? (
             <div className="mt-6 grid grid-cols-2 gap-3">
@@ -124,7 +127,7 @@ export default function ProductDetail({ p }) {
                   </span>
                   <span className="min-w-0">
                     <span className="block text-[10px] font-semibold uppercase tracking-wider text-gray-500">{k}</span>
-                    <span className="block truncate text-sm font-bold">{v}</span>
+                    <span className="block text-sm font-bold">{v}</span>
                   </span>
                 </div>
               ))}
@@ -175,11 +178,11 @@ export default function ProductDetail({ p }) {
         style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
       >
         <div className="mx-auto flex max-w-6xl items-center gap-3">
-          <div className="min-w-0 shrink-0">
-            <p className="text-[11px] uppercase tracking-wider text-gray-500">{p.brand}</p>
-            <p className="text-lg font-extrabold leading-tight">{priceText}</p>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[11px] uppercase tracking-wider text-gray-500">{p.name}</p>
+            <p className="truncate text-lg font-extrabold leading-tight">{priceText}</p>
           </div>
-          <Cta className="flex flex-1" />
+          {cta('flex shrink-0 px-5', p.price > 0 ? 'Pedir' : 'Consultar', 'Agotado')}
         </div>
       </div>
 

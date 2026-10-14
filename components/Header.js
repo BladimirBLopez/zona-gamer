@@ -1,4 +1,4 @@
-import { MessageCircle } from 'lucide-react';
+import WhatsAppIcon from './WhatsAppIcon';
 import { config } from '../data/config';
 import { waLink } from '../lib/utils';
 import ThemeToggle from './ThemeToggle';
@@ -39,9 +39,9 @@ export default function Header() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Escribir por WhatsApp"
-              className="flex h-10 items-center gap-2 rounded-xl bg-emerald-500 px-3 text-sm font-bold text-black transition hover:bg-emerald-400 sm:px-4"
+              className="flex h-10 items-center gap-2 rounded-xl bg-[#25D366] px-3 text-sm font-bold text-white transition hover:bg-[#1ebe5b] sm:px-4"
             >
-              <MessageCircle size={17} />
+              <WhatsAppIcon size={20} />
               <span className="hidden sm:inline">Escríbenos</span>
             </a>
             <MobileMenu />

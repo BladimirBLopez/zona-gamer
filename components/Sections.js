@@ -1,5 +1,6 @@
 import { Search, MessageCircle, PackageCheck, ChevronDown, ArrowRight } from 'lucide-react';
 import Reveal from './Reveal';
+import WhatsAppIcon from './WhatsAppIcon';
 import { config } from '../data/config';
 import { waLink } from '../lib/utils';
 
@@ -75,9 +76,9 @@ export function FloatingWhatsApp() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Escribir por WhatsApp"
-      className="fixed bottom-6 right-6 z-50 hidden h-14 w-14 items-center justify-center rounded-full bg-emerald-500 text-black shadow-lg shadow-emerald-500/30 transition hover:scale-105 md:flex"
+      className="fixed bottom-6 right-6 z-50 hidden h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-black/30 transition hover:scale-105 md:flex"
     >
-      <MessageCircle size={26} />
+      <WhatsAppIcon size={30} />
     </a>
   );
 }
@@ -100,8 +101,8 @@ export function Support() {
           className="glass group flex items-center justify-between gap-4 rounded-2xl p-5 transition hover:border-emerald-400/60"
         >
           <span className="flex items-center gap-4">
-            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500 text-black">
-              <MessageCircle size={24} />
+            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#25D366] text-white">
+              <WhatsAppIcon size={26} />
             </span>
             <span>
               <span className="block font-display text-lg font-semibold">WhatsApp</span>

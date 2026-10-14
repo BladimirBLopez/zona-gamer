@@ -1,4 +1,5 @@
-import { MessageCircle, Music2, Users } from 'lucide-react';
+import { Music2, Users } from 'lucide-react';
+import WhatsAppIcon from './WhatsAppIcon';
 import { config } from '../data/config';
 import { waLink } from '../lib/utils';
 import Brand from './Brand';
@@ -14,7 +15,7 @@ export default function Footer() {
   const socials = [
     config.tiktok && { label: 'TikTok', href: config.tiktok, Icon: Music2 },
     config.facebook && { label: 'Facebook', href: config.facebook, Icon: Users },
-    { label: 'WhatsApp', href: waLink(`Hola ${config.name} 👋`), Icon: MessageCircle },
+    { label: 'WhatsApp', href: waLink(`Hola ${config.name} 👋`), Icon: WhatsAppIcon },
   ].filter(Boolean);
 
   return (
