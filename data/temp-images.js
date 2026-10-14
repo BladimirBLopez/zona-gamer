@@ -2,6 +2,10 @@
 // La 1ª es la de la tarjeta y la ficha; si pones más, forman la galería.
 // Sin fotos => placeholder automático.
 export const photos = {
+  1: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1791969718/01-1_u9i7bi.png', 'https://res.cloudinary.com/dkq95jus0/image/upload/v1791969718/01-2_fzabz9.png', 'https://res.cloudinary.com/dkq95jus0/image/upload/v1791969719/01-3_ockrgh.png'],
+  2: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1791969869/02-1_w1tn7b.png'],
+  4: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1791969944/04-1_a3zujs.png'],
+  5: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1791970175/05-1_t6dicv.png'],
   // 1: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1700000000/elbrus.webp'],
   // 2: ['link-foto-principal', 'link-poster', 'link-detalle'],
 };
