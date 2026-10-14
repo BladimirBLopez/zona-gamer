@@ -20,35 +20,40 @@ const ranges = [
   { id: 'high', label: 'Más de Bs 3.500', min: 3501, max: Infinity },
 ];
 
+const tabs = categories.filter((c) => c === 'Todos' || products.some((p) => p.category === c));
+const brands = [...new Set(products.map((p) => p.brand))];
+
 export default function Catalog({ q, setQ, cat, setCat }) {
   const [sort, setSort] = useState('default');
   const [range, setRange] = useState('all');
-  const [color, setColor] = useState('');
+  const [brand, setBrand] = useState('');
   const [onlyAvail, setOnlyAvail] = useState(false);
-  const [material, setMaterial] = useState('');
 
   const list = useMemo(() => {
     const term = q.trim().toLowerCase();
     const r0 = ranges.find((x) => x.id === range) || ranges[0];
     const inRange = (price) => price >= r0.min && price <= r0.max;
     let r = products.filter(
-      (p) => (cat === 'Todos' || p.category === cat || p.brand === cat) && p.name.toLowerCase().includes(term) && inRange(p.price) && (!color || p.tagColors.includes(color)) && (!material || p.material === material) && (!onlyAvail || p.stock > 0)
+      (p) =>
+        (cat === 'Todos' || p.category === cat) &&
+        (!brand || p.brand === brand) &&
+        `${p.name} ${p.brand}`.toLowerCase().includes(term) &&
+        inRange(p.price) &&
+        (!onlyAvail || p.stock > 0)
     );
     if (sort === 'asc') r = [...r].sort((a, b) => (a.price || Infinity) - (b.price || Infinity));
     else if (sort === 'desc') r = [...r].sort((a, b) => b.price - a.price);
     else r = [...r].sort((a, b) => (b.stock > 0) - (a.stock > 0));
     return r;
-  }, [q, cat, sort, range, color, material, onlyAvail]);
+  }, [q, cat, brand, sort, range, onlyAvail]);
 
-  const countOf = (c) =>
-    c === 'Todos' ? products.length : products.filter((p) => p.category === c || p.brand === c).length;
+  const countOf = (c) => (c === 'Todos' ? products.length : products.filter((p) => p.category === c).length);
 
   const reset = () => {
     setQ('');
     setCat('Todos');
     setRange('all');
-    setColor('');
-    setMaterial('');
+    setBrand('');
     setOnlyAvail(false);
   };
 
@@ -57,9 +62,9 @@ export default function Catalog({ q, setQ, cat, setCat }) {
       <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Catálogo</p>
-          <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">Elige tu modelo</h2>
+          <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">Todos los productos</h2>
         </div>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-400">
           {list.length} {list.length === 1 ? 'producto' : 'productos'}
         </p>
       </div>
@@ -70,7 +75,7 @@ export default function Catalog({ q, setQ, cat, setCat }) {
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Buscar producto..."
+            placeholder="Buscar producto o marca"
             className="min-w-0 flex-1 bg-transparent py-3 text-sm outline-none placeholder:text-gray-500"
           />
         </div>
@@ -89,7 +94,7 @@ export default function Catalog({ q, setQ, cat, setCat }) {
       </div>
 
       <div className="no-scrollbar mt-4 flex gap-2 overflow-x-auto pb-2">
-        {categories.map((c) => (
+        {tabs.map((c) => (
           <button
             key={c}
             type="button"
@@ -105,31 +110,22 @@ export default function Catalog({ q, setQ, cat, setCat }) {
         ))}
       </div>
 
-      <label className="mt-3 flex w-fit cursor-pointer items-center gap-2 text-sm text-gray-300">
-        <input
-          type="checkbox"
-          checked={onlyAvail}
-          onChange={(e) => setOnlyAvail(e.target.checked)}
-          className="h-4 w-4 accent-accent"
-        />
-        Solo disponibles
-      </label>
-
       <Filters
         ranges={ranges}
         range={range}
         setRange={setRange}
-        color={color}
-        setColor={setColor}
-        material={material}
-        setMaterial={setMaterial}
+        brands={brands}
+        brand={brand}
+        setBrand={setBrand}
+        onlyAvail={onlyAvail}
+        setOnlyAvail={setOnlyAvail}
       />
 
       {list.length === 0 ? (
         <div className="glass mx-auto mt-10 max-w-md rounded-2xl p-8 text-center">
           <SearchX size={36} className="mx-auto text-gray-500" />
           <p className="mt-3 font-semibold">No encontramos ese producto</p>
-          <p className="mt-1 text-sm text-gray-500">Prueba con otra búsqueda o pregúntanos directo.</p>
+          <p className="mt-1 text-sm text-gray-400">Prueba con otra búsqueda o pregúntanos directo.</p>
           <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-center">
             <button type="button" onClick={reset} className="rounded-xl border border-white/10 px-4 py-2 text-sm hover:border-accent/60">
               Limpiar filtros
@@ -151,7 +147,6 @@ export default function Catalog({ q, setQ, cat, setCat }) {
           ))}
         </div>
       )}
-
     </section>
   );
 }

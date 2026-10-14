@@ -1,34 +1,20 @@
 'use client';
 import { useState } from 'react';
 import { SlidersHorizontal, X } from 'lucide-react';
-import { products, colorOptions, materialOptions } from '../data/products';
-
-const dots = {
-  Naranja: '#f97316',
-  Rosa: '#ec4899',
-  Dorado: '#eab308',
-  Verde: '#22c55e',
-  Azul: '#3b82f6',
-  Rojo: '#ef4444',
-  Gris: '#9ca3af',
-  Negro: '#111827',
-};
 
 const chip = (on) =>
   `whitespace-nowrap rounded-full border px-3.5 py-1.5 text-xs transition ${
-    on ? 'border-accent bg-accent text-white' : 'border-white/10 text-gray-400 hover:border-accent/60'
+    on ? 'border-accent bg-accent text-white' : 'border-white/10 text-gray-300 hover:border-accent/60'
   }`;
 
-export default function Filters({ ranges, range, setRange, color, setColor, material, setMaterial }) {
+export default function Filters({ ranges, range, setRange, brands, brand, setBrand, onlyAvail, setOnlyAvail }) {
   const [open, setOpen] = useState(false);
-  const active = (range !== 'all' ? 1 : 0) + (color ? 1 : 0) + (material ? 1 : 0);
+  const active = (range !== 'all' ? 1 : 0) + (brand ? 1 : 0) + (onlyAvail ? 1 : 0);
   const clear = () => {
     setRange('all');
-    setColor('');
-    setMaterial('');
+    setBrand('');
+    setOnlyAvail(false);
   };
-  const colors = colorOptions.filter((c) => products.some((p) => p.tagColors.includes(c)));
-  const materials = materialOptions.filter((m) => products.some((p) => p.material === m));
 
   return (
     <div className="mt-3">
@@ -58,30 +44,18 @@ export default function Filters({ ranges, range, setRange, color, setColor, mate
       {open ? (
         <div className="glass mt-3 space-y-5 rounded-2xl p-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Color</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Marca</p>
             <div className="mt-2 flex flex-wrap gap-2">
-              {colors.map((c) => (
-                <button key={c} type="button" onClick={() => setColor(color === c ? '' : c)} className={`flex items-center gap-2 ${chip(color === c)}`}>
-                  <span className="h-3 w-3 rounded-full border border-white/30" style={{ background: dots[c] }} />
-                  {c}
+              {brands.map((b) => (
+                <button key={b} type="button" onClick={() => setBrand(brand === b ? '' : b)} className={chip(brand === b)}>
+                  {b}
                 </button>
               ))}
             </div>
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Material</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {materials.map((m) => (
-                <button key={m} type="button" onClick={() => setMaterial(material === m ? '' : m)} className={chip(material === m)}>
-                  {m}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Precio</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Precio</p>
             <div className="mt-2 flex flex-wrap gap-2">
               {ranges.map((r) => (
                 <button key={r.id} type="button" onClick={() => setRange(r.id)} className={chip(range === r.id)}>
@@ -90,6 +64,16 @@ export default function Filters({ ranges, range, setRange, color, setColor, mate
               ))}
             </div>
           </div>
+
+          <label className="flex w-fit cursor-pointer items-center gap-2 text-sm text-gray-200">
+            <input
+              type="checkbox"
+              checked={onlyAvail}
+              onChange={(e) => setOnlyAvail(e.target.checked)}
+              className="h-4 w-4 accent-accent"
+            />
+            Solo disponibles
+          </label>
         </div>
       ) : null}
     </div>

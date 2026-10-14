@@ -97,25 +97,15 @@ export default function Hero({ q, setQ, onExplore }) {
             Equipa tu setup gamer. Revisa precios y disponibilidad, y haz tu pedido por WhatsApp.
           </motion.p>
 
-          <motion.form
-            {...up(0.3)}
-            onSubmit={submit}
-            className="glass mx-auto mt-8 flex max-w-xl items-center gap-2 rounded-2xl p-2"
-          >
-            <Search className="ml-2 shrink-0 text-gray-400" size={20} />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Buscar producto o marca"
-              className="min-w-0 flex-1 bg-transparent px-1 py-2 text-sm outline-none placeholder:text-gray-500 sm:text-base"
-            />
+          <motion.div {...up(0.3)} className="mt-8 flex justify-center">
             <button
-              type="submit"
-              className="flex shrink-0 items-center gap-1.5 rounded-xl bg-accent px-4 py-2.5 text-sm font-bold text-white transition hover:opacity-90 active:scale-95"
+              type="button"
+              onClick={onExplore}
+              className="flex items-center gap-2 rounded-xl bg-accent px-6 py-3 text-sm font-bold text-white transition hover:opacity-90 active:scale-95"
             >
-              Explorar <ArrowRight size={16} />
+              Ver catálogo <ArrowRight size={16} />
             </button>
-          </motion.form>
+          </motion.div>
         </div>
       </div>
     </section>
