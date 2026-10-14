@@ -3,7 +3,7 @@ export const config = {
   whatsapp: '59175034183',
   city: 'Bolivia',
   url: 'https://zona-gamer-tau.vercel.app',
-  schedule: 'Lun a Sáb · 10:00 a 20:00',
+  schedule: '', // poner el horario real cuando el cliente lo confirme
   instagram: '',
   facebook: 'https://www.facebook.com/share/19YFhPD9xS/',
   tiktok: 'https://www.tiktok.com/@zonasgamer5',

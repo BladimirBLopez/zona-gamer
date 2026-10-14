@@ -11,10 +11,9 @@ const steps = [
 ];
 
 const faqs = [
-  { q: '¿Cómo pago?', a: 'El pago se coordina por WhatsApp. No hay pagos dentro de la web.' },
+  { q: '¿Cómo pago?', a: 'El pago se coordina por WhatsApp. Lo coordinas directamente con nosotros.' },
   { q: '¿Cómo sé si hay stock?', a: 'Te confirmamos la disponibilidad por WhatsApp antes de cerrar tu pedido.' },
   { q: '¿Hacen envíos?', a: 'Coordinamos la entrega contigo por WhatsApp según tu ciudad.' },
-  { q: '¿Puedo reservar un producto?', a: 'Escríbenos y lo coordinamos. Te confirmamos disponibilidad al momento.' },
   { q: '¿Tienen garantía?', a: 'Consulta por WhatsApp la garantía de cada producto antes de comprar.' },
 ];
 
@@ -91,7 +90,7 @@ export function Support() {
       <Reveal>
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Soporte</p>
         <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">Atención al cliente</h2>
-        <p className="mt-2 text-sm text-gray-400">{config.schedule}</p>
+        {config.schedule ? <p className="mt-2 text-sm text-gray-400">{config.schedule}</p> : null}
       </Reveal>
       <Reveal className="mt-6">
         <a

@@ -8,7 +8,7 @@ import { products } from '../data/products';
 import { fmt } from '../lib/utils';
 import Reveal from './Reveal';
 
-const list = products.filter((p) => p.stock > 0);
+const list = products.filter((p) => p.stock > 0).slice(0, 8);
 
 export default function Featured() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', loop: true }, [

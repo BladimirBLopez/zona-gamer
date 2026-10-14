@@ -94,7 +94,7 @@ export default function Hero({ q, setQ, onExplore }) {
           </div>
 
           <motion.p {...up(0.2)} className="mx-auto mt-5 max-w-xl text-base text-gray-400 sm:text-lg">
-            Sillas, mousepads, cámaras y más. Revisa precios y disponibilidad, y haz tu pedido por WhatsApp.
+            Equipa tu setup gamer. Revisa precios y disponibilidad, y haz tu pedido por WhatsApp.
           </motion.p>
 
           <motion.form
