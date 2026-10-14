@@ -16,7 +16,7 @@ const dots = {
 
 const chip = (on) =>
   `whitespace-nowrap rounded-full border px-3.5 py-1.5 text-xs transition ${
-    on ? 'border-neon bg-neon/15 text-neon' : 'border-white/10 text-gray-400 hover:border-neon/50'
+    on ? 'border-accent bg-accent text-white' : 'border-white/10 text-gray-400 hover:border-accent/60'
   }`;
 
 export default function Filters({ ranges, range, setRange, color, setColor, material, setMaterial }) {
@@ -31,25 +31,25 @@ export default function Filters({ ranges, range, setRange, color, setColor, mate
   const materials = materialOptions.filter((m) => products.some((p) => p.material === m));
 
   return (
-    <div className="mt-1">
+    <div className="mt-3">
       <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={() => setOpen(!open)}
           aria-expanded={open}
           className={`glass flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition hover:border-accent/50 ${
-            active ? 'border-neon/60' : ''
+            active ? 'border-accent/60' : ''
           }`}
         >
           <SlidersHorizontal size={16} /> Filtros
           {active > 0 ? (
-            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-neon px-1 text-[11px] font-bold text-black">
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-[11px] font-bold text-white">
               {active}
             </span>
           ) : null}
         </button>
         {active > 0 ? (
-          <button type="button" onClick={clear} className="flex items-center gap-1 text-xs text-gray-400 transition hover:text-neon">
+          <button type="button" onClick={clear} className="flex items-center gap-1 text-xs text-gray-400 transition hover:text-accent">
             <X size={14} /> Limpiar
           </button>
         ) : null}
@@ -61,12 +61,7 @@ export default function Filters({ ranges, range, setRange, color, setColor, mate
             <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Color</p>
             <div className="mt-2 flex flex-wrap gap-2">
               {colors.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => setColor(color === c ? '' : c)}
-                  className={`flex items-center gap-2 ${chip(color === c)}`}
-                >
+                <button key={c} type="button" onClick={() => setColor(color === c ? '' : c)} className={`flex items-center gap-2 ${chip(color === c)}`}>
                   <span className="h-3 w-3 rounded-full border border-white/30" style={{ background: dots[c] }} />
                   {c}
                 </button>

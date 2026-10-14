@@ -24,6 +24,7 @@ export default function Catalog({ q, setQ, cat, setCat }) {
   const [sort, setSort] = useState('default');
   const [range, setRange] = useState('all');
   const [color, setColor] = useState('');
+  const [onlyAvail, setOnlyAvail] = useState(false);
   const [material, setMaterial] = useState('');
 
   const list = useMemo(() => {
@@ -31,13 +32,16 @@ export default function Catalog({ q, setQ, cat, setCat }) {
     const r0 = ranges.find((x) => x.id === range) || ranges[0];
     const inRange = (price) => price >= r0.min && price <= r0.max;
     let r = products.filter(
-      (p) => (cat === 'Todos' || p.category === cat || p.brand === cat) && p.name.toLowerCase().includes(term) && inRange(p.price) && (!color || p.tagColors.includes(color)) && (!material || p.material === material)
+      (p) => (cat === 'Todos' || p.category === cat || p.brand === cat) && p.name.toLowerCase().includes(term) && inRange(p.price) && (!color || p.tagColors.includes(color)) && (!material || p.material === material) && (!onlyAvail || p.stock > 0)
     );
     if (sort === 'asc') r = [...r].sort((a, b) => (a.price || Infinity) - (b.price || Infinity));
     else if (sort === 'desc') r = [...r].sort((a, b) => b.price - a.price);
     else r = [...r].sort((a, b) => (b.stock > 0) - (a.stock > 0));
     return r;
-  }, [q, cat, sort, range, color, material]);
+  }, [q, cat, sort, range, color, material, onlyAvail]);
+
+  const countOf = (c) =>
+    c === 'Todos' ? products.length : products.filter((p) => p.category === c || p.brand === c).length;
 
   const reset = () => {
     setQ('');
@@ -45,14 +49,15 @@ export default function Catalog({ q, setQ, cat, setCat }) {
     setRange('all');
     setColor('');
     setMaterial('');
+    setOnlyAvail(false);
   };
 
   return (
     <section id="catalogo" className="mx-auto max-w-7xl scroll-mt-28 px-4 py-12">
       <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-neon">Catálogo</p>
-          <h2 className="mt-1 font-display text-3xl font-bold sm:text-4xl">Elige y pide por WhatsApp</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Catálogo</p>
+          <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">Elige tu modelo</h2>
         </div>
         <p className="text-sm text-gray-500">
           {list.length} {list.length === 1 ? 'producto' : 'productos'}
@@ -91,14 +96,24 @@ export default function Catalog({ q, setQ, cat, setCat }) {
             onClick={() => setCat(c)}
             className={`whitespace-nowrap rounded-full border px-4 py-1.5 text-sm transition ${
               cat === c
-                ? 'border-accent bg-accent text-white shadow-lg shadow-accent/30'
+                ? 'border-accent bg-accent text-white'
                 : 'border-white/10 bg-card text-gray-300 hover:border-accent/60'
             }`}
           >
-            {c}
+            {c} <span className="ml-1 text-xs opacity-60">{countOf(c)}</span>
           </button>
         ))}
       </div>
+
+      <label className="mt-3 flex w-fit cursor-pointer items-center gap-2 text-sm text-gray-300">
+        <input
+          type="checkbox"
+          checked={onlyAvail}
+          onChange={(e) => setOnlyAvail(e.target.checked)}
+          className="h-4 w-4 accent-accent"
+        />
+        Solo disponibles
+      </label>
 
       <Filters
         ranges={ranges}
