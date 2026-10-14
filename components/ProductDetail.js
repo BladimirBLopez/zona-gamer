@@ -18,9 +18,9 @@ export default function ProductDetail({ p }) {
   const priceText = p.price > 0 ? `${p.from ? 'Desde ' : ''}Bs ${fmt(p.price)}` : 'Consultar precio';
 
   const specs = [
-    { Icon: Weight, k: 'Soporta', v: p.specs && p.specs.soporta },
+    { Icon: Weight, k: 'Peso máximo', v: p.specs && p.specs.soporta },
     { Icon: Armchair, k: 'Reclinación', v: p.specs && p.specs.reclina },
-    { Icon: Move, k: 'Apoyabrazos', v: p.specs && p.specs.brazos },
+    { Icon: Move, k: 'Reposabrazos', v: p.specs && p.specs.brazos },
     { Icon: Layers, k: 'Material', v: p.material },
   ].filter((x) => x.v);
 
