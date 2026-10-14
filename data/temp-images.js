@@ -17,8 +17,6 @@ export const photos = {
   16: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1791996769/16-1_yjty9x.png'],
   17: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1791996837/17-1_yg2ukq.png'],
   18: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1791996892/18-1_d2wxjv.png'],
-  // 1: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1700000000/elbrus.webp'],
-  // 2: ['link-foto-principal', 'link-poster', 'link-detalle'],
 };
 
 const opt = (url, w) =>
