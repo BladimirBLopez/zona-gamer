@@ -39,7 +39,7 @@ export default function BottomNav() {
       className="fixed inset-x-3 bottom-3 z-50 md:hidden"
       style={{ marginBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <div className="flex gap-1 rounded-3xl border border-white/10 bg-bg/90 p-1.5 shadow-2xl shadow-black/40 backdrop-blur-xl">
+      <div className="nav-pill flex gap-1 rounded-3xl p-1.5">
         {items.map(({ id, label, Icon }) => {
           const on = active === id;
           return (
@@ -49,7 +49,7 @@ export default function BottomNav() {
               onClick={(e) => goTo(e, id)}
               aria-current={on ? 'page' : undefined}
               className={`flex flex-1 flex-col items-center gap-1 rounded-2xl py-2.5 text-[11px] font-semibold transition-all duration-200 ${
-                on ? 'bg-accent text-white shadow-lg shadow-accent/30' : 'text-gray-400 active:bg-white/5'
+                on ? 'bg-accent text-white' : 'text-gray-400 active:bg-white/5'
               }`}
             >
               <Icon size={20} strokeWidth={on ? 2.4 : 2} />
