@@ -3,6 +3,7 @@ import { config } from '../data/config';
 import { waLink } from '../lib/utils';
 import ThemeToggle from './ThemeToggle';
 import MobileMenu from './MobileMenu';
+import Brand from './Brand';
 
 const links = [
   ['Inicio', '/#inicio'],
@@ -22,7 +23,7 @@ export default function Header() {
       <header className="sticky top-0 z-40 border-b border-white/5 bg-bg">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
           <a href="/#inicio" aria-label={config.name} className="flex items-center">
-            <img src="/logo.webp" alt={config.name} width={223} height={84} className="h-11 w-auto" />
+            <Brand size="sm" />
           </a>
           <nav className="hidden items-center gap-7 md:flex">
             {links.map(([label, href]) => (

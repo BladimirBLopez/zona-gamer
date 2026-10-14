@@ -1,6 +1,7 @@
 import { MessageCircle, Music2, Users } from 'lucide-react';
 import { config } from '../data/config';
 import { waLink } from '../lib/utils';
+import Brand from './Brand';
 
 const links = [
   ['Catálogo', '/#catalogo'],
@@ -20,10 +21,7 @@ export default function Footer() {
     <footer className="border-t border-white/10 bg-bg px-4 pb-28 pt-12 md:pb-10">
       <div className="mx-auto max-w-7xl">
         <a href="/#inicio" className="inline-flex items-center gap-3" aria-label={config.name}>
-          <span className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-accent/40 to-neon/20 font-display text-xl font-extrabold">
-            ZG
-          </span>
-          <span className="font-display text-2xl font-bold tracking-tight">{config.name}</span>
+          <Brand />
         </a>
 
         <p className="mt-5 max-w-md text-base leading-relaxed text-gray-400">
