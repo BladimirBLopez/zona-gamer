@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { ChevronRight, Share2, Check, X, ZoomIn, Scale, RotateCw, Move, Layers } from 'lucide-react';
+import { ChevronRight, Share2, Check, X, ZoomIn, Scale, RotateCw, Move, Layers, Video, Moon, ShieldCheck, HardDrive } from 'lucide-react';
 import { products } from '../data/products';
 import { config } from '../data/config';
 import { fmt, waLink, orderMsg, stockInfo, productUrl } from '../lib/utils';
@@ -17,12 +17,14 @@ export default function ProductDetail({ p }) {
   const related = products.filter((x) => x.id !== p.id && x.category === p.category).slice(0, 4);
   const priceText = p.price > 0 ? `${p.from ? 'Desde ' : ''}Bs ${fmt(p.price)}` : 'Consultar precio';
 
-  const specs = [
+  const camIcons = [Video, Moon, ShieldCheck, HardDrive];
+  const chairSpecs = [
     { Icon: Scale, k: 'Peso máximo', v: p.specs && p.specs.soporta },
     { Icon: RotateCw, k: 'Reclinación', v: p.specs && p.specs.reclina },
     { Icon: Move, k: 'Reposabrazos', v: p.specs && p.specs.brazos },
     { Icon: Layers, k: 'Material', v: p.material },
   ].filter((x) => x.v);
+  const specs = p.cards ? p.cards.map(([k, v], i) => ({ Icon: camIcons[i % 4], k, v })) : chairSpecs;
 
   const share = async () => {
     const url = productUrl(p);
