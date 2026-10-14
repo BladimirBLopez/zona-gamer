@@ -1,9 +1,9 @@
-import { Tag, PackageCheck, MessageCircle } from 'lucide-react';
+import { Headphones, PackageCheck, MessageCircle } from 'lucide-react';
 
 const items = [
-  { Icon: Tag, text: 'Precios en bolivianos' },
-  { Icon: PackageCheck, text: 'Disponibilidad confirmada al pedir' },
-  { Icon: MessageCircle, text: 'Asesoría personalizada por WhatsApp' },
+  { Icon: MessageCircle, text: 'Pedido directo por WhatsApp' },
+  { Icon: Headphones, text: 'Asesoría antes de comprar' },
+  { Icon: PackageCheck, text: 'Disponibilidad confirmada' },
 ];
 
 export default function TrustBar() {
