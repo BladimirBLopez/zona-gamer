@@ -6,8 +6,8 @@ module.exports = {
       colors: {
         bg: '#0a0a0c',
         card: '#131316',
-        accent: '#ea580c',
-        neon: '#fb923c',
+        accent: '#e11d48',
+        neon: '#fb7185',
       },
       fontFamily: {
         display: ['var(--font-display)', 'system-ui', 'sans-serif'],

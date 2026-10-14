@@ -128,7 +128,7 @@ html[data-theme='light'] .hover\:text-accent:hover { color: #c2410c; }
   right: 0;
   bottom: -1px;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #ea580c 50%, transparent);
+  background: linear-gradient(90deg, transparent, #e11d48 50%, transparent);
   opacity: 0.8;
   pointer-events: none;
 }
