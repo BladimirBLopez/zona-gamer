@@ -4,7 +4,8 @@ import { config } from '../../../data/config';
 import { fmt } from '../../../lib/utils';
 import Header from '../../../components/Header';
 import ProductDetail from '../../../components/ProductDetail';
-import { Footer, FloatingWhatsApp } from '../../../components/Sections';
+import { FloatingWhatsApp } from '../../../components/Sections';
+import Footer from '../../../components/Footer';
 
 const find = (slug) => products.find((x) => x.slug === slug);
 
