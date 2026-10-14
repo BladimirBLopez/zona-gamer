@@ -17,6 +17,13 @@ export const photos = {
   16: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1791996769/16-1_yjty9x.png'],
   17: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1791996837/17-1_yg2ukq.png'],
   18: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1791996892/18-1_d2wxjv.png'],
+  20: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792018251/file_0000000019f0820ea5079459f90b3c59_bylxfr.png'],
+  21: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792018323/file_00000000e288820ebed9b6d367d5b013_qhbllv.png'],
+  22: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792018362/file_000000002c9c820e9b6dcb6cd5730ab8_srwevh.png'],
+  23: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792018431/file_000000003434820eaf6de083fd134357_cf16do.png'],
+  24: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792018470/file_00000000269c820e8c4d6f20e7f8b108_unxtob.png'],
+  25: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792018504/file_000000001920820e96b840969bd069bd_uedjvp.png'],
+  26: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792018564/file_000000004b7c820e9fb15221c5e9ab5a_lrx9ge.png'],
 };
 
 const opt = (url, w) =>
