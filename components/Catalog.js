@@ -13,25 +13,36 @@ const sorts = [
   { id: 'desc', label: 'Mayor precio' },
 ];
 
+const ranges = [
+  { id: 'all', label: 'Todos los precios', min: 0, max: Infinity },
+  { id: 'low', label: 'Hasta Bs 2.500', min: 0, max: 2500 },
+  { id: 'mid', label: 'Bs 2.500 – 3.500', min: 2501, max: 3500 },
+  { id: 'high', label: 'Más de Bs 3.500', min: 3501, max: Infinity },
+];
+
 export default function Catalog({ q, setQ, cat, setCat }) {
   const [sort, setSort] = useState('default');
+  const [range, setRange] = useState('all');
   const [open, setOpen] = useState(null);
   const close = useCallback(() => setOpen(null), []);
 
   const list = useMemo(() => {
     const term = q.trim().toLowerCase();
+    const r0 = ranges.find((x) => x.id === range) || ranges[0];
+    const inRange = (price) => price >= r0.min && price <= r0.max;
     let r = products.filter(
-      (p) => (cat === 'Todos' || p.category === cat || p.brand === cat) && p.name.toLowerCase().includes(term)
+      (p) => (cat === 'Todos' || p.category === cat || p.brand === cat) && p.name.toLowerCase().includes(term) && inRange(p.price)
     );
     if (sort === 'asc') r = [...r].sort((a, b) => a.price - b.price);
     else if (sort === 'desc') r = [...r].sort((a, b) => b.price - a.price);
     else r = [...r].sort((a, b) => (b.stock > 0) - (a.stock > 0));
     return r;
-  }, [q, cat, sort]);
+  }, [q, cat, sort, range]);
 
   const reset = () => {
     setQ('');
     setCat('Todos');
+    setRange('all');
   };
 
   return (
@@ -83,6 +94,23 @@ export default function Catalog({ q, setQ, cat, setCat }) {
             }`}
           >
             {c}
+          </button>
+        ))}
+      </div>
+
+      <div className="no-scrollbar flex gap-2 overflow-x-auto pb-2">
+        {ranges.map((r) => (
+          <button
+            key={r.id}
+            type="button"
+            onClick={() => setRange(r.id)}
+            className={`whitespace-nowrap rounded-full border px-3.5 py-1 text-xs transition ${
+              range === r.id
+                ? 'border-neon bg-neon/15 text-neon'
+                : 'border-white/10 text-gray-400 hover:border-neon/50'
+            }`}
+          >
+            {r.label}
           </button>
         ))}
       </div>

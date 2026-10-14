@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Hero from './Hero';
 import Showcase from './Showcase';
 import Categories from './Categories';
+import Featured from './Featured';
 import Catalog from './Catalog';
 
 export default function Shop() {
@@ -23,6 +24,7 @@ export default function Shop() {
           goCatalog();
         }}
       />
+      <Featured />
       <Catalog q={q} setQ={setQ} cat={cat} setCat={setCat} />
     </>
   );
