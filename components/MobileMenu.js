@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X, Home, Search, ListChecks, Info, Headset, MessageCircle } from 'lucide-react';
 import { config } from '../data/config';
 import { waLink } from '../lib/utils';
+import Brand from './Brand';
 
 const items = [
   ['Inicio', '/#inicio', Home],
@@ -41,7 +42,7 @@ export default function MobileMenu() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
+          <div className="absolute inset-0 bg-black/70" onClick={() => setOpen(false)} />
           <motion.aside
             role="dialog"
             aria-modal="true"
@@ -54,7 +55,7 @@ export default function MobileMenu() {
             style={{ paddingBottom: 'max(1.25rem, env(safe-area-inset-bottom))' }}
           >
             <div className="flex items-center justify-between">
-              <img src="/logo.webp" alt={config.name} width={223} height={84} className="h-11 w-auto" />
+              <Brand size="sm" />
               <button
                 type="button"
                 onClick={() => setOpen(false)}
@@ -73,7 +74,7 @@ export default function MobileMenu() {
                   onClick={() => setOpen(false)}
                   className="flex items-center gap-3 rounded-xl px-3 py-3.5 text-base font-medium transition hover:bg-white/5"
                 >
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-accent/30 to-neon/20 text-neon">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/15 text-neon">
                     <Icon size={18} />
                   </span>
                   {label}
@@ -86,7 +87,7 @@ export default function MobileMenu() {
                 href={waLink(`Hola ${config.name} 👋`)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-xl bg-emerald-500 py-3 font-bold text-black transition hover:bg-emerald-400 active:scale-95"
+                className="flex items-center justify-center gap-2 rounded-xl bg-[#25D366] py-3 font-bold text-black transition hover:brightness-110 active:scale-95"
               >
                 <MessageCircle size={18} /> Escríbenos por WhatsApp
               </a>

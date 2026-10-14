@@ -27,9 +27,9 @@ export default function ProductCard({ p, i }) {
       <Link
         href={`/producto/${p.slug}`}
         aria-label={`Ver detalles de ${p.name}`}
-        className="group glass flex h-full flex-col overflow-hidden rounded-2xl transition-colors duration-300 hover:border-accent/50 hover:shadow-xl hover:shadow-accent/10"
+        className="group glass flex h-full flex-col overflow-hidden rounded-2xl transition-colors duration-300 hover:border-accent/50"
       >
-        <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-accent/20 via-card to-neon/10 sm:aspect-[4/3]">
+        <div className="relative aspect-square w-full overflow-hidden bg-white/5 sm:aspect-[4/3]">
           {p.image ? (
             <img
               src={p.image}
