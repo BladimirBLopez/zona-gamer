@@ -24,6 +24,13 @@ export const photos = {
   24: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792018470/file_00000000269c820e8c4d6f20e7f8b108_unxtob.png'],
   25: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792018504/file_000000001920820e96b840969bd069bd_uedjvp.png'],
   26: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792018564/file_000000004b7c820e9fb15221c5e9ab5a_lrx9ge.png'],
+  27: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792020473/27-1_avqpsy.png'],
+  28: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792020549/28-1_q8iuqr.png'],
+  29: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792020636/29-1_oz70yl.png'],
+  30: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792020700/30-1_jsndc8.png'],
+  31: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792020781/31-1_queetc.png'],
+  32: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792020945/32-1_k7ln6w.png'],
+  33: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792021091/33-1_uuqikg.png'],
 };
 
 const opt = (url, w) =>
