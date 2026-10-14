@@ -118,7 +118,7 @@ export default function ProductDetail({ p }) {
 
           {p.description ? <p className="mt-4 text-sm leading-relaxed text-gray-400">{p.description}</p> : null}
 
-          {cta('mt-5 hidden w-full md:flex', p.price > 0 ? 'Pedir por WhatsApp' : 'Consultar por WhatsApp', 'No disponible por ahora')}
+          {cta('mt-5 hidden w-full md:flex', p.price > 0 ? 'Comprar por WhatsApp' : 'Consultar por WhatsApp', 'No disponible por ahora')}
 
           {specs.length ? (
             <div className="mt-6 grid grid-cols-2 gap-3">
@@ -184,7 +184,7 @@ export default function ProductDetail({ p }) {
             <p className="truncate text-[11px] uppercase tracking-wider text-gray-500">{p.name}</p>
             <p className="truncate text-lg font-extrabold leading-tight">{priceText}</p>
           </div>
-          {cta('flex shrink-0 px-5', p.price > 0 ? 'Pedir' : 'Consultar', 'Agotado')}
+          {cta('flex shrink-0 px-5', p.price > 0 ? 'Comprar' : 'Consultar', 'Agotado')}
         </div>
       </div>
 
