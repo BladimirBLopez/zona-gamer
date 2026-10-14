@@ -1,3 +1,5 @@
+import { tempImages, USE_PLACEHOLDERS, placeholder } from './temp-images';
+
 export const categories = ['Todos', 'Sillas gamer', 'Sillones gamer', 'Cougar', 'Sharkoon'];
 
 const item = (id, name, brand, category, colors, price, stock, features, soporta, reclina, brazos, extra = {}) => ({
@@ -11,7 +13,7 @@ const item = (id, name, brand, category, colors, price, stock, features, soporta
   slug: slugify(name),
   stock,
   emoji: category === 'Sillones gamer' ? '🛋️' : '🪑',
-  image: `/sillas/${String(id).padStart(2, '0')}.webp`,
+  image: tempImages[id] || (USE_PLACEHOLDERS ? placeholder(name, brand) : `/sillas/${String(id).padStart(2, '0')}.webp`),
   badge: '',
   description: '',
   features,
