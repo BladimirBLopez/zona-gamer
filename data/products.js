@@ -122,6 +122,34 @@ const raw = [
     ['Panel solar incluido para carga continua', 'Batería recargable por Type-C', '100% sin cables, Wi-Fi 2.4 GHz', 'Alertas en tiempo real en el celular', 'Detección de movimiento PIR y humana', 'Sirena y luz de foco'],
     '', '', '',
     { cards: [['Resolución', '3MP · 2K'], ['Visión', 'Color inteligente'], ['Uso', 'Exterior · IP66'], ['Grabación', 'Nube / MicroSD']] }),
+  item(27, 'Havit PJ207', 'Havit', 'Proyectores', 'HD · Wi-Fi', 965, 5,
+    ['Proyector HD con Wi-Fi', 'Compatible con 1080p', 'Pantalla de hasta 140 pulgadas', '110 ANSI lúmenes'],
+    '', '', '',
+    { cards: [['Resolución', 'HD · 1080p compatible', 'monitor'], ['Brillo', '110 ANSI lúmenes', 'sun'], ['Pantalla', 'Hasta 140 pulgadas', 'maximize'], ['Conexión', 'Wi-Fi', 'wifi']] }),
+  item(28, 'Havit PJ217', 'Havit', 'Proyectores', 'HD 720p · Wi-Fi 2.4G/5G', 1224, 5,
+    ['Proyector HD 720p compatible con 1080p', 'Enfoque semiautomático', 'Pantalla de hasta 300 pulgadas', 'Wi-Fi 2.4G/5G', '180 ANSI lúmenes'],
+    '', '', '',
+    { cards: [['Resolución', 'HD 720p · 1080p compatible', 'monitor'], ['Brillo', '180 ANSI lúmenes', 'sun'], ['Pantalla', 'Hasta 300 pulgadas', 'maximize'], ['Conexión', 'Wi-Fi 2.4G / 5G', 'wifi']] }),
+  item(29, 'Havit PJ209', 'Havit', 'Proyectores', 'Full HD', 1791, 5,
+    ['Resolución nativa 1920 × 1080 (Full HD)', 'Soporte para contenido 4K', 'Pantalla de 43 hasta 220 pulgadas', 'Distancia de proyección de 1,5 a 6,9 metros', '350 ANSI lúmenes'],
+    '', '', '',
+    { cards: [['Resolución', 'Full HD · 1080p', 'monitor'], ['Brillo', '350 ANSI lúmenes', 'sun'], ['Pantalla', '43 a 220 pulgadas', 'maximize'], ['Distancia', '1,5 a 6,9 metros', 'sliders']] }),
+  item(30, 'Havit PJ209 Pro', 'Havit', 'Proyectores', 'Full HD · Android', 1850, 5,
+    ['Resolución nativa 1920 × 1080 (Full HD)', 'Soporte para 4K', 'Android integrado para apps y streaming', 'Pantalla de 43 hasta 220 pulgadas', '350 ANSI lúmenes'],
+    '', '', '',
+    { cards: [['Resolución', 'Full HD · 1080p', 'monitor'], ['Brillo', '350 ANSI lúmenes', 'sun'], ['Pantalla', '43 a 220 pulgadas', 'maximize'], ['Sistema', 'Android integrado', 'cpu']] }),
+  item(31, 'Havit PJ208', 'Havit', 'Proyectores', 'Batería integrada · Android TV', 0, 5,
+    ['Resolución nativa 960 × 540, con soporte para 1080p y 4K', 'Android TV 9.0 integrado', '180 ANSI lúmenes', 'Batería integrada de 8000 mAh', 'Autonomía de 2 a 4 horas'],
+    '', '', '',
+    { cards: [['Resolución', '960 × 540', 'monitor'], ['Brillo', '180 ANSI lúmenes', 'sun'], ['Batería', '8000 mAh · 2 a 4 horas', 'battery'], ['Sistema', 'Android TV 9.0', 'cpu']] }),
+  item(32, 'Havit PJ216 Pro', 'Havit', 'Proyectores', 'Full HD · Wi-Fi dual band', 1650, 5,
+    ['Resolución nativa 1920 × 1080 (Full HD)', 'Soporte para 4K', 'Wi-Fi dual band 2.4 GHz / 5 GHz', 'Proyección inalámbrica', 'Brillo equivalente a más de 300 ANSI lúmenes', 'Vida útil del LED: 40.000 horas'],
+    '', '', '',
+    { cards: [['Resolución', 'Full HD · 1080p', 'monitor'], ['Brillo', '300+ ANSI lúmenes', 'sun'], ['Conexión', 'Wi-Fi 2.4 / 5 GHz', 'wifi'], ['Vida del LED', '40.000 horas', 'sliders']] }),
+  item(33, 'Havit PJ300 Plus', 'Havit', 'Proyectores', 'Full HD · Google TV', 2450, 5,
+    ['Resolución nativa 1920 × 1080 (Full HD)', 'Soporte para 4K', 'Brillo de 550 ANSI lúmenes', 'Google TV oficial con Netflix y apps de Google Play', 'Motor óptico sellado antipolvo', 'Auto focus, auto keystone y detección de obstáculos', 'Corrección automática de hasta ±30°'],
+    '', '', '',
+    { cards: [['Resolución', 'Full HD · 1080p', 'monitor'], ['Brillo', '550 ANSI lúmenes', 'sun'], ['Sistema', 'Google TV', 'cpu'], ['Ajustes', 'Auto focus y keystone', 'sliders']] }),
 ];
 
 const dup = {};
@@ -177,6 +205,13 @@ const descriptions = {
   24: 'Cámara tipo bullet para exterior 3MP (2K) con visión nocturna a color, luz de foco activada por movimiento y resistencia IP67. Detecta personas y vehículos, tiene audio bidireccional y se conecta por Wi-Fi. Graba en nube, MicroSD o NVR. Garantía de 1 año.',
   25: 'Cámara de exterior con doble lente (3MP + 5MP), Pan & Tilt de 360° y visión nocturna a color. Tiene detección IA de personas y vehículos, disuasión activa, audio bidireccional y resistencia IP66. Se conecta por Wi-Fi y graba en nube o MicroSD. Garantía de 1 año.',
   26: 'Cámara de exterior 3MP (2K) sin cables, con batería recargable por Type-C y panel solar incluido para carga continua. Tiene detección PIR y humana, sirena con luz de foco y audio bidireccional. Wi-Fi 2.4 GHz, resistencia IP66; graba en nube o MicroSD. Garantía de 1 año.',
+  27: 'Proyector HD con Wi-Fi, compatible con 1080p. Proyecta una pantalla de hasta 140 pulgadas con 110 ANSI lúmenes.',
+  28: 'Proyector HD 720p compatible con 1080p, con Wi-Fi 2.4G/5G y enfoque semiautomático. Proyecta una pantalla de hasta 300 pulgadas con 180 ANSI lúmenes.',
+  29: 'Proyector con resolución nativa Full HD (1920 × 1080) y soporte para contenido 4K. Proyecta de 43 a 220 pulgadas a una distancia de 1,5 a 6,9 metros, con 350 ANSI lúmenes.',
+  30: 'Versión con Android integrado para apps y streaming. Resolución nativa Full HD (1920 × 1080) con soporte para 4K, proyección de 43 a 220 pulgadas y 350 ANSI lúmenes.',
+  31: 'Proyector con Android TV 9.0 integrado y batería de 8000 mAh, con autonomía de 2 a 4 horas. Resolución nativa 960 × 540 con soporte para 1080p y 4K, y 180 ANSI lúmenes. Consulta el precio por WhatsApp.',
+  32: 'Proyector Full HD (1920 × 1080 nativa) con soporte para 4K, Wi-Fi dual band 2.4 GHz / 5 GHz y proyección inalámbrica. Brillo equivalente a más de 300 ANSI lúmenes y LED con vida útil de 40.000 horas.',
+  33: 'Proyector Full HD (1920 × 1080 nativa) con soporte para 4K y 550 ANSI lúmenes. Trae Google TV oficial con Netflix y acceso a apps de Google Play, motor óptico sellado antipolvo y ajustes automáticos: auto focus, auto keystone, alineación inteligente de pantalla y detección de obstáculos, con corrección automática de hasta ±30°.',
 };
 
 export const colorOptions = ['Naranja', 'Rosa', 'Dorado', 'Verde', 'Azul', 'Rojo', 'Gris', 'Negro'];
@@ -188,7 +223,7 @@ export const products = raw.map((p) => {
   return { ...base, description: descriptions[p.id] || base.description, tagColors: t.colors || [], material: t.material || '' };
 });
 
-const catOrder = ['Sillas gamer', 'Sillones gamer', 'Mousepads', 'Cámaras'];
+const catOrder = ['Sillas gamer', 'Sillones gamer', 'Mousepads', 'Cámaras', 'Proyectores'];
 const brandList = [...new Set(['Cougar', 'Sharkoon', ...products.map((p) => p.brand)])];
 export const categories = [
   'Todos',
