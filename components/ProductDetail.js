@@ -52,7 +52,7 @@ export default function ProductDetail({ p }) {
     );
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-6 sm:py-10">
+    <section className="mx-auto max-w-6xl px-4 pb-28 pt-6 sm:pt-10 md:pb-10">
       <nav aria-label="Ruta" className="flex flex-wrap items-center gap-1.5 text-sm text-gray-400">
         <Link href="/#catalogo" className="transition hover:text-accent">Catálogo</Link>
         <ChevronRight size={14} />
@@ -121,11 +121,11 @@ export default function ProductDetail({ p }) {
           {cta('mt-5 hidden w-full md:flex', p.price > 0 ? 'Pedir por WhatsApp' : 'Consultar por WhatsApp', 'No disponible por ahora')}
 
           {specs.length ? (
-            <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="mt-6 grid grid-cols-2 gap-3">
               {specs.map(({ Icon, k, v }) => (
-                <div key={k} className="glass flex items-center gap-3 rounded-xl p-3">
-                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-accent/40 text-accent">
-                    <Icon size={22} />
+                <div key={k} className="glass flex flex-col gap-2.5 rounded-xl p-3.5">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-accent/40 text-accent">
+                    <Icon size={20} />
                   </span>
                   <span className="min-w-0">
                     <span className="block text-[10px] font-semibold uppercase tracking-wider text-gray-500">{k}</span>
@@ -139,9 +139,9 @@ export default function ProductDetail({ p }) {
           {p.features && p.features.length ? (
             <div className="mt-7">
               <h2 className="font-display text-lg font-semibold">Características</h2>
-              <ul className="mt-3 grid gap-2">
+              <ul className="glass mt-3 divide-y divide-white/10 overflow-hidden rounded-xl">
                 {p.features.map((f) => (
-                  <li key={f} className="glass flex items-start gap-2.5 rounded-xl px-3.5 py-3 text-sm text-gray-300">
+                  <li key={f} className="flex items-start gap-2.5 px-3.5 py-3 text-sm text-gray-300">
                     <Check size={16} className="mt-0.5 shrink-0 text-accent" />
                     {f}
                   </li>
