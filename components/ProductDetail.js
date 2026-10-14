@@ -3,7 +3,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ChevronRight, Share2, Check, X, ZoomIn, Weight, Armchair, Move, Layers } from 'lucide-react';
 import { products } from '../data/products';
-import { comfort } from '../data/comfort';
 import { config } from '../data/config';
 import { fmt, waLink, orderMsg, stockInfo, productUrl } from '../lib/utils';
 import WhatsAppIcon from './WhatsAppIcon';
@@ -132,18 +131,6 @@ export default function ProductDetail({ p }) {
                     <span className="block text-[10px] font-semibold uppercase tracking-wider text-gray-500">{k}</span>
                     <span className="mt-0.5 block font-display text-lg font-extrabold leading-tight text-accent">{v}</span>
                   </span>
-                </div>
-              ))}
-            </div>
-          ) : null}
-
-          {comfort[p.id] ? (
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              {comfort[p.id].map(({ t, d }) => (
-                <div key={t} className="glass relative overflow-hidden rounded-xl p-3.5 pl-5">
-                  <span className="absolute inset-y-0 left-0 w-1 bg-accent" />
-                  <p className="text-sm font-bold uppercase tracking-wide">{t}</p>
-                  <p className="mt-0.5 text-sm text-gray-400">{d}</p>
                 </div>
               ))}
             </div>
