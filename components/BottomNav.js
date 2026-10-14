@@ -5,7 +5,7 @@ import { Home, Search, ListChecks, Headset } from 'lucide-react';
 const items = [
   { id: 'inicio', label: 'Inicio', Icon: Home },
   { id: 'catalogo', label: 'Catálogo', Icon: Search },
-  { id: 'como-pedir', label: 'Cómo pedir', Icon: ListChecks },
+  { id: 'como-pedir', label: 'Cómo comprar', Icon: ListChecks },
   { id: 'soporte', label: 'Soporte', Icon: Headset },
 ];
 

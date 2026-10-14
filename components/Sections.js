@@ -6,7 +6,7 @@ import { waLink } from '../lib/utils';
 
 const steps = [
   { Icon: Search, t: 'Elige', d: 'Busca tu producto en el catálogo y revisa el stock.' },
-  { Icon: MessageCircle, t: 'Escríbenos', d: 'Desde la ficha toca "Pedir por WhatsApp" y el mensaje llega ya armado.' },
+  { Icon: MessageCircle, t: 'Escríbenos', d: 'Desde la ficha toca "Comprar por WhatsApp" y el mensaje llega ya armado.' },
   { Icon: PackageCheck, t: 'Recibe', d: 'Coordinamos el pago y la entrega contigo por chat.' },
 ];
 
@@ -22,7 +22,7 @@ export function HowTo() {
   return (
     <section id="como-pedir" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-14">
       <Reveal>
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Cómo pedir</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Cómo comprar</p>
         <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">Tres pasos y listo</h2>
       </Reveal>
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
@@ -49,7 +49,7 @@ export function Faq() {
   return (
     <section id="faq" className="mx-auto max-w-3xl scroll-mt-24 px-4 py-12">
       <Reveal>
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Antes de pedir</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Antes de comprar</p>
         <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">Preguntas frecuentes</h2>
       </Reveal>
       <div className="mt-6 space-y-3">
