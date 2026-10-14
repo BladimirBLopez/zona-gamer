@@ -1,11 +1,11 @@
 import { config } from '../data/config';
 
 // Cuando tengas el logo: ponlo en public/ y escribe aquí su ruta, ej. '/logo.webp'
-export const LOGO_SRC = '';
+export const LOGO_SRC = '/logo.webp';
 
 export default function Brand({ size = 'md', tagline = false }) {
   if (LOGO_SRC) {
-    return <img src={LOGO_SRC} alt={config.name} className={size === 'sm' ? 'h-11 w-auto' : 'h-14 w-auto'} />;
+    return <img src={LOGO_SRC} alt={config.name} width={1955} height={781} className={size === 'sm' ? 'h-11 w-auto' : 'h-14 w-auto'} />;
   }
   const box = size === 'sm' ? 'h-10 w-10 text-base' : 'h-14 w-14 text-xl';
   const txt = size === 'sm' ? 'text-base' : 'text-xl';
