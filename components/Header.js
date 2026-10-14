@@ -20,7 +20,7 @@ export default function Header() {
         🇧🇴 {config.city} <span className="mx-1.5 text-neon">•</span> Productos originales{' '}
         <span className="mx-1.5 text-neon">•</span> Atención por WhatsApp
       </div>
-      <header className="sticky top-0 z-40 border-b border-white/5 bg-bg">
+      <header className="nav-surface sticky top-0 z-40">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
           <a href="/#inicio" aria-label={config.name} className="flex items-center">
             <Brand size="sm" />
