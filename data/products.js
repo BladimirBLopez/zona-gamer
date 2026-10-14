@@ -98,4 +98,33 @@ const dup = {};
 raw.forEach((p) => {
   dup[p.slug] = (dup[p.slug] || 0) + 1;
 });
-export const products = raw.map((p) => (dup[p.slug] > 1 ? { ...p, slug: `${p.slug}-${p.id}` } : p));
+const tags = {
+  1: { colors: ['Negro', 'Verde', 'Azul'], material: 'Tela' },
+  2: { colors: ['Negro', 'Naranja'], material: 'Cuero PVC' },
+  3: { colors: ['Negro', 'Rojo'], material: 'Tela' },
+  4: { colors: [], material: 'Cuero PVC' },
+  5: { colors: ['Negro'], material: 'Cuero PVC' },
+  6: { colors: ['Negro', 'Naranja'], material: 'Cuero PVC' },
+  7: { colors: ['Negro', 'Rosa'], material: 'Cuero PVC' },
+  8: { colors: ['Negro', 'Naranja'], material: 'Tela' },
+  9: { colors: ['Negro', 'Naranja'], material: 'Cuero PVC' },
+  10: { colors: ['Negro', 'Dorado'], material: 'Cuero PVC' },
+  11: { colors: ['Negro', 'Dorado'], material: 'Cuero PVC' },
+  12: { colors: ['Gris'], material: 'Tela' },
+  13: { colors: ['Negro', 'Verde'], material: 'Cuero PVC' },
+  14: { colors: ['Negro', 'Naranja'], material: 'Tela' },
+  15: { colors: ['Negro', 'Gris'], material: 'Cuero PVC' },
+  16: { colors: ['Negro', 'Dorado'], material: 'Cuero PVC' },
+  17: { colors: ['Negro', 'Naranja'], material: 'Cuero PVC' },
+  18: { colors: ['Negro', 'Dorado'], material: 'Terciopelo' },
+  19: { colors: ['Negro', 'Naranja'], material: 'Cuero PVC' },
+};
+
+export const colorOptions = ['Naranja', 'Rosa', 'Dorado', 'Verde', 'Azul', 'Rojo', 'Gris', 'Negro'];
+export const materialOptions = ['Cuero PVC', 'Tela', 'Terciopelo'];
+
+export const products = raw.map((p) => {
+  const t = tags[p.id] || {};
+  const base = dup[p.slug] > 1 ? { ...p, slug: `${p.slug}-${p.id}` } : p;
+  return { ...base, tagColors: t.colors || [], material: t.material || '' };
+});
