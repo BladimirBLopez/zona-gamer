@@ -111,3 +111,11 @@ html[data-theme='light'] .nav-pill {
   border-color: rgba(15, 23, 42, 0.14);
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
 }
+
+/* ===== Negro + naranja (identidad Cougar) ===== */
+body { background: #0a0a0c; }
+.glass { background: #131316; }
+.nav-surface { background: #151518; }
+.nav-pill { background: #0d0d10; }
+html[data-theme='light'] .text-accent,
+html[data-theme='light'] .hover\:text-accent:hover { color: #c2410c; }

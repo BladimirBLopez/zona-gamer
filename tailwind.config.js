@@ -4,10 +4,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        bg: '#060c16',
-        card: '#0d1626',
-        accent: '#8b5cf6',
-        neon: '#22d3ee',
+        bg: '#0a0a0c',
+        card: '#131316',
+        accent: '#ea580c',
+        neon: '#fb923c',
       },
       fontFamily: {
         display: ['var(--font-display)', 'system-ui', 'sans-serif'],
