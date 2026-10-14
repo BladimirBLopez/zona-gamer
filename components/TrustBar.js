@@ -1,10 +1,10 @@
-import { ShieldCheck, Tag, PackageCheck, MessageCircle } from 'lucide-react';
+import { ShieldCheck, Tag, PackageCheck, ListChecks } from 'lucide-react';
 
 const items = [
   { Icon: ShieldCheck, t: 'Productos originales' },
   { Icon: Tag, t: 'Precios en bolivianos' },
   { Icon: PackageCheck, t: 'Stock visible' },
-  { Icon: MessageCircle, t: 'Atención por WhatsApp' },
+  { Icon: ListChecks, t: 'Ficha completa de cada silla' },
 ];
 
 export default function TrustBar() {

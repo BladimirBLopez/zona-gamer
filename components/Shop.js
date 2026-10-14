@@ -14,9 +14,9 @@ export default function Shop() {
 
   return (
     <>
-      <Hero q={q} setQ={setQ} onExplore={goCatalog} />
-      <TrustBar />
+      <Hero onExplore={goCatalog} />
       <Featured />
+      <TrustBar />
       <Catalog q={q} setQ={setQ} cat={cat} setCat={setCat} />
     </>
   );
