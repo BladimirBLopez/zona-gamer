@@ -123,11 +123,33 @@ const tags = {
   19: { colors: ['Negro', 'Naranja'], material: 'Cuero PVC' },
 };
 
+const descriptions = {
+  1: 'Silla de tela transpirable con reposabrazos acolchados abatibles y mecanismo basculante regulable de 3° a 18°. Se ofrece en versiones verde, negra y azul. Soporta hasta 120 kg.',
+  2: 'Silla en cuero PVC transpirable con cojines cervical y lumbar, reclinación continua hasta 180° y altura regulable por pistón. Soporta hasta 120 kg.',
+  3: 'Silla de tela suave y transpirable con cojines cervical y lumbar, reposabrazos ajustables 3D y mecanismo basculante de 3° a 18°. Reclina de 90° a 160° y soporta hasta 110 kg.',
+  4: 'Silla en PVC premium transpirable con cojines cervical y lumbar, reposabrazos regulables 2D y tensión de inclinación ajustable. Reclina hasta 160° y soporta hasta 120 kg. Precio desde; consulta por la variante.',
+  5: 'Armor Elite en negro total: PVC premium transpirable de acabado sobrio, cojines cervical y lumbar y tensión de inclinación ajustable. Reclina hasta 160° y soporta hasta 120 kg.',
+  6: 'Armor Elite en negro y naranja: PVC premium transpirable, cojines cervical y lumbar, reposabrazos regulables 2D y tensión de inclinación ajustable. Reclina hasta 160°.',
+  7: 'Armor Elite EVA con acabado negro y rosa en PVC premium transpirable. Incluye cojines cervical y lumbar, tensión de inclinación ajustable y reclina hasta 160°.',
+  8: 'Silla con tapizado de tela tejida, cojines cervical y lumbar, reposabrazos 4D plegables y bolsillo posterior integrado. Reclina de 90° a 155° y soporta hasta 120 kg.',
+  9: 'Silla en PVC premium transpirable con reposapiés retráctil, cojines cervical y lumbar y asiento amplio de alta densidad. Reclina de 90° a 155° y soporta hasta 120 kg.',
+  10: 'Versión negra y dorada de la Explore Neo: PVC premium transpirable, reposapiés retráctil, cojines cervical y lumbar y asiento amplio de alta densidad. Reclina de 90° a 155°.',
+  11: 'Silla en PVC transpirable premium con reposabrazos 3D Hyperrotation, cojines cervical y lumbar y un asiento de soporte más amplio. Reclina de 90° a 155° y soporta hasta 120 kg.',
+  12: 'Silla con tapizado de tela gris transpirable, reposabrazos 3D Hyperrotation, cojines cervical y lumbar y asiento de soporte más amplio. Reclina de 90° a 155°. Hoy agotada.',
+  13: 'Silla en cuero PVC transpirable en negro y verde, con cojines cervical y lumbar, reclinación continua hasta 180° y altura regulable por pistón. Soporta hasta 120 kg.',
+  14: 'Sillón tipo butaca en tejido transpirable con cojines cervical y lumbar, reposapiés plegable integrado y tres posiciones de reclinación (95° a 160°). Soporta hasta 150 kg.',
+  15: 'Silla en PVC con espuma moldeada, reposabrazos ajustables 4D, mecanismo basculante multifunción y base de aluminio de cinco radios. Reclina de 90° a 160° y soporta hasta 150 kg.',
+  16: 'Sillón en PVC extra grueso transpirable con mesa giratoria desmontable, puerto de carga USB Type-C y bolsillos laterales integrados. Reclina de 115° a 157° y soporta hasta 160 kg.',
+  17: 'Sillón en cuero sintético PVC con balanceo, reclinación y giro, soporte ergonómico por zonas y espuma de alta densidad. Reclina de 95° a 160° y soporta hasta 150 kg.',
+  18: 'Silla en terciopelo premium con soporte lumbar LiftBack, almohada cervical magnética y espuma de memoria. Reposabrazos 4D, reclina de 90° a 155° y soporta hasta 160 kg.',
+  19: 'Silla en cuero PVC premium transpirable con cojín cervical ajustable con correa, soporte lumbar ergonómico y reposabrazos 4D. Reclina hasta 170° con bloqueo y soporta hasta 160 kg. Consulta el precio por WhatsApp.',
+};
+
 export const colorOptions = ['Naranja', 'Rosa', 'Dorado', 'Verde', 'Azul', 'Rojo', 'Gris', 'Negro'];
 export const materialOptions = ['Cuero PVC', 'Tela', 'Terciopelo'];
 
 export const products = raw.map((p) => {
   const t = tags[p.id] || {};
   const base = dup[p.slug] > 1 ? { ...p, slug: `${p.slug}-${p.id}` } : p;
-  return { ...base, tagColors: t.colors || [], material: t.material || '' };
+  return { ...base, description: descriptions[p.id] || base.description, tagColors: t.colors || [], material: t.material || '' };
 });

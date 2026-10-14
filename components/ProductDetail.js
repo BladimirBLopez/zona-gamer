@@ -116,6 +116,8 @@ export default function ProductDetail({ p }) {
           <p className="mt-5 font-display text-4xl font-extrabold">{priceText}</p>
           <p className="mt-1 text-xs text-gray-500">{copied ? 'Link copiado.' : 'El pago y la entrega se coordinan por chat.'}</p>
 
+          {p.description ? <p className="mt-4 text-sm leading-relaxed text-gray-400">{p.description}</p> : null}
+
           {cta('mt-5 hidden w-full md:flex', p.price > 0 ? 'Pedir por WhatsApp' : 'Consultar por WhatsApp', 'No disponible por ahora')}
 
           {specs.length ? (
