@@ -9,7 +9,7 @@ const chairs = [
 
 export default function Showcase() {
   return (
-    <section className="relative mx-auto -mt-6 max-w-3xl px-4 pb-10">
+    <section className="relative mx-auto mt-2 max-w-3xl px-4 pb-10">
       <div className="pointer-events-none absolute inset-x-10 bottom-6 h-40 rounded-full bg-accent/30 blur-[90px]" />
       <div className="relative flex items-end justify-center gap-2 sm:gap-4">
         {chairs.map((c) => (
