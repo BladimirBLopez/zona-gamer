@@ -9,8 +9,8 @@ export const metadata = {
   metadataBase: new URL('https://zona-gamer-tau.vercel.app'),
   title: 'Zona Gamer | Tienda gamer en Bolivia',
   openGraph: {
-    title: 'Zona Gamer | Sillas y sillones gamer originales',
-    description: 'Cougar y Sharkoon. Elige tu silla y pídela por WhatsApp.',
+    title: 'Zona Gamer | Tienda gamer: sillas, mousepads y cámaras',
+    description: 'Productos gamer para tu setup. Elige el tuyo y pídelo por WhatsApp.',
     url: '/',
     siteName: 'Zona Gamer',
     locale: 'es_BO',
@@ -18,7 +18,7 @@ export const metadata = {
     images: [{ url: '/og.png', width: 1200, height: 630, alt: 'Zona Gamer' }],
   },
   twitter: { card: 'summary_large_image', images: ['/og.png'] },
-  description: 'Sillas y sillones gamer originales Cougar y Sharkoon. Pide por WhatsApp.',
+  description: 'Tienda gamer: sillas, mousepads, cámaras y más. Pide por WhatsApp.',
 };
 
 export const viewport = { themeColor: '#060c16' };

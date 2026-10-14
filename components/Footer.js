@@ -26,7 +26,7 @@ export default function Footer() {
         </a>
 
         <p className="mt-5 max-w-md text-base leading-relaxed text-gray-400">
-          Sillas y sillones gamer con precios claros y atención directa desde {config.city}.
+          Productos gamer con precios claros y atención directa desde {config.city}.
         </p>
 
         <nav className="mt-8 flex flex-wrap gap-x-6 gap-y-3">

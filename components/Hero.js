@@ -5,9 +5,9 @@ import { Search, ArrowRight, Gamepad2, Headphones, Keyboard, Cpu } from 'lucide-
 
 const headlines = [
   ['Sube de nivel tu ', 'setup gamer'],
-  ['Sillas y sillones ', 'originales'],
+  ['Todo para tu setup ', 'gamer'],
   ['Compara precio y stock, ', 'sin sorpresas'],
-  ['Elige tu silla y ', 'cómprala por WhatsApp'],
+  ['Elige tu producto y ', 'pídelo por WhatsApp'],
   ['Juega, trabaja y ', 'descansa mejor'],
 ];
 
@@ -94,7 +94,7 @@ export default function Hero({ q, setQ, onExplore }) {
           </div>
 
           <motion.p {...up(0.2)} className="mx-auto mt-5 max-w-xl text-base text-gray-400 sm:text-lg">
-            Sillas y sillones gamer originales Cougar y Sharkoon. Compara precio y stock, y compra directo por WhatsApp.
+            Sillas, mousepads, cámaras y más para tu setup gamer. Compara precio y stock, y compra directo por WhatsApp.
           </motion.p>
 
           <motion.form

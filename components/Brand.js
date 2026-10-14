@@ -17,7 +17,7 @@ export default function Brand({ size = 'md', tagline = false }) {
       <span className="leading-none">
         <span className={`block font-display ${txt} font-bold uppercase tracking-wide`}>{config.name}</span>
         {tagline ? (
-          <span className="mt-1 block text-[10px] font-medium tracking-wider text-gray-500">Sillas y sillones gamer</span>
+          <span className="mt-1 block text-[10px] font-medium tracking-wider text-gray-500">Tienda gamer</span>
         ) : null}
       </span>
     </span>

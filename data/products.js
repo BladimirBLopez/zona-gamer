@@ -12,7 +12,7 @@ const item = (id, name, brand, category, colors, price, stock, features, soporta
   oldPrice: 0,
   slug: slugify(name),
   stock,
-  emoji: category === 'Sillones gamer' ? '🛋️' : '🪑',
+  emoji: { 'Sillones gamer': '🛋️', 'Mousepads': '🖱️', 'Cámaras': '📷' }[category] || '🪑',
   image: imageFor(id, name, brand),
   gallery: galleryFor(id),
   badge: '',
