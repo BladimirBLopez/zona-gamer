@@ -5,14 +5,14 @@ import { config } from '../data/config';
 import { waLink } from '../lib/utils';
 
 const steps = [
-  { Icon: Search, t: 'Elige', d: 'Busca tu producto en el catálogo y revisa el stock.' },
-  { Icon: MessageCircle, t: 'Escríbenos', d: 'Desde la ficha toca "Comprar por WhatsApp" y el mensaje llega ya armado.' },
-  { Icon: PackageCheck, t: 'Recibe', d: 'Coordinamos el pago y la entrega contigo por chat.' },
+  { Icon: Search, t: 'Elige', d: 'Explora el catálogo y revisa precio y disponibilidad.' },
+  { Icon: MessageCircle, t: 'Escríbenos', d: 'Desde la ficha del producto, un toque y tu pedido llega a WhatsApp ya redactado.' },
+  { Icon: PackageCheck, t: 'Recibe', d: 'Confirmamos disponibilidad y coordinamos pago y entrega contigo.' },
 ];
 
 const faqs = [
   { q: '¿Cómo pago?', a: 'El pago se coordina por WhatsApp. No hay pagos dentro de la web.' },
-  { q: '¿El stock es real?', a: 'Sí, lo actualizamos seguido. Si algo cambia, te avisamos por chat.' },
+  { q: '¿Cómo sé si hay stock?', a: 'Te confirmamos la disponibilidad por WhatsApp antes de cerrar tu pedido.' },
   { q: '¿Hacen envíos?', a: 'Coordinamos la entrega contigo por WhatsApp según tu ciudad.' },
   { q: '¿Puedo reservar un producto?', a: 'Escríbenos y lo coordinamos. Te confirmamos disponibilidad al momento.' },
   { q: '¿Tienen garantía?', a: 'Consulta por WhatsApp la garantía de cada producto antes de comprar.' },
@@ -23,7 +23,7 @@ export function HowTo() {
     <section id="como-pedir" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-14">
       <Reveal>
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Cómo comprar</p>
-        <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">Tres pasos y listo</h2>
+        <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">Así compras en tres pasos</h2>
       </Reveal>
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
         {steps.map(({ Icon, t, d }, i) => (
@@ -90,7 +90,7 @@ export function Support() {
     <section id="soporte" className="mx-auto max-w-4xl scroll-mt-24 px-4 py-14">
       <Reveal>
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Soporte</p>
-        <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">¿Dudas? Escríbenos</h2>
+        <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">Atención al cliente</h2>
         <p className="mt-2 text-sm text-gray-400">{config.schedule}</p>
       </Reveal>
       <Reveal className="mt-6">
@@ -118,8 +118,8 @@ export function Support() {
 
 export function Community() {
   const cards = [
-    { label: 'Videos y lives', name: '@zonasgamer5', cta: 'Ver nuestro TikTok', href: config.tiktok },
-    { label: 'Novedades y contacto', name: config.name, cta: 'Visitar nuestra página de Facebook', href: config.facebook },
+    { label: 'Videos y lives', name: '@zonasgamer5', cta: 'Ver perfil de TikTok', href: config.tiktok },
+    { label: 'Novedades y contacto', name: config.name, cta: 'Ver página de Facebook', href: config.facebook },
   ].filter((c) => c.href);
 
   if (cards.length === 0) return null;
@@ -128,7 +128,7 @@ export function Community() {
     <section id="comunidad" className="mx-auto max-w-4xl scroll-mt-24 px-4 py-12">
       <Reveal>
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Comunidad</p>
-        <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">Síguenos</h2>
+        <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">Nuestras redes</h2>
         <p className="mt-2 max-w-xl text-sm text-gray-400">
           En nuestras redes publicamos novedades y productos de {config.name}.
         </p>

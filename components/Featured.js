@@ -21,8 +21,8 @@ export default function Featured() {
     <section className="mx-auto max-w-7xl px-4 py-12">
       <Reveal className="flex items-end justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Listos ahora</p>
-          <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">Disponibles para pedir hoy</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Selección</p>
+          <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">Productos disponibles</h2>
         </div>
         <div className="hidden gap-2 sm:flex">
           <button type="button" onClick={prev} aria-label="Anterior" className="glass flex h-10 w-10 items-center justify-center rounded-xl transition hover:border-accent/50 active:scale-95">
@@ -42,7 +42,7 @@ export default function Featured() {
                 href={`/producto/${p.slug}`}
                 className="glass group block overflow-hidden rounded-2xl transition hover:border-accent/50"
               >
-                <div className="flex aspect-[4/3] items-center justify-center bg-white/5">
+                <div className="flex aspect-[4/3] items-center justify-center bg-[#f1f1f4]">
                   <img
                     src={p.image}
                     alt={p.name}

@@ -4,11 +4,11 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Search, ArrowRight, Gamepad2, Headphones, Keyboard, Cpu } from 'lucide-react';
 
 const headlines = [
-  ['Sube de nivel tu ', 'setup gamer'],
-  ['Todo para tu setup ', 'gamer'],
-  ['Compara precio y stock, ', 'sin sorpresas'],
-  ['Elige tu producto y ', 'pídelo por WhatsApp'],
-  ['Juega, trabaja y ', 'descansa mejor'],
+  ['Lleva tu setup ', 'al siguiente nivel'],
+  ['Equípate con ', 'productos gamer'],
+  ['Precio y stock ', 'siempre a la vista'],
+  ['Pide fácil por ', 'WhatsApp'],
+  ['Asesoría directa ', 'antes de comprar'],
 ];
 
 const floats = [
@@ -62,7 +62,7 @@ export default function Hero({ q, setQ, onExplore }) {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
             </span>
-            Catálogo gamer en vivo
+            Tienda gamer en Bolivia
           </motion.span>
 
           <div className="mt-6 flex min-h-[8rem] items-center justify-center sm:min-h-[12.5rem] lg:min-h-[10rem]">
@@ -94,7 +94,7 @@ export default function Hero({ q, setQ, onExplore }) {
           </div>
 
           <motion.p {...up(0.2)} className="mx-auto mt-5 max-w-xl text-base text-gray-400 sm:text-lg">
-            Sillas, mousepads, cámaras y más para tu setup gamer. Compara precio y stock, y compra directo por WhatsApp.
+            Sillas, mousepads, cámaras y más. Revisa precios y disponibilidad, y haz tu pedido por WhatsApp.
           </motion.p>
 
           <motion.form
@@ -106,7 +106,7 @@ export default function Hero({ q, setQ, onExplore }) {
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="¿Qué producto buscas?"
+              placeholder="Buscar producto o marca"
               className="min-w-0 flex-1 bg-transparent px-1 py-2 text-sm outline-none placeholder:text-gray-500 sm:text-base"
             />
             <button
