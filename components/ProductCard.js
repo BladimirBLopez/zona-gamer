@@ -29,13 +29,13 @@ export default function ProductCard({ p, i }) {
         aria-label={`Ver detalles de ${p.name}`}
         className="group glass flex h-full flex-col overflow-hidden rounded-2xl transition-colors duration-300 hover:border-accent/50"
       >
-        <div className="relative aspect-square w-full overflow-hidden bg-white/5 sm:aspect-[4/3]">
+        <div className="relative aspect-square w-full overflow-hidden bg-[#f1f1f4] sm:aspect-[4/3]">
           {p.image ? (
             <img
               src={p.image}
               alt={p.name}
               loading="lazy"
-              className={`h-full w-full object-contain p-3 transition duration-300 group-hover:scale-105 ${out ? 'opacity-60 grayscale' : ''}`}
+              className={`h-full w-full object-contain p-1.5 transition duration-300 group-hover:scale-105 ${out ? 'opacity-60 grayscale' : ''}`}
             />
           ) : (
             <span className="flex h-full w-full items-center justify-center text-6xl sm:text-7xl">{p.emoji}</span>

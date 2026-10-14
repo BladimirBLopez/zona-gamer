@@ -162,7 +162,7 @@ export default function ProductDetail({ p }) {
                 href={`/producto/${r.slug}`}
                 className="glass group overflow-hidden rounded-2xl transition hover:border-accent/50"
               >
-                <div className="flex aspect-square items-center justify-center bg-white/5">
+                <div className="flex aspect-square items-center justify-center bg-[#f1f1f4]">
                   <img src={r.image} alt={r.name} loading="lazy" className="h-full w-full object-contain p-3 transition duration-300 group-hover:scale-105" />
                 </div>
                 <div className="p-3">
