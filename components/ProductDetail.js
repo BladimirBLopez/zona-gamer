@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ChevronRight, Share2, Check, X, ZoomIn, Weight, Armchair, Move, Layers } from 'lucide-react';
 import { products } from '../data/products';
+import { comfort } from '../data/comfort';
 import { config } from '../data/config';
 import { fmt, waLink, orderMsg, stockInfo, productUrl } from '../lib/utils';
 import WhatsAppIcon from './WhatsAppIcon';
@@ -121,16 +122,28 @@ export default function ProductDetail({ p }) {
           {cta('mt-5 hidden w-full md:flex', p.price > 0 ? 'Pedir por WhatsApp' : 'Consultar por WhatsApp', 'No disponible por ahora')}
 
           {specs.length ? (
-            <div className="mt-6 grid grid-cols-2 gap-3">
+            <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
               {specs.map(({ Icon, k, v }) => (
                 <div key={k} className="glass flex items-center gap-3 rounded-xl p-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
-                    <Icon size={20} />
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-accent/40 text-accent">
+                    <Icon size={22} />
                   </span>
                   <span className="min-w-0">
                     <span className="block text-[10px] font-semibold uppercase tracking-wider text-gray-500">{k}</span>
-                    <span className="block text-sm font-bold">{v}</span>
+                    <span className="mt-0.5 block font-display text-lg font-extrabold leading-tight text-accent">{v}</span>
                   </span>
+                </div>
+              ))}
+            </div>
+          ) : null}
+
+          {comfort[p.id] ? (
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              {comfort[p.id].map(({ t, d }) => (
+                <div key={t} className="glass relative overflow-hidden rounded-xl p-3.5 pl-5">
+                  <span className="absolute inset-y-0 left-0 w-1 bg-accent" />
+                  <p className="text-sm font-bold uppercase tracking-wide">{t}</p>
+                  <p className="mt-0.5 text-sm text-gray-400">{d}</p>
                 </div>
               ))}
             </div>
