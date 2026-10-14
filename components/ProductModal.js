@@ -39,7 +39,7 @@ export default function ProductModal({ p, onClose }) {
             transition={{ type: 'spring', damping: 26, stiffness: 300 }}
             className="relative max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-white/10 bg-[#0b1322] sm:rounded-3xl"
           >
-            <div className="relative flex h-44 items-center justify-center bg-gradient-to-br from-accent/30 via-card to-neon/20 text-8xl sm:h-56">
+            <div className="relative flex h-44 items-center justify-center bg-[#f1f1f4] text-8xl sm:h-56">
               {p.image ? <img src={p.image} alt={p.name} className="h-full w-full object-contain p-3" /> : p.emoji}
               <button
                 type="button"
@@ -77,7 +77,7 @@ export default function ProductModal({ p, onClose }) {
                 </ul>
               ) : null}
 
-              {p.specs ? (
+              {p.specs && (p.specs.soporta || p.specs.reclina || p.specs.brazos) ? (
                 <div className="mt-4 grid grid-cols-3 gap-2 text-center">
                   {[['Soporta', p.specs.soporta], ['Reclina', p.specs.reclina], ['Brazos', p.specs.brazos]].map(([k, v]) => (
                     <div key={k} className="rounded-xl border border-white/10 bg-white/5 px-2 py-2">

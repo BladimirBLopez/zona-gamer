@@ -1,6 +1,5 @@
 import { imageFor, galleryFor } from './temp-images';
 
-export const categories = ['Todos', 'Sillas gamer', 'Sillones gamer', 'Cougar', 'Sharkoon'];
 
 const item = (id, name, brand, category, colors, price, stock, features, soporta, reclina, brazos, extra = {}) => ({
   id,
@@ -153,3 +152,12 @@ export const products = raw.map((p) => {
   const base = dup[p.slug] > 1 ? { ...p, slug: `${p.slug}-${p.id}` } : p;
   return { ...base, description: descriptions[p.id] || base.description, tagColors: t.colors || [], material: t.material || '' };
 });
+
+const catOrder = ['Sillas gamer', 'Sillones gamer', 'Mousepads', 'Cámaras'];
+const brandList = [...new Set(['Cougar', 'Sharkoon', ...products.map((p) => p.brand)])];
+export const categories = [
+  'Todos',
+  ...catOrder.filter((c) => products.some((p) => p.category === c)),
+  ...[...new Set(products.map((p) => p.category))].filter((c) => !catOrder.includes(c)),
+  ...brandList,
+];

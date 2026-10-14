@@ -1,14 +1,17 @@
 'use client';
 import { motion } from 'framer-motion';
-import { Armchair, Sofa, Crown, Zap } from 'lucide-react';
+import { Armchair, Sofa, Crown, Zap, Mouse, Camera } from 'lucide-react';
 import { products } from '../data/products';
 
-const cards = [
+const allCards = [
   { name: 'Sillas gamer', Icon: Armchair },
   { name: 'Sillones gamer', Icon: Sofa },
+  { name: 'Mousepads', Icon: Mouse },
+  { name: 'Cámaras', Icon: Camera },
   { name: 'Cougar', Icon: Crown },
   { name: 'Sharkoon', Icon: Zap },
 ];
+const cards = allCards.filter((c) => products.some((p) => p.category === c.name || p.brand === c.name));
 
 export default function Categories({ cat, onPick }) {
   return (
