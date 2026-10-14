@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { ChevronRight, Share2, Check, X, ZoomIn, Weight, Armchair, Move, Layers } from 'lucide-react';
+import { ChevronRight, Share2, Check, X, ZoomIn, Scale, RotateCw, Move, Layers } from 'lucide-react';
 import { products } from '../data/products';
 import { config } from '../data/config';
 import { fmt, waLink, orderMsg, stockInfo, productUrl } from '../lib/utils';
@@ -18,8 +18,8 @@ export default function ProductDetail({ p }) {
   const priceText = p.price > 0 ? `${p.from ? 'Desde ' : ''}Bs ${fmt(p.price)}` : 'Consultar precio';
 
   const specs = [
-    { Icon: Weight, k: 'Peso máximo', v: p.specs && p.specs.soporta },
-    { Icon: Armchair, k: 'Reclinación', v: p.specs && p.specs.reclina },
+    { Icon: Scale, k: 'Peso máximo', v: p.specs && p.specs.soporta },
+    { Icon: RotateCw, k: 'Reclinación', v: p.specs && p.specs.reclina },
     { Icon: Move, k: 'Reposabrazos', v: p.specs && p.specs.brazos },
     { Icon: Layers, k: 'Material', v: p.material },
   ].filter((x) => x.v);
@@ -125,7 +125,7 @@ export default function ProductDetail({ p }) {
               {specs.map(({ Icon, k, v }) => (
                 <div key={k} className="flex items-center gap-3.5 rounded-xl border border-white/10 bg-white/[0.06] p-3.5">
                   <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-accent/60 bg-accent/10 text-accent">
-                    <Icon size={20} />
+                    <Icon size={24} strokeWidth={1.75} />
                   </span>
                   <span className="min-w-0">
                     <span className="block text-xs font-bold uppercase tracking-wider text-gray-100">{k}</span>
