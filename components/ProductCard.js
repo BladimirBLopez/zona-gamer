@@ -14,6 +14,7 @@ export default function ProductCard({ p, i }) {
   const s = stockInfo(p.stock);
   const out = p.stock <= 0;
   const showStock = p.stock <= 3;
+  const title = p.name.toLowerCase().startsWith(p.brand.toLowerCase() + ' ') ? p.name.slice(p.brand.length + 1) : p.name;
 
   return (
     <motion.article
@@ -54,7 +55,7 @@ export default function ProductCard({ p, i }) {
 
         <div className="flex flex-1 flex-col p-3 sm:p-4">
           <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-neon">{p.brand}</span>
-          <h3 className="mt-1 line-clamp-2 text-sm font-semibold leading-snug sm:text-base">{p.name}</h3>
+          <h3 className="mt-1 line-clamp-2 text-sm font-semibold leading-snug sm:text-base">{title}</h3>
           {p.colors ? <p className="mt-0.5 line-clamp-1 text-[11px] text-gray-500">{p.colors}</p> : null}
           <div className="mt-auto flex flex-wrap items-baseline gap-x-2 pt-3">
             <span className="text-lg font-extrabold sm:text-xl">
@@ -68,7 +69,7 @@ export default function ProductCard({ p, i }) {
             </span>
             {p.oldPrice ? <span className="text-xs text-gray-500 line-through">Bs {fmt(p.oldPrice)}</span> : null}
           </div>
-          <span className="mt-3 flex items-center justify-center gap-1.5 rounded-xl border border-white/10 py-2.5 text-sm font-semibold transition group-hover:border-accent/60 group-hover:bg-accent group-hover:text-white">
+          <span className="mt-3 flex items-center justify-center gap-1.5 rounded-xl bg-accent py-2.5 text-sm font-semibold text-white transition group-hover:opacity-90">
             Ver detalles
             <ArrowRight size={15} className="transition group-hover:translate-x-0.5" />
           </span>
