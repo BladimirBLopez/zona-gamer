@@ -31,7 +31,7 @@ export default function Categories({ cat, onPick }) {
                 on ? 'border-accent/70 bg-accent/10' : ''
               }`}
             >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-accent/30 to-neon/20 text-neon transition group-hover:scale-110">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent transition group-hover:scale-110">
                 <Icon size={22} />
               </span>
               <span>
