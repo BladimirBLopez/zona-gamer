@@ -114,11 +114,11 @@ const raw = [
     ['Visión nocturna a color inteligente', 'Detección humana y de vehículos', 'Luz de foco activada por movimiento', 'Conexión Wi-Fi', 'Audio bidireccional', 'Resistente al clima IP67'],
     '', '', '',
     { cards: [['Resolución', '3MP · 2K'], ['Visión', 'Color inteligente'], ['Uso', 'Exterior · IP67'], ['Grabación', 'Nube / SD / NVR']] }),
-  item(25, 'Imou Cruiser Dual 2', 'Imou', 'Cámaras', 'Exterior · Doble lente', 0, 5,
+  item(25, 'Imou Cruiser Dual 2', 'Imou', 'Cámaras', 'Exterior · Doble lente', 890, 5,
     ['Doble lente: 3MP + 5MP', 'Detección IA de personas y vehículos', 'Disuasión activa', 'Pan & Tilt con cobertura 360°', 'Audio bidireccional', 'Resistente al clima IP66'],
     '', '', '',
     { cards: [['Lentes', 'Doble · 3MP + 5MP'], ['Visión', 'Color inteligente'], ['Uso', 'Exterior · IP66'], ['Grabación', 'Nube / MicroSD']] }),
-  item(26, 'Imou Cell PT 3MP Solar', 'Imou', 'Cámaras', 'Exterior · Solar', 0, 5,
+  item(26, 'Imou Cell PT 3MP Solar', 'Imou', 'Cámaras', 'Exterior · Solar', 1500, 5,
     ['Panel solar incluido para carga continua', 'Batería recargable por Type-C', '100% sin cables, Wi-Fi 2.4 GHz', 'Alertas en tiempo real en el celular', 'Detección de movimiento PIR y humana', 'Sirena y luz de foco'],
     '', '', '',
     { cards: [['Resolución', '3MP · 2K'], ['Visión', 'Color inteligente'], ['Uso', 'Exterior · IP66'], ['Grabación', 'Nube / MicroSD']] }),
@@ -175,8 +175,8 @@ const descriptions = {
   22: 'Cámara Wi-Fi para exterior 3MP (2K) con Pan & Tilt de 360°, visión nocturna a color y resistencia IP66. Detecta personas y vehículos, sigue el movimiento y tiene disuasión activa y audio bidireccional. Graba en nube, MicroSD o NVR. Garantía de 1 año.',
   23: 'Cámara tipo bullet para exterior 5MP (3K) con visión nocturna a color, luz de foco activada por movimiento y resistencia IP67. Detecta personas y vehículos, tiene audio bidireccional y se conecta por Wi-Fi. Graba en nube, MicroSD o NVR. Garantía de 1 año.',
   24: 'Cámara tipo bullet para exterior 3MP (2K) con visión nocturna a color, luz de foco activada por movimiento y resistencia IP67. Detecta personas y vehículos, tiene audio bidireccional y se conecta por Wi-Fi. Graba en nube, MicroSD o NVR. Garantía de 1 año.',
-  25: 'Cámara de exterior con doble lente (3MP + 5MP), Pan & Tilt de 360° y visión nocturna a color. Tiene detección IA de personas y vehículos, disuasión activa, audio bidireccional y resistencia IP66. Se conecta por Wi-Fi y graba en nube o MicroSD. Garantía de 1 año. Consulta el precio por WhatsApp.',
-  26: 'Cámara de exterior 3MP (2K) sin cables, con batería recargable por Type-C y panel solar incluido para carga continua. Tiene detección PIR y humana, sirena con luz de foco y audio bidireccional. Wi-Fi 2.4 GHz, resistencia IP66; graba en nube o MicroSD. Garantía de 1 año. Consulta el precio por WhatsApp.',
+  25: 'Cámara de exterior con doble lente (3MP + 5MP), Pan & Tilt de 360° y visión nocturna a color. Tiene detección IA de personas y vehículos, disuasión activa, audio bidireccional y resistencia IP66. Se conecta por Wi-Fi y graba en nube o MicroSD. Garantía de 1 año.',
+  26: 'Cámara de exterior 3MP (2K) sin cables, con batería recargable por Type-C y panel solar incluido para carga continua. Tiene detección PIR y humana, sirena con luz de foco y audio bidireccional. Wi-Fi 2.4 GHz, resistencia IP66; graba en nube o MicroSD. Garantía de 1 año.',
 };
 
 export const colorOptions = ['Naranja', 'Rosa', 'Dorado', 'Verde', 'Azul', 'Rojo', 'Gris', 'Negro'];
