@@ -18,7 +18,7 @@ export const metadata = {
     images: [{ url: '/og.png', width: 1200, height: 630, alt: 'Zona Gamer' }],
   },
   twitter: { card: 'summary_large_image', images: ['/og.png'] },
-  description: 'Tienda gamer: sillas, cámaras, proyectores, mousepads y accesorios. Pide por WhatsApp.',
+  description: 'Tienda gamer: sillas, cámaras, proyectores, mousepads y mesas. Pide por WhatsApp.',
 };
 
 export const viewport = { themeColor: '#060c16' };

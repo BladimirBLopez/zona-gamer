@@ -11,7 +11,7 @@ const item = (id, name, brand, category, colors, price, stock, features, soporta
   oldPrice: 0,
   slug: slugify(name),
   stock,
-  emoji: { 'Sillones gamer': '🛋️', 'Mousepads': '🖱️', 'Cámaras': '📷' }[category] || '🪑',
+  emoji: { 'Sillones gamer': '🛋️', 'Mousepads': '🖱️', 'Mesas Cougar': '🖥️', 'Cámaras': '📷' }[category] || '🪑',
   image: imageFor(id, name, brand),
   gallery: galleryFor(id),
   badge: '',
@@ -166,11 +166,11 @@ const raw = [
     ['Superficie de alto rendimiento: movimiento preciso y fluido', 'Bordes cosidos: mayor durabilidad y resistencia', 'Base de goma antideslizante', 'Tamaño XL para jugar y trabajar', 'Grosor de 3 mm'],
     '', '', '',
     { cards: [['Medidas', '800 × 300 mm', 'maximize'], ['Grosor', '3 mm'], ['Base', 'Goma antideslizante'], ['Bordes', 'Cosidos']] }),
-  item(39, 'Cougar Forerunner', 'Cougar', 'Accesorios', 'Gris oscuro · Naranja', 0, 5,
+  item(39, 'Cougar Forerunner', 'Cougar', 'Mesas Cougar', 'Gris oscuro · Naranja', 0, 5,
     ['Bolso deportivo de 38 L de capacidad', 'Diseño 3 en 1', 'Resistente al agua', 'Medidas 51 × 31 × 30 cm', 'Peso 1,03 kg'],
     '', '', '',
     { cards: [['Capacidad', '38 L'], ['Medidas', '51 × 31 × 30 cm', 'maximize'], ['Peso', '1,03 kg'], ['Resistencia', 'Al agua']] }),
-  item(40, 'Cougar E-Grav 180', 'Cougar', 'Accesorios', 'Negro', 0, 5,
+  item(40, 'Cougar E-Grav 180', 'Cougar', 'Mesas Cougar', 'Negro', 0, 5,
     ['Escritorio gaming XL: 1800 × 800 × 15 mm', 'Ajuste de altura de 730 a 1180 mm', 'Motores duales: estable y silencioso', 'Soporta hasta 120 kg', 'Panel con 2 memorias de altura', 'Tablero resistente y de fácil limpieza', 'Patas de acero de gran firmeza'],
     '', '', '',
     { cards: [['Medidas', '1800 × 800 mm', 'maximize'], ['Altura', '730–1180 mm', 'sliders'], ['Carga máx.', '120 kg'], ['Motores', 'Duales']] }),
@@ -249,7 +249,7 @@ export const products = raw.map((p) => {
   return { ...base, description: descriptions[p.id] || base.description, tagColors: t.colors || [], material: t.material || '' };
 });
 
-const catOrder = ['Sillas gamer', 'Sillones gamer', 'Mousepads', 'Cámaras', 'Proyectores'];
+const catOrder = ['Sillas gamer', 'Sillones gamer', 'Mesas Cougar', 'Mousepads', 'Cámaras', 'Proyectores'];
 const brandList = [...new Set(['Cougar', 'Sharkoon', ...products.map((p) => p.brand)])];
 export const categories = [
   'Todos',
