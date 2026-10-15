@@ -150,6 +150,33 @@ const raw = [
     ['Resolución nativa 1920 × 1080 (Full HD)', 'Soporte para 4K', 'Brillo de 550 ANSI lúmenes', 'Google TV oficial con Netflix y apps de Google Play', 'Motor óptico sellado antipolvo', 'Auto focus, auto keystone y detección de obstáculos', 'Corrección automática de hasta ±30°'],
     '', '', '',
     { cards: [['Resolución', 'Full HD · 1080p', 'monitor'], ['Brillo', '550 ANSI lúmenes', 'sun'], ['Sistema', 'Google TV', 'cpu'], ['Ajustes', 'Auto focus y keystone', 'sliders']] }),
+  item(34, 'Cougar Defensor S Jet Gray', 'Cougar', S, 'Gris · Negro', 0, 5,
+    ['Soporte lumbar PushBack ajustable', 'Almohada cervical magnética con espuma viscoelástica', 'Reposabrazos 4D de ajuste multidireccional', 'Reclinación de 90° a 155°', 'Espuma de alta densidad', 'Base de acero y ruedas silenciosas'],
+    '', '', '',
+    { cards: [['Reclinación', '90° a 155°'], ['Reposabrazos', '4D'], ['Lumbar', 'PushBack ajustable'], ['Cervical', 'Almohada magnética']] }),
+  item(35, 'Cougar Defensor S Navy Blue F', 'Cougar', S, 'Azul · Negro', 0, 5,
+    ['Soporte lumbar PushBack integrado y ajustable', 'Reposabrazos 4D: altura, ángulo, posición y desplazamiento', 'Reclinación de 90° a 155°', 'Cojín cervical de espuma viscoelástica', 'Tapizado de cuero PU transpirable y resistente'],
+    '150 kg', 'Hasta 155°', '4D'),
+  item(36, 'Cougar Armor Elite White', 'Cougar', S, 'Blanco · Gris', 0, 5,
+    ['Cojín cervical y cojín lumbar incluidos'],
+    '', '', '',
+    { cards: [['Color', 'Blanco · Gris'], ['Línea', 'Armor Elite']] }),
+  item(37, 'Cougar Arena Black', 'Cougar', 'Mousepads', 'Negro · Naranja', 0, 5,
+    ['Superficie de alto rendimiento: movimiento preciso y fluido', 'Bordes cosidos: mayor durabilidad y resistencia', 'Base de goma antideslizante', 'Tamaño XL para jugar y trabajar', 'Grosor de 3 mm'],
+    '', '', '',
+    { cards: [['Medidas', '800 × 300 mm', 'maximize'], ['Grosor', '3 mm'], ['Base', 'Goma antideslizante'], ['Bordes', 'Cosidos']] }),
+  item(38, 'Cougar Arena', 'Cougar', 'Mousepads', 'Naranja', 0, 5,
+    ['Superficie de alto rendimiento: movimiento preciso y fluido', 'Bordes cosidos: mayor durabilidad y resistencia', 'Base de goma antideslizante', 'Tamaño XL para jugar y trabajar', 'Grosor de 3 mm'],
+    '', '', '',
+    { cards: [['Medidas', '800 × 300 mm', 'maximize'], ['Grosor', '3 mm'], ['Base', 'Goma antideslizante'], ['Bordes', 'Cosidos']] }),
+  item(39, 'Cougar Forerunner', 'Cougar', 'Accesorios', 'Gris oscuro · Naranja', 0, 5,
+    ['Bolso deportivo de 38 L de capacidad', 'Diseño 3 en 1', 'Resistente al agua', 'Medidas 51 × 31 × 30 cm', 'Peso 1,03 kg'],
+    '', '', '',
+    { cards: [['Capacidad', '38 L'], ['Medidas', '51 × 31 × 30 cm', 'maximize'], ['Peso', '1,03 kg'], ['Resistencia', 'Al agua']] }),
+  item(40, 'Cougar E-Grav 180', 'Cougar', 'Accesorios', 'Negro', 0, 5,
+    ['Escritorio gaming XL: 1800 × 800 × 15 mm', 'Ajuste de altura de 730 a 1180 mm', 'Motores duales: estable y silencioso', 'Soporta hasta 120 kg', 'Panel con 2 memorias de altura', 'Tablero resistente y de fácil limpieza', 'Patas de acero de gran firmeza'],
+    '', '', '',
+    { cards: [['Medidas', '1800 × 800 mm', 'maximize'], ['Altura', '730–1180 mm', 'sliders'], ['Carga máx.', '120 kg'], ['Motores', 'Duales']] }),
 ];
 
 const dup = {};
@@ -176,6 +203,8 @@ const tags = {
   17: { colors: ['Negro', 'Naranja'], material: 'Cuero PVC' },
   18: { colors: ['Negro', 'Dorado'], material: 'Terciopelo' },
   19: { colors: ['Negro', 'Naranja'], material: 'Cuero PVC' },
+  34: { colors: ['Negro', 'Gris'], material: '' },
+  35: { colors: ['Negro', 'Azul'], material: '' },
 };
 
 const descriptions = {
