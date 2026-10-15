@@ -52,7 +52,7 @@ export default function ProductDetail({ p }) {
   return (
     <section className="mx-auto max-w-6xl px-4 pb-28 pt-6 sm:pt-10 md:pb-10">
       <nav aria-label="Ruta" className="flex flex-wrap items-center gap-1.5 text-sm text-gray-400">
-        <Link href="/#catalogo" className="transition hover:text-accent">Catálogo</Link>
+        <Link href="/catalogo" className="transition hover:text-accent">Catálogo</Link>
         <ChevronRight size={14} />
         <span>{p.category}</span>
         <ChevronRight size={14} />
