@@ -6,7 +6,7 @@ const display = Space_Grotesk({ subsets: ['latin'], weight: ['500', '700'], vari
 const body = Inter({ subsets: ['latin'], variable: '--font-body' });
 
 export const metadata = {
-  metadataBase: new URL('https://zona-gamer-tau.vercel.app'),
+  metadataBase: new URL('https://zona-gamer.store'),
   title: 'Zona Gamer | Tienda gamer en Bolivia',
   openGraph: {
     title: 'Zona Gamer | Tienda gamer: sillas, cámaras, proyectores y más',
