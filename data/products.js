@@ -11,7 +11,7 @@ const item = (id, name, brand, category, colors, price, stock, features, soporta
   oldPrice: 0,
   slug: slugify(name),
   stock,
-  emoji: { 'Sillones gamer': '🛋️', 'Mousepads': '🖱️', 'Mesas Cougar': '🖥️', 'Cámaras': '📷' }[category] || '🪑',
+  emoji: { 'Sillones gamer': '🛋️', 'Mousepads': '🖱️', 'Mesas Cougar': '🖥️', 'Accesorios gamer': '🎒', 'Cámaras': '📷' }[category] || '🪑',
   image: imageFor(id, name, brand),
   gallery: galleryFor(id),
   badge: '',
@@ -82,7 +82,7 @@ const raw = [
   item(17, 'Cougar Overlord', 'Cougar', L, 'Negro · Naranja', 4300, 5,
     ['Cuero sintético PVC', 'Balanceo, reclinación y giro', 'Soporte ergonómico por zonas', 'Espuma de alta densidad'],
     '150 kg', '95°–160°', 'Trimotion'),
-  item(19, 'Cougar Armor Titan', 'Cougar', S, 'Negro · Naranja', 0, 5,
+  item(19, 'Cougar Armor Titan', 'Cougar', S, 'Negro · Naranja', 3950, 5,
     ['Cuero PVC premium transpirable y resistente', 'Cojín cervical ajustable con correa', 'Soporte lumbar ergonómico', 'Tapizado premium de alta durabilidad'],
     '160 kg', 'Hasta 170° con bloqueo', '4D',
     {
@@ -148,11 +148,11 @@ const raw = [
     ['Resolución nativa 1920 × 1080 (Full HD)', 'Soporte para 4K', 'Brillo de 550 ANSI lúmenes', 'Google TV oficial con Netflix y apps de Google Play', 'Motor óptico sellado antipolvo', 'Auto focus, auto keystone y detección de obstáculos', 'Corrección automática de hasta ±30°'],
     '', '', '',
     { cards: [['Resolución', 'Full HD · 1080p', 'monitor'], ['Brillo', '550 ANSI lúmenes', 'sun'], ['Sistema', 'Google TV', 'cpu'], ['Ajustes', 'Auto focus y keystone', 'sliders']] }),
-  item(34, 'Cougar Defensor S Jet Gray', 'Cougar', S, 'Gris · Negro', 0, 5,
+  item(34, 'Cougar Defensor S Jet Gray', 'Cougar', S, 'Gris · Negro', 3950, 5,
     ['Soporte lumbar PushBack ajustable', 'Almohada cervical magnética con espuma viscoelástica', 'Reposabrazos 4D de ajuste multidireccional', 'Reclinación de 90° a 155°', 'Espuma de alta densidad', 'Base de acero y ruedas silenciosas'],
     '', '', '',
     { cards: [['Reclinación', '90° a 155°'], ['Reposabrazos', '4D'], ['Lumbar', 'PushBack ajustable'], ['Cervical', 'Almohada magnética']] }),
-  item(35, 'Cougar Defensor S Navy Blue F', 'Cougar', S, 'Azul · Negro', 0, 5,
+  item(35, 'Cougar Defensor S Navy Blue F', 'Cougar', S, 'Azul · Negro', 3950, 5,
     ['Soporte lumbar PushBack integrado y ajustable', 'Reposabrazos 4D: altura, ángulo, posición y desplazamiento', 'Reclinación de 90° a 155°', 'Cojín cervical de espuma viscoelástica', 'Tapizado de cuero PU transpirable y resistente'],
     '150 kg', 'Hasta 155°', '4D'),
   item(36, 'Cougar Armor Elite White', 'Cougar', S, 'Blanco · Gris', 0, 5,
@@ -166,7 +166,7 @@ const raw = [
     ['Superficie de alto rendimiento: movimiento preciso y fluido', 'Bordes cosidos: mayor durabilidad y resistencia', 'Base de goma antideslizante', 'Tamaño XL para jugar y trabajar', 'Grosor de 3 mm'],
     '', '', '',
     { cards: [['Medidas', '800 × 300 mm', 'maximize'], ['Grosor', '3 mm'], ['Base', 'Goma antideslizante'], ['Bordes', 'Cosidos']] }),
-  item(39, 'Cougar Forerunner', 'Cougar', 'Mesas Cougar', 'Gris oscuro · Naranja', 0, 5,
+  item(39, 'Cougar Forerunner', 'Cougar', 'Accesorios gamer', 'Gris oscuro · Naranja', 578, 5,
     ['Bolso deportivo de 38 L de capacidad', 'Diseño 3 en 1', 'Resistente al agua', 'Medidas 51 × 31 × 30 cm', 'Peso 1,03 kg'],
     '', '', '',
     { cards: [['Capacidad', '38 L'], ['Medidas', '51 × 31 × 30 cm', 'maximize'], ['Peso', '1,03 kg'], ['Resistencia', 'Al agua']] }),
@@ -262,7 +262,7 @@ const descriptions = {
   16: 'Sillón en PVC extra grueso transpirable con mesa giratoria desmontable, puerto de carga USB Type-C y bolsillos laterales integrados. Reclina de 115° a 157° y soporta hasta 160 kg.',
   17: 'Sillón en cuero sintético PVC con balanceo, reclinación y giro, soporte ergonómico por zonas y espuma de alta densidad. Reclina de 95° a 160° y soporta hasta 150 kg.',
   18: 'Silla en terciopelo premium con soporte lumbar LiftBack, almohada cervical magnética y espuma de memoria. Reposabrazos 4D, reclina de 90° a 155° y soporta hasta 160 kg.',
-  19: 'Silla en cuero PVC premium transpirable con cojín cervical ajustable con correa, soporte lumbar ergonómico y reposabrazos 4D. Reclina hasta 170° con bloqueo y soporta hasta 160 kg. Consulta el precio por WhatsApp.',
+  19: 'Silla en cuero PVC premium transpirable con cojín cervical ajustable con correa, soporte lumbar ergonómico y reposabrazos 4D. Reclina hasta 170° con bloqueo y soporta hasta 160 kg. Consulta disponibilidad por WhatsApp.',
   20: 'Cámara Wi-Fi para interior con imagen 4MP QHD, visión nocturna y giro de 360° con inclinación de 90°. Sigue el movimiento, detecta personas y sonidos, y tiene audio bidireccional y modo privacidad. Graba en MicroSD o NVR. Garantía de 1 año.',
   21: 'Cámara Wi-Fi para exterior 5MP (3K) con Pan & Tilt de 360°, visión nocturna a color y resistencia IP66. Detecta personas y vehículos, sigue el movimiento y tiene disuasión activa y audio bidireccional. Graba en nube, MicroSD o NVR. Garantía de 1 año.',
   22: 'Cámara Wi-Fi para exterior 3MP (2K) con Pan & Tilt de 360°, visión nocturna a color y resistencia IP66. Detecta personas y vehículos, sigue el movimiento y tiene disuasión activa y audio bidireccional. Graba en nube, MicroSD o NVR. Garantía de 1 año.',
@@ -288,7 +288,7 @@ export const products = raw.map((p) => {
   return { ...base, description: descriptions[p.id] || base.description, tagColors: t.colors || [], material: t.material || '' };
 });
 
-const catOrder = ['Sillas gamer', 'Sillones gamer', 'Mesas Cougar', 'Mousepads', 'Cámaras', 'Proyectores'];
+const catOrder = ['Sillas gamer', 'Sillones gamer', 'Mesas Cougar', 'Mousepads', 'Accesorios gamer', 'Cámaras', 'Proyectores'];
 const brandList = [...new Set(['Cougar', 'Sharkoon', ...products.map((p) => p.brand)])];
 export const categories = [
   'Todos',
