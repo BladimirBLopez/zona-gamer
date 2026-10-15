@@ -23,7 +23,10 @@ const ranges = [
 const tabs = categories.filter((c) => c === 'Todos' || products.some((p) => p.category === c));
 const brands = [...new Set(products.map((p) => p.brand))];
 
-export default function Catalog({ q, setQ, cat, setCat }) {
+export default function Catalog({ initialCategory = 'Todos', initialQuery = '' }) {
+  const [q, setQ] = useState(initialQuery);
+  const [cat, setCat] = useState(initialCategory);
+  const [visibleCount, setVisibleCount] = useState(12);
   const [sort, setSort] = useState('default');
   const [range, setRange] = useState('all');
   const [brand, setBrand] = useState('');
@@ -44,6 +47,7 @@ export default function Catalog({ q, setQ, cat, setCat }) {
     return r;
   }, [q, cat, brand, sort, range]);
 
+  const shown = list.slice(0, visibleCount);
   const countOf = (c) => (c === 'Todos' ? products.length : products.filter((p) => p.category === c).length);
 
   const reset = () => {
@@ -51,6 +55,7 @@ export default function Catalog({ q, setQ, cat, setCat }) {
     setCat('Todos');
     setRange('all');
     setBrand('');
+    setVisibleCount(12);
   };
 
   return (
@@ -70,14 +75,14 @@ export default function Catalog({ q, setQ, cat, setCat }) {
           <Search size={18} className="shrink-0 text-gray-400" />
           <input
             value={q}
-            onChange={(e) => setQ(e.target.value)}
+            onChange={(e) => { setQ(e.target.value); setVisibleCount(12); }}
             placeholder="Buscar producto o marca"
             className="min-w-0 flex-1 bg-transparent py-3 text-sm outline-none placeholder:text-gray-500"
           />
         </div>
         <select
           value={sort}
-          onChange={(e) => setSort(e.target.value)}
+          onChange={(e) => { setSort(e.target.value); setVisibleCount(12); }}
           aria-label="Ordenar"
           className="glass rounded-xl px-3 py-3 text-sm outline-none"
         >
@@ -94,7 +99,7 @@ export default function Catalog({ q, setQ, cat, setCat }) {
           <button
             key={c}
             type="button"
-            onClick={() => setCat(c)}
+            onClick={() => { setCat(c); setVisibleCount(12); }}
             className={`whitespace-nowrap rounded-full border px-4 py-1.5 text-sm transition ${
               cat === c
                 ? 'border-accent bg-accent text-white'
@@ -109,10 +114,10 @@ export default function Catalog({ q, setQ, cat, setCat }) {
       <Filters
         ranges={ranges}
         range={range}
-        setRange={setRange}
+        setRange={(value) => { setRange(value); setVisibleCount(12); }}
         brands={brands}
         brand={brand}
-        setBrand={setBrand}
+        setBrand={(value) => { setBrand(value); setVisibleCount(12); }}
       />
 
       {list.length === 0 ? (
@@ -136,11 +141,25 @@ export default function Catalog({ q, setQ, cat, setCat }) {
         </div>
       ) : (
         <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
-          {list.map((p, i) => (
+          {shown.map((p, i) => (
             <ProductCard key={p.id} p={p} i={i} />
           ))}
         </div>
       )}
+      {list.length > visibleCount ? (
+        <div className="mt-8 flex flex-col items-center gap-3">
+          <p className="text-sm text-gray-400">
+            Mostrando {shown.length} de {list.length} productos
+          </p>
+          <button
+            type="button"
+            onClick={() => setVisibleCount((n) => n + 12)}
+            className="rounded-xl border border-accent px-8 py-3 font-semibold text-accent transition hover:bg-accent hover:text-white"
+          >
+            Cargar más productos
+          </button>
+        </div>
+      ) : null}
     </section>
   );
 }

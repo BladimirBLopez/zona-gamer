@@ -7,7 +7,7 @@ import WhatsAppIcon from './WhatsAppIcon';
 
 const links = [
   ['Inicio', '/#inicio'],
-  ['Catálogo', '/#catalogo'],
+  ['Catálogo', '/catalogo'],
   ['Cómo comprar', '/#como-pedir'],
   ['Preguntas', '/#faq'],
   ['Soporte', '/#soporte'],

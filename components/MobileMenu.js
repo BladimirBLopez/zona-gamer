@@ -9,7 +9,7 @@ import Brand from './Brand';
 
 const items = [
   ['Inicio', '/#inicio', Home],
-  ['Catálogo', '/#catalogo', Search],
+  ['Catálogo', '/catalogo', Search],
   ['Cómo comprar', '/#como-pedir', ListChecks],
   ['Preguntas', '/#faq', Info],
   ['Soporte', '/#soporte', Headset],

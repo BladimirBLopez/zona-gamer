@@ -1,25 +1,32 @@
 'use client';
-import { useState } from 'react';
+import Link from 'next/link';
 import Hero from './Hero';
 import Showcase from './Showcase';
 import TrustBar from './TrustBar';
 import Featured from './Featured';
-import Catalog from './Catalog';
+import HomeCategories from './HomeCategories';
 
 export default function Shop() {
-  const [q, setQ] = useState('');
-  const [cat, setCat] = useState('Todos');
-
-  const goCatalog = () =>
-    document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const goCatalog = () => {
+    window.location.assign('/catalogo');
+  };
 
   return (
     <>
-      <Hero q={q} setQ={setQ} onExplore={goCatalog} />
+      <Hero onExplore={goCatalog} />
       <Showcase />
       <TrustBar />
+      <HomeCategories />
       <Featured />
-      <Catalog q={q} setQ={setQ} cat={cat} setCat={setCat} />
+
+      <div className="mx-auto max-w-7xl px-4 pb-12 text-center">
+        <Link
+          href="/catalogo"
+          className="inline-flex items-center justify-center rounded-xl bg-accent px-7 py-3 font-bold text-white transition hover:opacity-90"
+        >
+          Explorar todos los productos →
+        </Link>
+      </div>
     </>
   );
 }

@@ -5,7 +5,7 @@ import { waLink } from '../lib/utils';
 import Brand from './Brand';
 
 const links = [
-  ['Catálogo', '/#catalogo'],
+  ['Catálogo', '/catalogo'],
   ['Cómo comprar', '/#como-pedir'],
   ['Preguntas', '/#faq'],
   ['Soporte', '/#soporte'],

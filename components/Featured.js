@@ -8,7 +8,10 @@ import { products } from '../data/products';
 import { fmt } from '../lib/utils';
 import Reveal from './Reveal';
 
-const list = products.slice(0, 8);
+const featuredIds = [19, 40, 33, 34, 20, 39, 41, 44];
+const list = featuredIds
+  .map((id) => products.find((p) => p.id === id))
+  .filter(Boolean);
 
 export default function Featured() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', loop: true }, [
