@@ -13,17 +13,33 @@ export default function BottomNav() {
   const [active, setActive] = useState('inicio');
 
   useEffect(() => {
-    const els = items.map((i) => document.getElementById(i.id)).filter(Boolean);
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActive(e.target.id);
-        });
-      },
-      { rootMargin: '-40% 0px -50% 0px' }
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const line = window.innerHeight * 0.4;
+      let current = items[0].id;
+      items.forEach(({ id }) => {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= line) current = id;
+      });
+      const bottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      if (bottom) current = items[items.length - 1].id;
+      setActive(current);
+    };
+    const onChange = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onChange, { passive: true });
+    window.addEventListener('resize', onChange);
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(onChange) : null;
+    if (ro) ro.observe(document.body);
+    return () => {
+      window.removeEventListener('scroll', onChange);
+      window.removeEventListener('resize', onChange);
+      if (ro) ro.disconnect();
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
 
   const goTo = (e, id) => {
