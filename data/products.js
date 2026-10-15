@@ -144,7 +144,7 @@ const raw = [
     ['Resolución nativa 1920 × 1080 (Full HD)', 'Soporte para 4K', 'Wi-Fi dual band 2.4 GHz / 5 GHz', 'Proyección inalámbrica', 'Brillo equivalente a más de 300 ANSI lúmenes', 'Vida útil del LED: 40.000 horas'],
     '', '', '',
     { cards: [['Resolución', 'Full HD · 1080p', 'monitor'], ['Brillo', '300+ ANSI lúmenes', 'sun'], ['Conexión', 'Wi-Fi 2.4 / 5 GHz', 'wifi'], ['Vida del LED', '40.000 horas', 'sliders']] }),
-  item(33, 'Havit PJ300 Plus', 'Havit', 'Proyectores', 'Full HD · Google TV', 2450, 5,
+  item(33, 'Havit PJ300 Pro', 'Havit', 'Proyectores', 'Full HD · Google TV', 3250, 5,
     ['Resolución nativa 1920 × 1080 (Full HD)', 'Soporte para 4K', 'Brillo de 550 ANSI lúmenes', 'Google TV oficial con Netflix y apps de Google Play', 'Motor óptico sellado antipolvo', 'Auto focus, auto keystone y detección de obstáculos', 'Corrección automática de hasta ±30°'],
     '', '', '',
     { cards: [['Resolución', 'Full HD · 1080p', 'monitor'], ['Brillo', '550 ANSI lúmenes', 'sun'], ['Sistema', 'Google TV', 'cpu'], ['Ajustes', 'Auto focus y keystone', 'sliders']] }),
