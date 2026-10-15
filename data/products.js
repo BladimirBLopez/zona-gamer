@@ -26,7 +26,6 @@ const slugify = (s) =>
 
 const CLD = 'https://res.cloudinary.com/dkq95jus0/image/upload';
 const TITAN = 'v1791961738/IMG-20261014-WA0000_msslce.jpg';
-const CROP = 'c_crop,x_0.35,y_0.02,w_0.58,h_0.76';
 
 const S = 'Sillas gamer';
 const L = 'Sillones gamer';
@@ -87,8 +86,7 @@ const raw = [
     ['Cuero PVC premium transpirable y resistente', 'Cojín cervical ajustable con correa', 'Soporte lumbar ergonómico', 'Tapizado premium de alta durabilidad'],
     '160 kg', 'Hasta 170° con bloqueo', '4D',
     {
-      image: `${CLD}/${CROP}/f_auto,q_auto,w_700/${TITAN}`,
-      gallery: [`${CLD}/f_auto,q_auto,w_1400/${TITAN}`, `${CLD}/${CROP}/f_auto,q_auto,w_900/${TITAN}`],
+      gallery: [imageFor(19, 'Cougar Armor Titan', 'Cougar'), `${CLD}/f_auto,q_auto,w_1400/${TITAN}`],
       og: `${CLD}/f_jpg,q_auto,w_1200/${TITAN}`,
     }),
   item(18, 'Cougar Titan Pro V2 Gold F', 'Cougar', S, 'Terciopelo · Negro / Dorado', 5016, 5,
