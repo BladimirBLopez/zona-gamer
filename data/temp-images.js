@@ -16,6 +16,7 @@ export const photos = {
   12: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792043096/file_000000006eec81f49a3824656c48b098_gxllve.png'],
   13: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1791996333/13-1_vzvvhz.png'],
   14: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1791996388/14-1_xxhlcu.png'],
+  15: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792078340/file_000000003f5c82119371c5ffa1ec0b11_nqf6wf.png'],
   16: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1791996769/16-1_yjty9x.png'],
   17: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1791996837/17-1_yg2ukq.png'],
   18: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1791996892/18-1_d2wxjv.png'],
@@ -34,6 +35,9 @@ export const photos = {
   31: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792020781/31-1_queetc.png'],
   32: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792020945/32-1_k7ln6w.png'],
   33: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792021091/33-1_uuqikg.png'],
+  34: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792078512/file_000000008c288230b5654677af4cfed1_dxehwp.png'],
+  36: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792079404/file_000000001a74820ba8a2762977ed17b6_r4dc9k.png'],
+  37: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792079585/file_00000000522c8209bc7e8ff0f531140d_b37heb.png'],
 };
 
 const opt = (url, w) =>
