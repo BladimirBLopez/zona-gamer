@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ChevronRight, Share2, Check, X, ZoomIn, Scale, RotateCw, Move, Layers, Video, Moon, ShieldCheck, HardDrive, Monitor, Sun, Maximize, Cpu, Wifi, Battery, SlidersHorizontal } from 'lucide-react';
 import { products } from '../data/products';
 import { config } from '../data/config';
-import { fmt, waLink, orderMsg, stockInfo, productUrl } from '../lib/utils';
+import { fmt, waLink, orderMsg, productUrl } from '../lib/utils';
 import WhatsAppIcon from './WhatsAppIcon';
 
 export default function ProductDetail({ p }) {
@@ -12,8 +12,6 @@ export default function ProductDetail({ p }) {
   const [idx, setIdx] = useState(0);
   const [zoom, setZoom] = useState(false);
   const [copied, setCopied] = useState(false);
-  const s = stockInfo(p.stock);
-  const out = p.stock <= 0;
   const related = products.filter((x) => x.id !== p.id && x.category === p.category).slice(0, 4);
   const priceText = p.price > 0 ? `${p.from ? 'Desde ' : ''}Bs ${fmt(p.price)}` : 'Consultar precio';
 
@@ -40,10 +38,7 @@ export default function ProductDetail({ p }) {
     } catch (e) {}
   };
 
-  const cta = (className, label, outLabel) =>
-    out ? (
-      <span className={`rounded-xl bg-white/5 py-3.5 text-center text-sm text-gray-500 ${className}`}>{outLabel}</span>
-    ) : (
+  const cta = (className, label) => (
       <a
         href={waLink(orderMsg(p))}
         target="_blank"
@@ -72,7 +67,7 @@ export default function ProductDetail({ p }) {
             aria-label="Ampliar imagen"
             className="relative block aspect-square w-full overflow-hidden rounded-3xl border border-white/10 bg-[#f1f1f4]"
           >
-            <img src={images[idx]} alt={p.name} className={`h-full w-full object-contain p-4 ${out ? 'opacity-60 grayscale' : ''}`} />
+            <img src={images[idx]} alt={p.name} className="h-full w-full object-contain p-4" />
             <span className="absolute bottom-3 right-3 flex items-center gap-1.5 rounded-full bg-black/70 px-3 py-1.5 text-xs font-semibold text-white">
               <ZoomIn size={14} /> Ampliar
             </span>
@@ -100,7 +95,6 @@ export default function ProductDetail({ p }) {
           <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
             <span className="uppercase tracking-[0.2em] text-accent">{p.brand}</span>
             {p.badge ? <span className="rounded-full bg-accent px-2.5 py-0.5 text-white">{p.badge}</span> : null}
-            <span className={`rounded-full px-2.5 py-0.5 ${s.cls}`}>{s.label}</span>
           </div>
 
           <div className="mt-3 flex items-start justify-between gap-3">
@@ -121,7 +115,7 @@ export default function ProductDetail({ p }) {
 
           {p.description ? <p className="mt-4 text-sm leading-relaxed text-gray-200">{p.description}</p> : null}
 
-          {cta('mt-5 hidden w-full md:flex', p.price > 0 ? 'Comprar por WhatsApp' : 'Consultar por WhatsApp', 'No disponible por ahora')}
+          {cta('mt-5 hidden w-full md:flex', 'Consultar por WhatsApp')}
 
           {specs.length ? (
             <div className="mt-6 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
@@ -187,7 +181,7 @@ export default function ProductDetail({ p }) {
             <p className="truncate text-[11px] uppercase tracking-wider text-gray-500">{p.name}</p>
             <p className="truncate text-lg font-extrabold leading-tight">{priceText}</p>
           </div>
-          {cta('flex shrink-0 px-5', p.price > 0 ? 'Comprar' : 'Consultar', 'Agotado')}
+          {cta('flex shrink-0 px-5', 'Consultar')}
         </div>
       </div>
 

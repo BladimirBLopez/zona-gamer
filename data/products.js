@@ -170,8 +170,8 @@ const raw = [
     ['Bolso deportivo de 38 L de capacidad', 'Diseño 3 en 1', 'Resistente al agua', 'Medidas 51 × 31 × 30 cm', 'Peso 1,03 kg'],
     '', '', '',
     { cards: [['Capacidad', '38 L'], ['Medidas', '51 × 31 × 30 cm', 'maximize'], ['Peso', '1,03 kg'], ['Resistencia', 'Al agua']] }),
-  item(40, 'Cougar E-Grav 180', 'Cougar', 'Mesas Cougar', 'Negro', 0, 5,
-    ['Escritorio gaming XL: 1800 × 800 × 15 mm', 'Ajuste de altura de 730 a 1180 mm', 'Motores duales: estable y silencioso', 'Soporta hasta 120 kg', 'Panel con 2 memorias de altura', 'Tablero resistente y de fácil limpieza', 'Patas de acero de gran firmeza'],
+  item(40, 'Cougar E-Grav 180', 'Cougar', 'Mesas Cougar', 'Blanco', 4200, 5,
+    ['Escritorio gaming XL: 1800 × 800 × 15 mm', 'Ajuste de altura de 730 a 1180 mm', 'Motores duales: estable y silencioso', 'Soporta hasta 120 kg', 'Panel con 2 memorias de altura', 'Tablero resistente y de fácil limpieza', 'Patas de acero de gran firmeza', 'Gancho para auriculares incluido'],
     '', '', '',
     { cards: [['Medidas', '1800 × 800 mm', 'maximize'], ['Altura', '730–1180 mm', 'sliders'], ['Carga máx.', '120 kg'], ['Motores', 'Duales']] }),
   item(41, 'Kingston MicroSD 256 GB SDCS3', 'Kingston', 'Almacenamiento', '256 GB · Con adaptador', 620, 10,
@@ -192,6 +192,27 @@ const raw = [
   item(46, 'Cooler Master CryoFuze 5 Blanco', 'Cooler Master', 'Pasta térmica', 'Blanco', 180, 10,
     ['Pasta térmica CryoFuze 5', 'Modelo MGY-ADSW-N03G-R1'],
     '', '', ''),
+  item(47, 'Cougar E-Grav 160', 'Cougar', 'Mesas Cougar', 'Negro', 3800, 0,
+    [
+      'Escritorio gaming de 1600 × 800 mm',
+      'Altura ajustable de 730 a 1180 mm',
+      'Sistema de elevacion electrico',
+      'Motores duales, suaves y silenciosos',
+      'Capacidad maxima de 120 kg',
+      'Panel con 2 memorias de altura',
+      'Superficie resistente y duradera',
+      'Estructura reforzada de acero',
+      'Gancho para auriculares incluido'
+    ],
+    '', '', '',
+    {
+      cards: [
+        ['Medidas', '1600 × 800 mm', 'maximize'],
+        ['Altura', '730–1180 mm', 'sliders'],
+        ['Carga máx.', '120 kg'],
+        ['Motores', 'Duales']
+      ]
+    }),
 ];
 
 const dup = {};

@@ -5,14 +5,14 @@ import { config } from '../data/config';
 import { waLink } from '../lib/utils';
 
 const steps = [
-  { Icon: Search, t: 'Elige', d: 'Explora el catálogo y revisa precio y disponibilidad.' },
+  { Icon: Search, t: 'Elige', d: 'Explora el catálogo, compara productos y revisa sus precios.' },
   { Icon: MessageCircle, t: 'Escríbenos', d: 'Desde la ficha del producto, un toque y tu pedido llega a WhatsApp ya redactado.' },
   { Icon: PackageCheck, t: 'Recibe', d: 'Confirmamos disponibilidad y coordinamos pago y entrega contigo.' },
 ];
 
 const faqs = [
   { q: '¿Cómo pago?', a: 'El pago se coordina por WhatsApp. Lo coordinas directamente con nosotros.' },
-  { q: '¿Cómo sé si hay stock?', a: 'Te confirmamos la disponibilidad por WhatsApp antes de cerrar tu pedido.' },
+  { q: '¿Cómo confirmo la disponibilidad?', a: 'Te confirmamos la disponibilidad por WhatsApp antes de cerrar tu pedido.' },
   { q: '¿Hacen envíos?', a: 'Coordinamos la entrega contigo por WhatsApp según tu ciudad.' },
   { q: '¿Tienen garantía?', a: 'Consulta por WhatsApp la garantía de cada producto antes de comprar.' },
 ];

@@ -27,7 +27,6 @@ export default function Catalog({ q, setQ, cat, setCat }) {
   const [sort, setSort] = useState('default');
   const [range, setRange] = useState('all');
   const [brand, setBrand] = useState('');
-  const [onlyAvail, setOnlyAvail] = useState(false);
 
   const list = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -38,14 +37,12 @@ export default function Catalog({ q, setQ, cat, setCat }) {
         (cat === 'Todos' || p.category === cat) &&
         (!brand || p.brand === brand) &&
         `${p.name} ${p.brand}`.toLowerCase().includes(term) &&
-        inRange(p.price) &&
-        (!onlyAvail || p.stock > 0)
+        inRange(p.price)
     );
     if (sort === 'asc') r = [...r].sort((a, b) => (a.price || Infinity) - (b.price || Infinity));
     else if (sort === 'desc') r = [...r].sort((a, b) => b.price - a.price);
-    else r = [...r].sort((a, b) => (b.stock > 0) - (a.stock > 0));
     return r;
-  }, [q, cat, brand, sort, range, onlyAvail]);
+  }, [q, cat, brand, sort, range]);
 
   const countOf = (c) => (c === 'Todos' ? products.length : products.filter((p) => p.category === c).length);
 
@@ -54,7 +51,6 @@ export default function Catalog({ q, setQ, cat, setCat }) {
     setCat('Todos');
     setRange('all');
     setBrand('');
-    setOnlyAvail(false);
   };
 
   return (
@@ -117,8 +113,6 @@ export default function Catalog({ q, setQ, cat, setCat }) {
         brands={brands}
         brand={brand}
         setBrand={setBrand}
-        onlyAvail={onlyAvail}
-        setOnlyAvail={setOnlyAvail}
       />
 
       {list.length === 0 ? (

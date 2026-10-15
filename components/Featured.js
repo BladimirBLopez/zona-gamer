@@ -8,7 +8,7 @@ import { products } from '../data/products';
 import { fmt } from '../lib/utils';
 import Reveal from './Reveal';
 
-const list = products.filter((p) => p.stock > 0).slice(0, 8);
+const list = products.slice(0, 8);
 
 export default function Featured() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', loop: true }, [
@@ -22,7 +22,7 @@ export default function Featured() {
       <Reveal className="flex items-end justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Selección</p>
-          <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">Productos disponibles</h2>
+          <h2 className="mt-1 font-display text-2xl font-bold sm:text-3xl">Productos destacados</h2>
         </div>
         <div className="hidden gap-2 sm:flex">
           <button type="button" onClick={prev} aria-label="Anterior" className="glass flex h-10 w-10 items-center justify-center rounded-xl transition hover:border-accent/50 active:scale-95">

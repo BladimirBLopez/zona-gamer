@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, MessageCircle, Check } from 'lucide-react';
 import Link from 'next/link';
-import { fmt, waLink, orderMsg, stockInfo } from '../lib/utils';
+import { fmt, waLink, orderMsg } from '../lib/utils';
 
 export default function ProductModal({ p, onClose }) {
   useEffect(() => {
@@ -54,7 +54,6 @@ export default function ProductModal({ p, onClose }) {
             <div className="p-5" style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}>
               <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
                 {p.badge ? <span className="rounded-full bg-fuchsia-500 px-2.5 py-0.5 text-white">{p.badge}</span> : null}
-                <span className={`rounded-full px-2.5 py-0.5 ${stockInfo(p.stock).cls}`}>{stockInfo(p.stock).label}</span>
                 <span className="text-gray-500">{p.category}</span>
               </div>
               <h3 className="mt-3 font-display text-xl font-bold">{p.name}</h3>
@@ -88,8 +87,7 @@ export default function ProductModal({ p, onClose }) {
                 </div>
               ) : null}
 
-              {p.stock > 0 ? (
-                <a
+              <a
                   href={waLink(orderMsg(p))}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -97,9 +95,6 @@ export default function ProductModal({ p, onClose }) {
                 >
                   <MessageCircle size={18} /> Pedir por WhatsApp
                 </a>
-              ) : (
-                <span className="mt-5 block rounded-xl bg-white/5 py-3 text-center text-gray-500">No disponible por ahora</span>
-              )}
               <Link
                 href={`/producto/${p.slug}`}
                 onClick={onClose}

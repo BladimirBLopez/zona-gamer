@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { fmt, stockInfo } from '../lib/utils';
+import { fmt } from '../lib/utils';
 
 const badgeCls = {
   Nuevo: 'bg-neon text-black',
@@ -11,9 +11,6 @@ const badgeCls = {
 };
 
 export default function ProductCard({ p, i }) {
-  const s = stockInfo(p.stock);
-  const out = p.stock <= 0;
-  const showStock = p.stock <= 3;
   const title = p.name.toLowerCase().startsWith(p.brand.toLowerCase() + ' ') ? p.name.slice(p.brand.length + 1) : p.name;
 
   return (
@@ -36,7 +33,7 @@ export default function ProductCard({ p, i }) {
               src={p.image}
               alt={p.name}
               loading="lazy"
-              className={`h-full w-full object-contain scale-[1.1] transition duration-300 group-hover:scale-[1.15] ${out ? 'opacity-60 grayscale' : ''}`}
+              className="h-full w-full object-contain scale-[1.1] transition duration-300 group-hover:scale-[1.15]"
             />
           ) : (
             <span className="flex h-full w-full items-center justify-center text-6xl sm:text-7xl">{p.emoji}</span>
@@ -44,11 +41,6 @@ export default function ProductCard({ p, i }) {
           {p.badge ? (
             <span className={`absolute left-2 top-2 rounded-full px-2.5 py-0.5 text-[11px] font-bold ${badgeCls[p.badge] || 'bg-white text-black'}`}>
               {p.badge}
-            </span>
-          ) : null}
-          {showStock ? (
-            <span className={`absolute right-2 top-2 rounded-full px-2 py-0.5 text-[10px] font-semibold backdrop-blur ${s.cls}`}>
-              {s.label}
             </span>
           ) : null}
         </div>

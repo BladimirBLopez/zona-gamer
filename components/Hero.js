@@ -6,7 +6,7 @@ import { Search, ArrowRight, Gamepad2, Headphones, Keyboard, Cpu } from 'lucide-
 const headlines = [
   ['Lleva tu setup ', 'al siguiente nivel'],
   ['Equípate con ', 'productos gamer'],
-  ['Precio y stock ', 'siempre a la vista'],
+  ['Explora precios ', 'y productos'],
   ['Pide fácil por ', 'WhatsApp'],
   ['Asesoría directa ', 'antes de comprar'],
 ];
@@ -94,7 +94,7 @@ export default function Hero({ q, setQ, onExplore }) {
           </div>
 
           <motion.p {...up(0.2)} className="mx-auto mt-5 max-w-xl text-base text-gray-400 sm:text-lg">
-            Equipa tu setup gamer. Revisa precios y disponibilidad, y haz tu pedido por WhatsApp.
+            Equipa tu setup gamer. Explora productos y consulta disponibilidad por WhatsApp.
           </motion.p>
 
           <motion.div {...up(0.3)} className="mt-8 flex justify-center">

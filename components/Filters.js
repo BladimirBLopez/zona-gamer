@@ -7,13 +7,12 @@ const chip = (on) =>
     on ? 'border-accent bg-accent text-white' : 'border-white/10 text-gray-300 hover:border-accent/60'
   }`;
 
-export default function Filters({ ranges, range, setRange, brands, brand, setBrand, onlyAvail, setOnlyAvail }) {
+export default function Filters({ ranges, range, setRange, brands, brand, setBrand }) {
   const [open, setOpen] = useState(false);
-  const active = (range !== 'all' ? 1 : 0) + (brand ? 1 : 0) + (onlyAvail ? 1 : 0);
+  const active = (range !== 'all' ? 1 : 0) + (brand ? 1 : 0);
   const clear = () => {
     setRange('all');
     setBrand('');
-    setOnlyAvail(false);
   };
 
   return (
@@ -65,15 +64,6 @@ export default function Filters({ ranges, range, setRange, brands, brand, setBra
             </div>
           </div>
 
-          <label className="flex w-fit cursor-pointer items-center gap-2 text-sm text-gray-200">
-            <input
-              type="checkbox"
-              checked={onlyAvail}
-              onChange={(e) => setOnlyAvail(e.target.checked)}
-              className="h-4 w-4 accent-accent"
-            />
-            Solo disponibles
-          </label>
         </div>
       ) : null}
     </div>

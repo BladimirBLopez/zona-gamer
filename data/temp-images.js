@@ -39,12 +39,14 @@ export const photos = {
   35: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792079144/34-1_isw1mx.png'],
   36: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792079404/file_000000001a74820ba8a2762977ed17b6_r4dc9k.png'],
   37: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792079585/file_00000000522c8209bc7e8ff0f531140d_b37heb.png'],
+  40: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792090102/Cougar_E-GRAV_180_Blanco_zkt0ib.png'],
   41: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792083495/35-1_uodr77.png'],
   42: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792083520/36-1_r4u6j3.png'],
   43: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792083541/37-1_y1pypz.png'],
   44: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792083860/38-1_mpfnbq.png'],
   45: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792083810/39-1_bkz5v1.png'],
   46: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792083835/40-1_me4svy.png'],
+  47: ['https://res.cloudinary.com/dkq95jus0/image/upload/v1792090277/Cougar_E-GRAV_160_Negro_qzhdsk.png'],
 };
 
 const opt = (url, w) =>
