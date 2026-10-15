@@ -91,7 +91,7 @@ export default function MobileMenu() {
               >
                 <MessageCircle size={18} /> Escríbenos por WhatsApp
               </a>
-              <p className="mt-3 text-center text-xs text-gray-500">{config.schedule}</p>
+              {config.schedule ? <p className="mt-3 text-center text-xs text-gray-500">{config.schedule}</p> : null}
             </div>
           </motion.aside>
         </motion.div>
