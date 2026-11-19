@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Search, Package, AlertTriangle, Ban, RotateCcw } from 'lucide-react';
+import { Search, Pencil, X, Package, AlertTriangle, Ban, RotateCcw } from 'lucide-react';
 import { fmt, stockInfo } from '../../lib/utils';
 
 export default function Admin() {
@@ -11,6 +11,9 @@ export default function Admin() {
   const [unauthorized, setUnauthorized] = useState(false);
   const [q, setQ] = useState('');
   const [cat, setCat] = useState('Todas');
+  const [editing, setEditing] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
 
   const loadProducts = useCallback(async () => {
     setLoading(true);
@@ -67,6 +70,83 @@ export default function Admin() {
     total: items.length,
     low: items.filter((p) => p.stock > 0 && p.stock <= 3).length,
     out: items.filter((p) => p.stock <= 0).length,
+  };
+
+  const openEditor = (product) => {
+    setSaveError('');
+    setEditing({
+      id: product.id,
+      name: product.name,
+      price: String(product.price),
+      stock: String(product.stock),
+    });
+  };
+
+  const saveChanges = async (event) => {
+    event.preventDefault();
+    if (!editing || saving) return;
+
+    const rawPrice = editing.price.trim();
+    const rawStock = editing.stock.trim();
+    const price = Number(rawPrice);
+    const stock = Number(rawStock);
+
+    if (
+      !/^\d+(?:\.\d{1,2})?$/.test(rawPrice) ||
+      !Number.isFinite(price) ||
+      price > 10000000
+    ) {
+      setSaveError('Ingresa un precio válido, con máximo 2 decimales.');
+      return;
+    }
+
+    if (
+      !/^\d+$/.test(rawStock) ||
+      !Number.isSafeInteger(stock) ||
+      stock > 1000000
+    ) {
+      setSaveError('El stock debe ser un número entero entre 0 y 1000000.');
+      return;
+    }
+
+    setSaving(true);
+    setSaveError('');
+
+    try {
+      const response = await fetch(
+        `/api/admin/products/${editing.id}`,
+        {
+          method: 'PATCH',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ price, stock }),
+        }
+      );
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || !result.ok || !result.product) {
+        throw new Error(result.error || 'No se pudieron guardar los cambios.');
+      }
+
+      setItems((current) =>
+        current.map((product) =>
+          product.id === editing.id
+            ? {
+                ...product,
+                price: result.product.price,
+                stock: result.product.stock,
+              }
+            : product
+        )
+      );
+
+      setEditing(null);
+    } catch (error) {
+      setSaveError(error.message || 'Error al guardar en Neon.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const input = 'w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm outline-none focus:border-accent';
@@ -184,8 +264,19 @@ export default function Admin() {
                     {s.label}
                   </span>
                 </div>
-                <div className="mt-2 text-xs text-gray-400">
-                  Stock: {p.stock}
+                <div className="mt-2 flex items-center justify-between gap-2">
+                  <span className="text-xs text-gray-400">
+                    Stock: {p.stock}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => openEditor(p)}
+                    className="flex items-center gap-1 rounded-lg bg-white/10 px-3 py-1.5 text-xs"
+                    aria-label={`Editar ${p.name}`}
+                  >
+                    <Pencil size={13} />
+                    Editar
+                  </button>
                 </div>
               </div>
             </div>
@@ -201,9 +292,96 @@ export default function Admin() {
 
       {!loading && !error && (
         <p className="px-4 pt-5 text-center text-xs text-gray-500">
-          Edición, stock y nuevos productos se habilitarán
-          cuando esté lista la API de guardado seguro.
+          Los cambios de precio y stock se guardan en Neon.
+          Agregar nuevos productos estará disponible después.
         </p>
+      )}
+
+      {editing && (
+        <div
+          className="fixed inset-0 z-30 bg-black/70 flex items-end sm:items-center justify-center"
+          role="presentation"
+        >
+          <form
+            onSubmit={saveChanges}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Editar ${editing.name}`}
+            className="w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl bg-card border border-white/10 p-4 space-y-4"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h2 className="font-display font-bold">Editar producto</h2>
+                <p className="text-xs text-gray-400 mt-1">
+                  {editing.name}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEditing(null)}
+                disabled={saving}
+                className="p-2 disabled:opacity-50"
+                aria-label="Cerrar edición"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <label className="space-y-1">
+                <span className="text-xs text-gray-300">Precio en Bs</span>
+                <input
+                  type="number"
+                  min="0"
+                  max="10000000"
+                  step="0.01"
+                  required
+                  className={input}
+                  value={editing.price}
+                  onChange={(event) =>
+                    setEditing({
+                      ...editing,
+                      price: event.target.value,
+                    })
+                  }
+                />
+              </label>
+
+              <label className="space-y-1">
+                <span className="text-xs text-gray-300">Existencias</span>
+                <input
+                  type="number"
+                  min="0"
+                  max="1000000"
+                  step="1"
+                  required
+                  className={input}
+                  value={editing.stock}
+                  onChange={(event) =>
+                    setEditing({
+                      ...editing,
+                      stock: event.target.value,
+                    })
+                  }
+                />
+              </label>
+            </div>
+
+            {saveError && (
+              <p className="rounded-lg bg-red-500/10 border border-red-400/30 p-3 text-sm text-red-200" role="alert">
+                {saveError}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={saving}
+              className="w-full rounded-lg bg-accent py-3 font-semibold text-sm disabled:opacity-50"
+            >
+              {saving ? 'Guardando en Neon...' : 'Guardar cambios'}
+            </button>
+          </form>
+        </div>
       )}
     </main>
   );
