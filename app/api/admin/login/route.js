@@ -20,12 +20,10 @@ export async function POST(request) {
 
   try {
     const body = await request.json();
-    const { username, password } = body || {};
+    const { password } = body || {};
 
     if (
-      typeof username !== 'string' ||
       typeof password !== 'string' ||
-      username.length > 100 ||
       password.length > 256
     ) {
       return NextResponse.json(
@@ -43,7 +41,7 @@ export async function POST(request) {
       );
     }
 
-    const valid = await verifyCredentials(username, password);
+    const valid = await verifyCredentials(password);
 
     if (!valid) {
       return NextResponse.json(

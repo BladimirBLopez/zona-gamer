@@ -7,7 +7,6 @@ import { LockKeyhole, LogIn } from 'lucide-react';
 export default function AdminLoginPage() {
   const router = useRouter();
 
-  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -26,7 +25,7 @@ export default function AdminLoginPage() {
           'Content-Type': 'application/json'
         },
         cache: 'no-store',
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ password })
       });
 
       const data = await response.json();
@@ -64,25 +63,6 @@ export default function AdminLoginPage() {
           <p className="text-sm text-gray-400">
             Acceso al panel administrativo
           </p>
-        </div>
-
-        <div className="space-y-2">
-          <label
-            htmlFor="admin-username"
-            className="text-sm text-gray-300"
-          >
-            Usuario
-          </label>
-          <input
-            id="admin-username"
-            required
-            maxLength={100}
-            autoComplete="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none focus:border-accent"
-            placeholder="Usuario administrador"
-          />
         </div>
 
         <div className="space-y-2">
