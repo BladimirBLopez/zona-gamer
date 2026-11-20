@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Search, Plus, Pencil, X, Package, AlertTriangle, Ban, RotateCcw, LayoutGrid, Tag } from 'lucide-react';
+import { Search, Plus, Pencil, X, Package, AlertTriangle, Ban, RotateCcw, LayoutGrid, Tag, EyeOff } from 'lucide-react';
 import { fmt, stockInfo } from '../../lib/utils';
 import ProductFormModal from './ProductFormModal';
 import { Toaster, toast } from 'sonner';
@@ -14,6 +14,7 @@ export default function Admin() {
   const [unauthorized, setUnauthorized] = useState(false);
   const [q, setQ] = useState('');
   const [cat, setCat] = useState('Todas');
+  const [status, setStatus] = useState('all');
   const [managing, setManaging] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
   const setNotice = (message) => {
@@ -95,17 +96,22 @@ export default function Admin() {
   const list = useMemo(
     () => items.filter((p) =>
       (cat === 'Todas' || p.category === cat) &&
+      (status === 'all' ||
+        (status === 'low' && p.stock > 0 && p.stock <= 3) ||
+        (status === 'out' && p.stock <= 0) ||
+        (status === 'hidden' && p.active === false)) &&
       `${p.name || ''} ${p.brand || ''}`
         .toLowerCase()
         .includes(q.toLowerCase().trim())
     ),
-    [items, q, cat]
+    [items, q, cat, status]
   );
 
   const stats = {
     total: items.length,
     low: items.filter((p) => p.stock > 0 && p.stock <= 3).length,
     out: items.filter((p) => p.stock <= 0).length,
+    hidden: items.filter((p) => p.active === false).length,
   };
 
   const [toggling, setToggling] = useState(null);
@@ -200,19 +206,26 @@ export default function Admin() {
         </div>
       </header>
 
-      <section className="px-4 pt-4 grid grid-cols-3 gap-2">
+      <section className="px-4 pt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {[
-          { l: 'Productos', v: stats.total, i: Package, c: 'text-neon' },
-          { l: 'Pocas unid.', v: stats.low, i: AlertTriangle, c: 'text-amber-300' },
-          { l: 'Agotados', v: stats.out, i: Ban, c: 'text-red-300' },
+          { k: 'all', l: 'Productos', v: stats.total, i: Package, c: 'text-neon' },
+          { k: 'low', l: 'Pocas unid.', v: stats.low, i: AlertTriangle, c: 'text-amber-300' },
+          { k: 'out', l: 'Agotados', v: stats.out, i: Ban, c: 'text-red-300' },
+          { k: 'hidden', l: 'Ocultos', v: stats.hidden, i: EyeOff, c: 'text-gray-300' },
         ].map((s) => (
-          <div key={s.l} className="rounded-xl bg-card border border-white/10 p-3">
+          <button
+            key={s.k}
+            type="button"
+            onClick={() => setStatus(status === s.k ? 'all' : s.k)}
+            aria-pressed={status === s.k}
+            className={'rounded-xl border p-3 text-left transition-colors ' + (status === s.k ? 'border-accent bg-accent/10' : 'border-white/10 bg-card')}
+          >
             <s.i size={16} className={s.c} />
-            <p className="text-xl font-bold mt-1">
+            <p className="mt-1 text-xl font-bold">
               {loading || error ? '—' : s.v}
             </p>
             <p className="text-[11px] text-gray-400">{s.l}</p>
-          </div>
+          </button>
         ))}
       </section>
 
@@ -267,6 +280,20 @@ export default function Admin() {
           </p>
         )}
 
+        {!loading && !error && (
+          <div className="flex items-center justify-between px-1 text-xs text-gray-400">
+            <span>Mostrando {list.length} de {items.length} productos</span>
+            {(status !== 'all' || cat !== 'Todas' || q) && (
+              <button
+                type="button"
+                onClick={() => { setStatus('all'); setCat('Todas'); setQ(''); }}
+                className="font-semibold text-neon"
+              >
+                Limpiar filtros
+              </button>
+            )}
+          </div>
+        )}
         {!loading && !error && list.map((p) => {
           const s = stockInfo(p.stock);
           const visible = p.active !== false;
