@@ -134,9 +134,27 @@ html[data-theme='light'] .hover\:text-accent:hover { color: #c2410c; }
 }
 
 /* ===== ADMIN-UI: paleta del panel (no afecta la tienda) ===== */
-html[data-theme='dark'] .admin-ui .bg-card { background-color: #1a1a20; }
-html[data-theme='dark'] .admin-ui .border-white\/10 { border-color: #2e2e38; }
-html[data-theme='dark'] .admin-ui .bg-white\/5 { background-color: #22222a; }
+html[data-theme='dark'] .admin-ui.bg-bg { background-color: #0b0b0f; }
+html[data-theme='dark'] .admin-ui .bg-bg { background-color: #111116; }
+html[data-theme='dark'] .admin-ui .bg-bg\/95 { background-color: rgba(17, 17, 22, 0.94); }
+html[data-theme='dark'] .admin-ui .bg-card { background-color: #17171d; }
+html[data-theme='dark'] .admin-ui .bg-white\/5 { background-color: #1f1f27; }
+html[data-theme='dark'] .admin-ui .bg-white\/10 { background-color: #2a2a34; }
+html[data-theme='dark'] .admin-ui .border-white\/10 { border-color: #2a2a34; }
 html[data-theme='dark'] .admin-ui .text-gray-300 { color: #d4d4d8; }
 html[data-theme='dark'] .admin-ui .text-gray-400 { color: #a1a1aa; }
 html[data-theme='dark'] .admin-ui .text-gray-500 { color: #8b8b95; }
+html[data-theme='dark'] .admin-ui img.bg-black\/40 { background-color: #ffffff; }
+html[data-theme='dark'] .admin-ui section.sticky button.rounded-full:not(.bg-accent) { background-color: #17171d; }
+html[data-theme='dark'] .admin-ui > header { position: relative; }
+html[data-theme='dark'] .admin-ui > header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #e11d48 50%, transparent);
+  opacity: 0.8;
+  pointer-events: none;
+}

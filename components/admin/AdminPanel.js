@@ -238,23 +238,23 @@ export default function Admin() {
 
       <section className="px-4 pt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {[
-          { k: 'all', l: 'Productos', v: stats.total, i: Package, c: 'text-neon' },
-          { k: 'low', l: 'Pocas unid.', v: stats.low, i: AlertTriangle, c: 'text-amber-300' },
-          { k: 'out', l: 'Agotados', v: stats.out, i: Ban, c: 'text-red-300' },
-          { k: 'hidden', l: 'Ocultos', v: stats.hidden, i: EyeOff, c: 'text-gray-300' },
+          { k: 'all', l: 'Productos', v: stats.total, i: Package, c: 'text-neon', t: 'bg-accent/10' },
+          { k: 'low', l: 'Pocas unid.', v: stats.low, i: AlertTriangle, c: 'text-amber-300', t: 'bg-amber-500/10' },
+          { k: 'out', l: 'Agotados', v: stats.out, i: Ban, c: 'text-red-300', t: 'bg-red-500/10' },
+          { k: 'hidden', l: 'Ocultos', v: stats.hidden, i: EyeOff, c: 'text-gray-300', t: 'bg-white/5' },
         ].map((s) => (
           <button
             key={s.k}
             type="button"
             onClick={() => setStatus(status === s.k ? 'all' : s.k)}
             aria-pressed={status === s.k}
-            className={'rounded-xl border p-3 text-left transition-colors ' + (status === s.k ? 'border-accent bg-accent/10' : 'border-white/10 bg-card')}
+            className={'rounded-2xl border p-3 text-left transition-colors ' + (status === s.k ? 'border-accent bg-accent/10' : 'border-white/10 bg-card')}
           >
-            <s.i size={16} className={s.c} />
-            <p className="mt-1 text-xl font-bold">
+            <span className={'flex h-8 w-8 items-center justify-center rounded-lg ' + s.t}><s.i size={16} className={s.c} /></span>
+            <p className="mt-2 text-2xl font-bold leading-none">
               {loading || error ? '—' : s.v}
             </p>
-            <p className="text-[11px] text-gray-400">{s.l}</p>
+            <p className="mt-1 text-[11px] font-medium text-gray-400">{s.l}</p>
           </button>
         ))}
       </section>
@@ -345,7 +345,7 @@ export default function Admin() {
           return (
             <div
               key={p.id}
-              className={`flex items-center gap-3 rounded-xl border bg-card p-2.5 transition-colors ${
+              className={`flex items-center gap-3 rounded-2xl border bg-card p-2.5 transition-colors ${
                 visible ? 'border-white/10' : 'border-amber-400/30'
               }`}
             >
@@ -359,7 +359,7 @@ export default function Admin() {
                 <img
                   src={p.image}
                   alt=""
-                  className={`h-14 w-14 shrink-0 rounded-lg bg-black/40 object-contain transition ${
+                  className={`h-14 w-14 shrink-0 rounded-xl bg-black/40 object-contain transition ${
                     visible ? '' : 'opacity-40 grayscale'
                   }`}
                 />
