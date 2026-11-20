@@ -440,7 +440,7 @@ export default function ProductFormModal({
               />
             </Field>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <Field id="zg-brand" label="Marca" required error={shown.brand}>
                 <input
                   id="zg-brand"
@@ -489,9 +489,9 @@ export default function ProductFormModal({
                 type="button"
                 onClick={onOpenCategories}
                 disabled={busy}
-                className="text-xs font-semibold text-neon disabled:opacity-50"
+                className="inline-flex min-h-10 items-center text-sm font-semibold text-neon disabled:opacity-50"
               >
-                + Nueva categoría
+                + Crear nueva categoría
               </button>
             )}
           </Section>
