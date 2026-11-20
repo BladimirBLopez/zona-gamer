@@ -1,10 +1,11 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Search, Plus, Pencil, X, Package, AlertTriangle, Ban, RotateCcw, LayoutGrid, Tag, EyeOff } from 'lucide-react';
+import { Search, Plus, Pencil, X, Package, AlertTriangle, Ban, RotateCcw, LayoutGrid, Tag, EyeOff, LogOut } from 'lucide-react';
 import { fmt, stockInfo } from '../../lib/utils';
 import ProductFormModal from './ProductFormModal';
 import { Toaster, toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 import CategoriesModule from './CategoriesModule';
 
 export default function Admin() {
@@ -25,7 +26,24 @@ export default function Admin() {
     if (message) toast.success(message);
   };
   const [categoryList, setCategoryList] = useState([]);
-  const [showMenu, setShowMenu] = useState(false);
+  const router = useRouter();
+  const [loggingOut, setLoggingOut] = useState(false);
+  const logout = async () => {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    try {
+      const response = await fetch('/api/admin/logout', {
+        method: 'POST',
+        cache: 'no-store',
+      });
+      if (!response.ok) throw new Error('No se pudo cerrar sesión');
+      router.replace('/admin/login');
+      router.refresh();
+    } catch (err) {
+      toast.error(err.message || 'No se pudo cerrar sesión');
+      setLoggingOut(false);
+    }
+  };
   const [showCategories, setShowCategories] = useState(false);
   const [createdCategory, setCreatedCategory] = useState(null);
 
@@ -178,7 +196,7 @@ export default function Admin() {
   const input = 'w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm outline-none focus:border-accent';
 
   return (
-    <main className="min-h-screen bg-bg text-gray-100 pb-24">
+    <main className="min-h-screen bg-bg text-gray-100 pb-28">
       <header className="sticky top-0 z-20 bg-bg/95 backdrop-blur border-b border-white/10 px-4 py-3 flex items-center justify-between">
         <div>
           <h1 className="font-display text-lg font-bold">
@@ -189,15 +207,6 @@ export default function Admin() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setShowMenu(true)}
-            className="flex items-center gap-1.5 rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-gray-200"
-            aria-label="Abrir módulos"
-          >
-            <LayoutGrid size={16} />
-            Módulos
-          </button>
           <button
           onClick={loadProducts}
           disabled={loading}
@@ -401,59 +410,6 @@ export default function Admin() {
 
       <Toaster theme="dark" position="top-center" richColors closeButton />
 
-      {showMenu && (
-        <div
-          className="fixed inset-0 z-40 bg-black/60"
-          role="presentation"
-          onClick={() => setShowMenu(false)}
-        >
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-label="Módulos del panel"
-            onClick={(event) => event.stopPropagation()}
-            className="absolute right-3 top-14 w-72 rounded-2xl border border-white/10 bg-card p-2 shadow-2xl"
-          >
-            <p className="px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-              Módulos
-            </p>
-            <button
-              type="button"
-              onClick={() => setShowMenu(false)}
-              className="flex w-full items-center gap-3 rounded-xl bg-white/5 px-3 py-3 text-left"
-            >
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/20 text-neon">
-                <Package size={18} />
-              </span>
-              <span>
-                <span className="block text-sm font-semibold">Productos</span>
-                <span className="block text-[11px] text-gray-400">
-                  Catálogo, precios y stock
-                </span>
-              </span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setShowMenu(false);
-                openCategories();
-              }}
-              className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left hover:bg-white/5"
-            >
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/20 text-neon">
-                <Tag size={18} />
-              </span>
-              <span>
-                <span className="block text-sm font-semibold">Categorías</span>
-                <span className="block text-[11px] text-gray-400">
-                  Organiza tu catálogo
-                </span>
-              </span>
-            </button>
-          </div>
-        </div>
-      )}
-
       {showCategories && (
         <CategoriesModule
           categories={categoryList}
@@ -463,16 +419,51 @@ export default function Admin() {
         />
       )}
 
-      {!loading && !error && (
-        <button
-          type="button"
-          onClick={openNew}
-          className="fixed bottom-5 right-5 z-20 flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-semibold shadow-lg"
-        >
-          <Plus size={18} />
-          Nuevo producto
-        </button>
-      )}
+      <nav
+        aria-label="Navegación del panel"
+        className="fixed inset-x-0 bottom-0 z-20 border-t border-white/10 bg-bg/95 backdrop-blur"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+      >
+        <div className="mx-auto grid max-w-xl grid-cols-4 gap-1 px-2 py-1.5">
+          <button
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            aria-current="page"
+            className="flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl text-neon"
+          >
+            <Package size={22} />
+            <span className="text-[13px] font-semibold">Productos</span>
+          </button>
+          <button
+            type="button"
+            onClick={openCategories}
+            className="flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl text-gray-300 active:bg-white/5"
+          >
+            <Tag size={22} />
+            <span className="text-[13px] font-semibold">Categorías</span>
+          </button>
+          <button
+            type="button"
+            onClick={openNew}
+            disabled={loading || Boolean(error)}
+            className="flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl text-gray-300 disabled:opacity-40"
+          >
+            <span className="flex h-8 w-12 items-center justify-center rounded-full bg-accent text-white">
+              <Plus size={20} />
+            </span>
+            <span className="text-[13px] font-semibold">Nuevo</span>
+          </button>
+          <button
+            type="button"
+            onClick={logout}
+            disabled={loggingOut}
+            className="flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl text-gray-300 active:bg-white/5 disabled:opacity-50"
+          >
+            <LogOut size={22} />
+            <span className="text-[13px] font-semibold">{loggingOut ? 'Saliendo' : 'Salir'}</span>
+          </button>
+        </div>
+      </nav>
 
       {formOpen && (
         <ProductFormModal
