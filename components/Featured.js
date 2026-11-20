@@ -4,16 +4,14 @@ import Link from 'next/link';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { products } from '../data/products';
 import { fmt } from '../lib/utils';
 import Reveal from './Reveal';
 
 const featuredIds = [19, 40, 33, 34, 20, 39, 41, 44];
-const list = featuredIds
-  .map((id) => products.find((p) => p.id === id))
-  .filter(Boolean);
-
-export default function Featured() {
+export default function Featured({ products }) {
+  const list = featuredIds
+    .map((id) => products.find((p) => p.id === id))
+    .filter(Boolean);
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', loop: true }, [
     Autoplay({ delay: 4000, stopOnInteraction: true }),
   ]);

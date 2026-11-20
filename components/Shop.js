@@ -6,7 +6,7 @@ import TrustBar from './TrustBar';
 import Featured from './Featured';
 import HomeCategories from './HomeCategories';
 
-export default function Shop() {
+export default function Shop({ products }) {
   const goCatalog = () => {
     window.location.assign('/catalogo');
   };
@@ -14,10 +14,10 @@ export default function Shop() {
   return (
     <>
       <Hero onExplore={goCatalog} />
-      <Showcase />
+      <Showcase products={products} />
       <TrustBar />
-      <HomeCategories />
-      <Featured />
+      <HomeCategories products={products} />
+      <Featured products={products} />
 
       <div className="mx-auto max-w-7xl px-4 pb-12 text-center">
         <Link

@@ -1,19 +1,21 @@
 'use client';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { products } from '../data/products';
 
-const byId = (id) => products.find((p) => p.id === id);
-
-const chairs = [
+const chairChoices = [
   { id: 1, cls: 'w-[28%] translate-y-4 -rotate-2', delay: 0.1 },
   { id: 2, cls: 'z-10 w-[40%]', delay: 0 },
   { id: 5, cls: 'w-[28%] translate-y-4 rotate-2', delay: 0.2 },
-]
-  .map((c) => ({ ...c, p: byId(c.id) }))
-  .filter((c) => c.p && !c.p.image.startsWith('data:'));
+];
 
-export default function Showcase() {
+export default function Showcase({ products }) {
+  const chairs = chairChoices
+    .map((c) => ({
+      ...c,
+      p: products.find((p) => p.id === c.id),
+    }))
+    .filter((c) => c.p && c.p.image && !c.p.image.startsWith('data:'));
+
   if (!chairs.length) return null;
   return (
     <section className="mx-auto mt-6 max-w-3xl px-4 pb-8">

@@ -3,7 +3,9 @@ import Catalog from '../../components/Catalog';
 import Footer from '../../components/Footer';
 import BottomNav from '../../components/BottomNav';
 import { FloatingWhatsApp } from '../../components/Sections';
-import { products } from '../../data/products';
+import { getPublicProducts } from '../../lib/public-products';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Catálogo | Zona Gamer',
@@ -13,6 +15,7 @@ export const metadata = {
 
 export default async function CatalogoPage({ searchParams }) {
   const params = await searchParams;
+  const products = await getPublicProducts();
   const category = typeof params?.categoria === 'string'
     ? params.categoria
     : 'Todos';
@@ -35,7 +38,7 @@ export default async function CatalogoPage({ searchParams }) {
           Encuentra tus productos favoritos, compara precios y consulta directamente por WhatsApp.
         </p>
       </div>
-      <Catalog key={initialCategory} initialCategory={initialCategory} />
+      <Catalog key={initialCategory} products={products} initialCategory={initialCategory} />
       <Footer />
       <FloatingWhatsApp />
       <BottomNav />

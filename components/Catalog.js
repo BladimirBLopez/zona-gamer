@@ -1,7 +1,6 @@
 'use client';
 import { useMemo, useState } from 'react';
 import { Search, SearchX } from 'lucide-react';
-import { products, categories } from '../data/products';
 import { config } from '../data/config';
 import { waLink } from '../lib/utils';
 import ProductCard from './ProductCard';
@@ -20,10 +19,37 @@ const ranges = [
   { id: 'high', label: 'Más de Bs 3.500', min: 3501, max: Infinity },
 ];
 
-const tabs = categories.filter((c) => c === 'Todos' || products.some((p) => p.category === c));
-const brands = [...new Set(products.map((p) => p.brand))];
+const categoryOrder = [
+  'Sillas gamer',
+  'Sillones gamer',
+  'Mesas Cougar',
+  'Mousepads',
+  'Accesorios gamer',
+  'Cámaras',
+  'Proyectores',
+];
 
-export default function Catalog({ initialCategory = 'Todos', initialQuery = '' }) {
+export default function Catalog({
+  products,
+  initialCategory = 'Todos',
+  initialQuery = '',
+}) {
+  const tabs = useMemo(() => {
+    const available = [
+      ...new Set(products.map((p) => p.category).filter(Boolean))
+    ];
+
+    return [
+      'Todos',
+      ...categoryOrder.filter((c) => available.includes(c)),
+      ...available.filter((c) => !categoryOrder.includes(c)),
+    ];
+  }, [products]);
+
+  const brands = useMemo(
+    () => [...new Set(products.map((p) => p.brand).filter(Boolean))],
+    [products]
+  );
   const [q, setQ] = useState(initialQuery);
   const [cat, setCat] = useState(initialCategory);
   const [visibleCount, setVisibleCount] = useState(12);
@@ -45,7 +71,7 @@ export default function Catalog({ initialCategory = 'Todos', initialQuery = '' }
     if (sort === 'asc') r = [...r].sort((a, b) => (a.price || Infinity) - (b.price || Infinity));
     else if (sort === 'desc') r = [...r].sort((a, b) => b.price - a.price);
     return r;
-  }, [q, cat, brand, sort, range]);
+  }, [products, q, cat, brand, sort, range]);
 
   const shown = list.slice(0, visibleCount);
   const countOf = (c) => (c === 'Todos' ? products.length : products.filter((p) => p.category === c).length);

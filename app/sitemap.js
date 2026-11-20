@@ -1,7 +1,10 @@
-import { products } from '../data/products';
+import { getPublicProducts } from '../lib/public-products';
 import { config } from '../data/config';
 
-export default function sitemap() {
+export const dynamic = 'force-dynamic';
+
+export default async function sitemap() {
+  const products = await getPublicProducts();
   const now = new Date();
   return [
     { url: config.url, lastModified: now, changeFrequency: 'weekly', priority: 1 },

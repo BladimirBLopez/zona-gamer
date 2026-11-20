@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { products } from '../../../data/products';
+import { getPublicProducts } from '../../../lib/public-products';
 import { config } from '../../../data/config';
 import { fmt } from '../../../lib/utils';
 import Header from '../../../components/Header';
@@ -7,7 +7,7 @@ import ProductDetail from '../../../components/ProductDetail';
 import { FloatingWhatsApp } from '../../../components/Sections';
 import Footer from '../../../components/Footer';
 
-const find = (slug) => products.find((x) => x.slug === slug);
+export const dynamic = 'force-dynamic';
 
 const productJsonLd = (p) => {
   const url = `${config.url.replace(/\/$/, '')}/producto/${p.slug}`;
@@ -46,13 +46,10 @@ const productJsonLd = (p) => {
 };
 
 
-export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
-}
-
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const p = find(slug);
+  const products = await getPublicProducts();
+  const p = products.find((x) => x.slug === slug);
   if (!p) return {};
   const title = `${p.name} | ${config.name}`;
   const desc = `${p.name}${p.colors ? ' (' + p.colors + ')' : ''} en ${config.name}. ${
@@ -70,8 +67,14 @@ export async function generateMetadata({ params }) {
 
 export default async function ProductPage({ params }) {
   const { slug } = await params;
-  const p = find(slug);
+  const products = await getPublicProducts();
+  const p = products.find((x) => x.slug === slug);
   if (!p) notFound();
+
+  const related = products
+    .filter((x) => x.id !== p.id && x.category === p.category)
+    .slice(0, 4);
+
   const jsonLd = productJsonLd(p);
   return (
     <main>
@@ -82,7 +85,7 @@ export default async function ProductPage({ params }) {
         }}
       />
       <Header />
-      <ProductDetail p={p} />
+      <ProductDetail p={p} related={related} />
       <Footer />
       <FloatingWhatsApp />
     </main>

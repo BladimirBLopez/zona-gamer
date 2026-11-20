@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { products } from '../data/products';
 
 const choices = [
   ['Sillas gamer', 19],
@@ -13,15 +12,14 @@ const choices = [
   ['Pasta térmica', 44],
 ];
 
-const cards = choices
-  .map(([name, id]) => ({
-    name,
-    image: products.find((p) => p.id === id)?.image,
-    count: products.filter((p) => p.category === name).length,
-  }))
-  .filter((c) => c.count > 0);
-
-export default function HomeCategories() {
+export default function HomeCategories({ products }) {
+  const cards = choices
+    .map(([name, id]) => ({
+      name,
+      image: products.find((p) => p.id === id)?.image,
+      count: products.filter((p) => p.category === name).length,
+    }))
+    .filter((c) => c.count > 0);
   return (
     <section className="mx-auto max-w-7xl px-4 py-12">
       <div className="flex flex-wrap items-end justify-between gap-3">
