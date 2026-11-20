@@ -11,10 +11,10 @@ const fieldClass =
 const parseFeatures = (text) =>
   text.split('\n').map((v) => v.trim()).filter(Boolean);
 
-function initialForm(product) {
+function initialForm(product, defaults = {}) {
   if (!product) {
     return {
-      name: '', brand: '', category: '', price: '', stock: '0',
+      name: defaults.name || '', brand: '', category: defaults.category || '', price: '', stock: '0',
       colors: '', description: '', features: ''
     };
   }
@@ -150,13 +150,15 @@ export default function ProductFormModal({
   brands = [],
   onOpenCategories,
   createdCategory = null,
+  defaultCategory = '',
+  defaultName = '',
   onClose,
   onSaved
 }) {
   const isEdit = mode === 'edit' && Boolean(product);
 
   const initial = useMemo(
-    () => initialForm(isEdit ? product : null),
+    () => initialForm(isEdit ? product : null, { category: defaultCategory, name: defaultName }),
     [isEdit, product]
   );
   const initialKeys = useMemo(

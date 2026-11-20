@@ -22,6 +22,7 @@ export default function Admin() {
   }, [q, cat, status]);
   const [managing, setManaging] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
+  const [newName, setNewName] = useState('');
   const setNotice = (message) => {
     if (message) toast.success(message);
   };
@@ -115,6 +116,21 @@ export default function Admin() {
     [items]
   );
 
+  const catCount = useMemo(() => {
+    const m = {};
+    items.forEach((p) => {
+      if (p.category) m[p.category] = (m[p.category] || 0) + 1;
+    });
+    return m;
+  }, [items]);
+
+  const catsByCount = useMemo(
+    () => [...cats].sort(
+      (x, y) => (catCount[y] || 0) - (catCount[x] || 0) || x.localeCompare(y, 'es')
+    ),
+    [cats, catCount]
+  );
+
   const list = useMemo(
     () => items.filter((p) =>
       (cat === 'Todas' || p.category === cat) &&
@@ -122,7 +138,7 @@ export default function Admin() {
         (status === 'low' && p.stock > 0 && p.stock <= 3) ||
         (status === 'out' && p.stock <= 0) ||
         (status === 'hidden' && p.active === false)) &&
-      `${p.name || ''} ${p.brand || ''}`
+      `${p.name || ''} ${p.brand || ''} ${p.category || ''}`
         .toLowerCase()
         .includes(q.toLowerCase().trim())
     ),
@@ -189,6 +205,7 @@ export default function Admin() {
   };
 
   const openNew = () => {
+    setNewName('');
     setNotice('');
     setFormOpen(true);
   };
@@ -197,7 +214,7 @@ export default function Admin() {
 
   return (
     <main className="admin-ui min-h-screen bg-bg text-gray-100 pb-28">
-      <header className="sticky top-0 z-20 bg-bg/95 backdrop-blur border-b border-white/10 px-4 py-3 flex items-center justify-between">
+      <header className="bg-bg border-b border-white/10 px-4 py-3 flex items-center justify-between">
         <div>
           <h1 className="font-display text-lg font-bold">
             Panel <span className="text-neon">Zona Gamer</span>
@@ -242,18 +259,28 @@ export default function Admin() {
         ))}
       </section>
 
-      <section className="px-4 pt-4 space-y-2">
+      <section className="sticky top-0 z-10 bg-bg/95 backdrop-blur border-b border-white/10 px-4 pt-3 pb-2 space-y-2">
         <div className="relative">
           <Search size={16} className="absolute left-3 top-2.5 text-gray-500" />
+          {q && (
+            <button
+              type="button"
+              onClick={() => setQ('')}
+              aria-label="Borrar búsqueda"
+              className="absolute right-2 top-1.5 p-1 text-gray-400"
+            >
+              <X size={16} />
+            </button>
+          )}
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Buscar producto o marca"
-            className={input + ' pl-9'}
+            placeholder="Buscar nombre, marca o categoría"
+            className={input + ' pl-9 pr-9'}
           />
         </div>
         <div className="flex gap-2 overflow-x-auto no-scrollbar">
-          {['Todas', ...cats].map((c) => (
+          {['Todas', ...catsByCount].map((c) => (
             <button
               key={c}
               onClick={() => setCat(c)}
@@ -264,6 +291,9 @@ export default function Admin() {
               }`}
             >
               {c}
+              <span className="ml-1 opacity-70">
+                {c === 'Todas' ? items.length : catCount[c] || 0}
+              </span>
             </button>
           ))}
         </div>
@@ -395,9 +425,18 @@ export default function Admin() {
         )}
 
         {!loading && !error && list.length === 0 && (
-          <p className="text-center text-sm text-gray-500 py-10">
-            Sin resultados
-          </p>
+          <div className="py-10 text-center">
+            <p className="text-sm text-gray-500">Sin resultados</p>
+            {q.trim() && (
+              <button
+                type="button"
+                onClick={() => { setNewName(q.trim()); setFormOpen(true); }}
+                className="mt-3 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-white"
+              >
+                Crear «{q.trim()}»
+              </button>
+            )}
+          </div>
         )}
       </section>
 
@@ -468,6 +507,8 @@ export default function Admin() {
       {formOpen && (
         <ProductFormModal
           mode="create"
+          defaultCategory={cat !== 'Todas' ? cat : ''}
+          defaultName={newName}
           categories={categoryNames}
           brands={[...new Set(items.map((p) => p.brand).filter(Boolean))].sort((x, y) => x.localeCompare(y, 'es'))}
           onOpenCategories={openCategories}
