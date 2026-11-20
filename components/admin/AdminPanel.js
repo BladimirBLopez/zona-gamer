@@ -1,12 +1,13 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Search, Plus, Pencil, X, Package, AlertTriangle, Ban, RotateCcw, LayoutGrid, Tag, EyeOff, LogOut } from 'lucide-react';
+import { Search, Plus, Pencil, X, Package, AlertTriangle, Ban, RotateCcw, LayoutGrid, Tag, EyeOff, LogOut, Settings } from 'lucide-react';
 import { fmt, stockInfo } from '../../lib/utils';
 import ProductFormModal from './ProductFormModal';
 import { Toaster, toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import CategoriesModule from './CategoriesModule';
+import SettingsModule from './SettingsModule';
 
 export default function Admin() {
   const [items, setItems] = useState([]);
@@ -46,6 +47,7 @@ export default function Admin() {
     }
   };
   const [showCategories, setShowCategories] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [createdCategory, setCreatedCategory] = useState(null);
 
   const loadProducts = useCallback(async () => {
@@ -232,6 +234,15 @@ export default function Admin() {
           aria-label="Actualizar productos"
         >
           <RotateCcw size={18} className={loading ? 'animate-spin' : ''} />
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowSettings(true)}
+          className="p-2 rounded-lg bg-white/5 text-gray-300"
+          title="Ajustes"
+          aria-label="Ajustes"
+        >
+          <Settings size={18} />
         </button>
         </div>
       </header>
@@ -448,6 +459,10 @@ export default function Admin() {
       )}
 
       <Toaster theme="light" position="top-center" richColors closeButton />
+
+      {showSettings && (
+        <SettingsModule onClose={() => setShowSettings(false)} />
+      )}
 
       {showCategories && (
         <CategoriesModule
