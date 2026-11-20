@@ -13,9 +13,6 @@ export default function Admin() {
   const [q, setQ] = useState('');
   const [cat, setCat] = useState('Todas');
   const [managing, setManaging] = useState(null);
-  const [editing, setEditing] = useState(null);
-  const [saving, setSaving] = useState(false);
-  const [saveError, setSaveError] = useState('');
   const [newForm, setNewForm] = useState(null);
   const [newSaving, setNewSaving] = useState(false);
   const [newError, setNewError] = useState('');
@@ -81,80 +78,53 @@ export default function Admin() {
     out: items.filter((p) => p.stock <= 0).length,
   };
 
-  const openEditor = (product) => {
-    setSaveError('');
-    setEditing({
-      id: product.id,
-      name: product.name,
-      price: String(product.price),
-      stock: String(product.stock),
-    });
-  };
+  const [toggling, setToggling] = useState(null);
+  const [toggleError, setToggleError] = useState('');
 
-  const saveChanges = async (event) => {
-    event.preventDefault();
-    if (!editing || saving) return;
+  const toggleVisibility = async (product) => {
+    if (toggling !== null) return;
 
-    const rawPrice = editing.price.trim();
-    const rawStock = editing.stock.trim();
-    const price = Number(rawPrice);
-    const stock = Number(rawStock);
+    const next = product.active === false;
 
-    if (
-      !/^\d+(?:\.\d{1,2})?$/.test(rawPrice) ||
-      !Number.isFinite(price) ||
-      price > 10000000
-    ) {
-      setSaveError('Ingresa un precio válido, con máximo 2 decimales.');
-      return;
-    }
-
-    if (
-      !/^\d+$/.test(rawStock) ||
-      !Number.isSafeInteger(stock) ||
-      stock > 1000000
-    ) {
-      setSaveError('El stock debe ser un número entero entre 0 y 1000000.');
-      return;
-    }
-
-    setSaving(true);
-    setSaveError('');
+    setToggling(product.id);
+    setToggleError('');
+    setItems((current) =>
+      current.map((item) =>
+        item.id === product.id ? { ...item, active: next } : item
+      )
+    );
 
     try {
       const response = await fetch(
-        `/api/admin/products/${editing.id}`,
+        `/api/admin/products/${product.id}`,
         {
-          method: 'PATCH',
+          method: 'POST',
           credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ price, stock }),
+          body: JSON.stringify({ action: 'visibility', active: next }),
         }
       );
 
       const result = await response.json().catch(() => ({}));
 
-      if (!response.ok || !result.ok || !result.product) {
-        throw new Error(result.error || 'No se pudieron guardar los cambios.');
+      if (!response.ok || !result.ok) {
+        throw new Error(
+          result.error || 'No se pudo cambiar la visibilidad.'
+        );
       }
-
+    } catch (err) {
       setItems((current) =>
-        current.map((product) =>
-          product.id === editing.id
-            ? {
-                ...product,
-                price: result.product.price,
-                stock: result.product.stock,
-              }
-            : product
+        current.map((item) =>
+          item.id === product.id
+            ? { ...item, active: !next }
+            : item
         )
       );
-
-      setEditing(null);
-    } catch (error) {
-      setSaveError(error.message || 'Error al guardar en Neon.');
+      setToggleError(
+        err.message || 'No se pudo cambiar la visibilidad.'
+      );
     } finally {
-      setSaving(false);
+      setToggling(null);
     }
   };
 
@@ -477,22 +447,26 @@ export default function Admin() {
 
         {!loading && !error && list.map((p) => {
           const s = stockInfo(p.stock);
+          const visible = p.active !== false;
+          const busy = toggling === p.id;
 
           return (
-            <div key={p.id} className="rounded-xl bg-card border border-white/10 p-3 flex gap-3">
+            <div
+              key={p.id}
+              className={`rounded-xl bg-card border p-3 flex gap-3 transition-colors ${
+                visible ? 'border-white/10' : 'border-amber-400/30'
+              }`}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={p.image}
                 alt={p.name}
-                className="w-16 h-16 rounded-lg object-contain bg-black/40 shrink-0"
+                className={`w-16 h-16 rounded-lg object-contain bg-black/40 shrink-0 transition ${
+                  visible ? '' : 'opacity-40 grayscale'
+                }`}
               />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold truncate">{p.name}</p>
-                {p.active === false && (
-                  <p className="text-[11px] font-semibold text-amber-300">
-                    Oculto de la tienda
-                  </p>
-                )}
                 <p className="text-[11px] text-gray-400 truncate">
                   {p.brand} · {p.category}
                 </p>
@@ -504,29 +478,49 @@ export default function Admin() {
                     {s.label}
                   </span>
                 </div>
-                <div className="mt-2 flex items-center justify-between gap-2">
-                  <span className="text-xs text-gray-400">
-                    Stock: {p.stock}
-                  </span>
-                  <div className="flex items-center gap-1">
-                    <button
-                      type="button"
-                      onClick={() => openEditor(p)}
-                      className="rounded-lg bg-white/10 px-2 py-1.5 text-[11px]"
-                      aria-label={`Editar precio y stock de ${p.name}`}
+                <p className="mt-1 text-xs text-gray-400">
+                  Stock: {p.stock}
+                </p>
+                <div className="mt-2 flex items-center justify-between gap-2 border-t border-white/10 pt-2">
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={visible}
+                    aria-label={`${visible ? 'Ocultar' : 'Mostrar'} ${p.name} en la tienda`}
+                    onClick={() => toggleVisibility(p)}
+                    disabled={toggling !== null}
+                    className={`flex items-center gap-2 disabled:opacity-60 ${
+                      busy ? 'animate-pulse' : ''
+                    }`}
+                  >
+                    <span
+                      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${
+                        visible ? 'bg-emerald-500' : 'bg-white/20'
+                      }`}
                     >
-                      Precio/stock
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setManaging(p)}
-                      className="flex items-center gap-1 rounded-lg bg-accent px-2 py-1.5 text-[11px]"
-                      aria-label={`Editar todos los datos de ${p.name}`}
+                      <span
+                        className={`inline-block h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                          visible ? 'translate-x-[22px]' : 'translate-x-0.5'
+                        }`}
+                      />
+                    </span>
+                    <span
+                      className={`text-xs font-semibold ${
+                        visible ? 'text-emerald-300' : 'text-amber-300'
+                      }`}
                     >
-                      <Pencil size={12} />
-                      Editar todo
-                    </button>
-                  </div>
+                      {busy ? 'Guardando...' : visible ? 'Visible' : 'Oculto'}
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setManaging(p)}
+                    className="flex items-center gap-1 rounded-lg bg-accent px-3 py-1.5 text-[11px] font-semibold"
+                    aria-label={`Editar todos los datos de ${p.name}`}
+                  >
+                    <Pencil size={12} />
+                    Editar todo
+                  </button>
                 </div>
               </div>
             </div>
@@ -545,6 +539,23 @@ export default function Admin() {
           Agrega, edita, oculta y vuelve a publicar productos
           desde este panel.
         </p>
+      )}
+
+      {toggleError && (
+        <div
+          role="alert"
+          className="fixed left-4 right-4 top-16 z-40 mx-auto flex max-w-lg items-start justify-between gap-3 rounded-xl border border-red-400/30 bg-red-950 p-3 text-sm text-red-100 shadow-xl"
+        >
+          <span>{toggleError}</span>
+          <button
+            type="button"
+            onClick={() => setToggleError('')}
+            aria-label="Cerrar aviso"
+            className="shrink-0 rounded-lg p-1"
+          >
+            <X size={16} />
+          </button>
+        </div>
       )}
 
       {notice && (
@@ -802,92 +813,6 @@ export default function Admin() {
             await loadProducts();
           }}
         />
-      )}
-      {editing && (
-        <div
-          className="fixed inset-0 z-30 bg-black/70 flex items-end sm:items-center justify-center"
-          role="presentation"
-        >
-          <form
-            onSubmit={saveChanges}
-            role="dialog"
-            aria-modal="true"
-            aria-label={`Editar ${editing.name}`}
-            className="w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl bg-card border border-white/10 p-4 space-y-4"
-          >
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <h2 className="font-display font-bold">Editar producto</h2>
-                <p className="text-xs text-gray-400 mt-1">
-                  {editing.name}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setEditing(null)}
-                disabled={saving}
-                className="p-2 disabled:opacity-50"
-                aria-label="Cerrar edición"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <label className="space-y-1">
-                <span className="text-xs text-gray-300">Precio en Bs</span>
-                <input
-                  type="number"
-                  min="0"
-                  max="10000000"
-                  step="0.01"
-                  required
-                  className={input}
-                  value={editing.price}
-                  onChange={(event) =>
-                    setEditing({
-                      ...editing,
-                      price: event.target.value,
-                    })
-                  }
-                />
-              </label>
-
-              <label className="space-y-1">
-                <span className="text-xs text-gray-300">Existencias</span>
-                <input
-                  type="number"
-                  min="0"
-                  max="1000000"
-                  step="1"
-                  required
-                  className={input}
-                  value={editing.stock}
-                  onChange={(event) =>
-                    setEditing({
-                      ...editing,
-                      stock: event.target.value,
-                    })
-                  }
-                />
-              </label>
-            </div>
-
-            {saveError && (
-              <p className="rounded-lg bg-red-500/10 border border-red-400/30 p-3 text-sm text-red-200" role="alert">
-                {saveError}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={saving}
-              className="w-full rounded-lg bg-accent py-3 font-semibold text-sm disabled:opacity-50"
-            >
-              {saving ? 'Guardando en Neon...' : 'Guardar cambios'}
-            </button>
-          </form>
-        </div>
       )}
     </main>
   );

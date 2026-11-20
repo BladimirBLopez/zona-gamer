@@ -211,34 +211,6 @@ export default function ManageProductModal({
     }
   }
 
-  async function toggleVisibility() {
-    if (saving) return;
-    const willPublish = product.active === false;
-    const message = willPublish
-      ? '¿Volver a publicar este producto en la tienda?'
-      : '¿Ocultar este producto de la tienda sin borrarlo?';
-
-    if (!window.confirm(message)) return;
-
-    setSaving(true);
-    setError('');
-    try {
-      await requestUpdate({
-        action: 'visibility',
-        active: willPublish
-      });
-      await onSaved(
-        willPublish
-          ? 'Producto publicado correctamente.'
-          : 'Producto ocultado correctamente.'
-      );
-    } catch (err) {
-      setError(err.message || 'No se pudo cambiar la visibilidad.');
-    } finally {
-      setSaving(false);
-    }
-  }
-
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/75 sm:items-center">
       <form
@@ -395,19 +367,8 @@ export default function ManageProductModal({
           {saving ? 'Guardando cambios...' : 'Guardar cambios'}
         </button>
 
-        <button
-          type="button"
-          onClick={toggleVisibility}
-          disabled={saving}
-          className="w-full rounded-lg border border-white/20 py-3 text-sm font-semibold disabled:opacity-50"
-        >
-          {product.active === false
-            ? 'Volver a publicar producto'
-            : 'Ocultar producto de la tienda'}
-        </button>
-
         <p className="text-center text-[11px] text-gray-400">
-          Ocultar no elimina los datos ni las fotografías.
+          Para mostrar u ocultar el producto usa el interruptor de la lista.
         </p>
       </form>
     </div>
