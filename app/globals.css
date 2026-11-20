@@ -132,3 +132,11 @@ html[data-theme='light'] .hover\:text-accent:hover { color: #c2410c; }
   opacity: 0.8;
   pointer-events: none;
 }
+
+/* ===== ADMIN-UI: paleta del panel (no afecta la tienda) ===== */
+html[data-theme='dark'] .admin-ui .bg-card { background-color: #1a1a20; }
+html[data-theme='dark'] .admin-ui .border-white\/10 { border-color: #2e2e38; }
+html[data-theme='dark'] .admin-ui .bg-white\/5 { background-color: #22222a; }
+html[data-theme='dark'] .admin-ui .text-gray-300 { color: #d4d4d8; }
+html[data-theme='dark'] .admin-ui .text-gray-400 { color: #a1a1aa; }
+html[data-theme='dark'] .admin-ui .text-gray-500 { color: #8b8b95; }

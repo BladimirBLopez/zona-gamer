@@ -196,7 +196,7 @@ export default function Admin() {
   const input = 'w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm outline-none focus:border-accent';
 
   return (
-    <main className="min-h-screen bg-bg text-gray-100 pb-28">
+    <main className="admin-ui min-h-screen bg-bg text-gray-100 pb-28">
       <header className="sticky top-0 z-20 bg-bg/95 backdrop-blur border-b border-white/10 px-4 py-3 flex items-center justify-between">
         <div>
           <h1 className="font-display text-lg font-bold">
@@ -339,7 +339,7 @@ export default function Admin() {
                     {p.brand} · {p.category}
                   </span>
                   <span className="mt-0.5 flex items-center gap-2">
-                    <span className="text-sm font-bold text-neon">
+                    <span className="text-sm font-bold text-white">
                       {p.price > 0 ? `Bs ${fmt(p.price)}` : 'Consultar'}
                     </span>
                     <span className={`rounded-full px-2 py-0.5 text-[10px] ${s.cls}`}>
