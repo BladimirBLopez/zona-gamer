@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Search, Pencil, X, Package, AlertTriangle, Ban, RotateCcw } from 'lucide-react';
+import { Search, Plus, Pencil, X, Package, AlertTriangle, Ban, RotateCcw } from 'lucide-react';
 import { fmt, stockInfo } from '../../lib/utils';
 
 export default function Admin() {
@@ -14,6 +14,10 @@ export default function Admin() {
   const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
+  const [newForm, setNewForm] = useState(null);
+  const [newSaving, setNewSaving] = useState(false);
+  const [newError, setNewError] = useState('');
+  const [notice, setNotice] = useState('');
 
   const loadProducts = useCallback(async () => {
     setLoading(true);
@@ -146,6 +150,108 @@ export default function Admin() {
       setSaveError(error.message || 'Error al guardar en Neon.');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const openNew = () => {
+    setNewError('');
+    setNotice('');
+    setNewForm({
+      name: '',
+      brand: '',
+      category: '',
+      price: '0',
+      stock: '0',
+      colors: '',
+      description: '',
+      features: '',
+      image: '',
+    });
+  };
+
+  const updateNew = (key) => (event) => {
+    setNewForm((current) => ({
+      ...current,
+      [key]: event.target.value,
+    }));
+  };
+
+  const createProduct = async (event) => {
+    event.preventDefault();
+    if (!newForm || newSaving) return;
+
+    const rawPrice = newForm.price.trim();
+    const rawStock = newForm.stock.trim();
+    const price = Number(rawPrice);
+    const stock = Number(rawStock);
+
+    if (
+      !/^\d+(?:\.\d{1,2})?$/.test(rawPrice) ||
+      !Number.isFinite(price) ||
+      price > 10000000
+    ) {
+      setNewError('El precio debe ser válido y tener máximo 2 decimales.');
+      return;
+    }
+
+    if (
+      !/^\d+$/.test(rawStock) ||
+      !Number.isSafeInteger(stock) ||
+      stock > 1000000
+    ) {
+      setNewError('El stock debe ser un número entero válido.');
+      return;
+    }
+
+    const payload = {
+      name: newForm.name.trim(),
+      brand: newForm.brand.trim(),
+      category: newForm.category.trim(),
+      price,
+      stock,
+      colors: newForm.colors.trim(),
+      description: newForm.description.trim(),
+      features: newForm.features
+        .split('\n')
+        .map((value) => value.trim())
+        .filter(Boolean),
+      image: newForm.image.trim(),
+    };
+
+    if (
+      !payload.name ||
+      !payload.brand ||
+      !payload.category ||
+      !payload.image
+    ) {
+      setNewError('Completa nombre, marca, categoría y fotografía.');
+      return;
+    }
+
+    setNewSaving(true);
+    setNewError('');
+
+    try {
+      const response = await fetch('/api/admin/products/create', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.error || 'No se pudo crear el producto.');
+      }
+
+      setNewForm(null);
+      setNotice(`Producto "${result.product.name}" registrado en Neon.`);
+      await loadProducts();
+    } catch (error) {
+      setNewError(error.message || 'Error al registrar el producto.');
+    } finally {
+      setNewSaving(false);
     }
   };
 
@@ -293,8 +399,221 @@ export default function Admin() {
       {!loading && !error && (
         <p className="px-4 pt-5 text-center text-xs text-gray-500">
           Los cambios de precio y stock se guardan en Neon.
-          Agregar nuevos productos estará disponible después.
+          Usa «Nuevo producto» para agregar productos al catálogo.
         </p>
+      )}
+
+      {notice && (
+        <div
+          role="status"
+          className="fixed left-4 right-4 top-16 z-40 mx-auto flex max-w-lg items-start justify-between gap-3 rounded-xl border border-emerald-500/30 bg-[#123227] p-3 text-sm text-emerald-100 shadow-xl"
+        >
+          <span>{notice}</span>
+          <button
+            type="button"
+            onClick={() => setNotice('')}
+            aria-label="Cerrar aviso"
+            className="shrink-0 rounded-lg p-1"
+          >
+            <X size={16} />
+          </button>
+        </div>
+      )}
+
+      {!loading && !error && (
+        <button
+          type="button"
+          onClick={openNew}
+          className="fixed bottom-5 right-5 z-20 flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-semibold shadow-lg"
+        >
+          <Plus size={18} />
+          Nuevo producto
+        </button>
+      )}
+
+      {newForm && (
+        <div className="fixed inset-0 z-30 flex items-end justify-center bg-black/70 sm:items-center">
+          <form
+            onSubmit={createProduct}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Registrar nuevo producto"
+            className="w-full max-h-[92vh] overflow-y-auto rounded-t-2xl border border-white/10 bg-card p-4 space-y-3 sm:max-w-lg sm:rounded-2xl"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="font-display text-lg font-bold">
+                  Nuevo producto
+                </h2>
+                <p className="text-xs text-gray-400">
+                  Se guardará directamente en Neon
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setNewForm(null)}
+                disabled={newSaving}
+                className="p-2 disabled:opacity-50"
+                aria-label="Cerrar formulario"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <label className="block space-y-1">
+              <span className="text-xs text-gray-300">Nombre *</span>
+              <input
+                required
+                maxLength={160}
+                className={input}
+                value={newForm.name}
+                onChange={updateNew('name')}
+                placeholder="Nombre del producto"
+              />
+            </label>
+
+            <div className="grid grid-cols-2 gap-2">
+              <label className="space-y-1">
+                <span className="text-xs text-gray-300">Marca *</span>
+                <input
+                  required
+                  maxLength={80}
+                  className={input}
+                  value={newForm.brand}
+                  onChange={updateNew('brand')}
+                  placeholder="Ej. Cougar"
+                  list="zg-new-brands"
+                />
+              </label>
+
+              <label className="space-y-1">
+                <span className="text-xs text-gray-300">Categoría *</span>
+                <input
+                  required
+                  maxLength={100}
+                  className={input}
+                  value={newForm.category}
+                  onChange={updateNew('category')}
+                  placeholder="Ej. Sillas gamer"
+                  list="zg-new-categories"
+                />
+              </label>
+            </div>
+
+            <datalist id="zg-new-brands">
+              {[...new Set(items.map((p) => p.brand).filter(Boolean))]
+                .map((brand) => (
+                  <option key={brand} value={brand} />
+                ))}
+            </datalist>
+
+            <datalist id="zg-new-categories">
+              {cats.map((category) => (
+                <option key={category} value={category} />
+              ))}
+            </datalist>
+
+            <div className="grid grid-cols-2 gap-2">
+              <label className="space-y-1">
+                <span className="text-xs text-gray-300">Precio Bs *</span>
+                <input
+                  required
+                  type="number"
+                  min="0"
+                  max="10000000"
+                  step="0.01"
+                  className={input}
+                  value={newForm.price}
+                  onChange={updateNew('price')}
+                />
+              </label>
+              <label className="space-y-1">
+                <span className="text-xs text-gray-300">Existencias *</span>
+                <input
+                  required
+                  type="number"
+                  min="0"
+                  max="1000000"
+                  step="1"
+                  className={input}
+                  value={newForm.stock}
+                  onChange={updateNew('stock')}
+                />
+              </label>
+            </div>
+
+            <label className="block space-y-1">
+              <span className="text-xs text-gray-300">Colores</span>
+              <input
+                maxLength={300}
+                className={input}
+                value={newForm.colors}
+                onChange={updateNew('colors')}
+                placeholder="Negro, azul, rojo..."
+              />
+            </label>
+
+            <label className="block space-y-1">
+              <span className="text-xs text-gray-300">Descripción</span>
+              <textarea
+                rows={3}
+                maxLength={4000}
+                className={input}
+                value={newForm.description}
+                onChange={updateNew('description')}
+                placeholder="Descripción del producto"
+              />
+            </label>
+
+            <label className="block space-y-1">
+              <span className="text-xs text-gray-300">
+                Características (una por línea)
+              </span>
+              <textarea
+                rows={4}
+                className={input}
+                value={newForm.features}
+                onChange={updateNew('features')}
+                placeholder="Material resistente&#10;Diseño ergonómico"
+              />
+            </label>
+
+            <label className="block space-y-1">
+              <span className="text-xs text-gray-300">
+                URL de fotografía de Cloudinary *
+              </span>
+              <input
+                required
+                type="url"
+                maxLength={2000}
+                className={input}
+                value={newForm.image}
+                onChange={updateNew('image')}
+                placeholder="https://res.cloudinary.com/..."
+              />
+              <span className="block text-[11px] text-gray-400">
+                Por ahora se pega la URL. La subida desde el celular vendrá después.
+              </span>
+            </label>
+
+            {newError && (
+              <p
+                role="alert"
+                className="rounded-lg border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200"
+              >
+                {newError}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={newSaving}
+              className="w-full rounded-lg bg-accent py-3 text-sm font-semibold disabled:opacity-50"
+            >
+              {newSaving ? 'Registrando en Neon...' : 'Guardar producto'}
+            </button>
+          </form>
+        </div>
       )}
 
       {editing && (
