@@ -17,6 +17,9 @@ export default function Admin() {
   const [newForm, setNewForm] = useState(null);
   const [newSaving, setNewSaving] = useState(false);
   const [newError, setNewError] = useState('');
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState('');
+  const [photoUploading, setPhotoUploading] = useState(false);
   const [notice, setNotice] = useState('');
 
   const loadProducts = useCallback(async () => {
@@ -153,9 +156,126 @@ export default function Admin() {
     }
   };
 
+  useEffect(() => {
+    if (!selectedPhoto) {
+      setPhotoPreview('');
+      return;
+    }
+
+    const url = URL.createObjectURL(selectedPhoto);
+    setPhotoPreview(url);
+
+    return () => URL.revokeObjectURL(url);
+  }, [selectedPhoto]);
+
+  const selectPhoto = (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+
+    if (!file) return;
+
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+      setNewError('Selecciona una fotografía JPG, PNG o WebP.');
+      return;
+    }
+
+    if (file.size > 8 * 1024 * 1024) {
+      setNewError('La fotografía debe pesar máximo 8 MB.');
+      return;
+    }
+
+    setNewError('');
+    setSelectedPhoto(file);
+    setNewForm((current) =>
+      current ? { ...current, image: '' } : current
+    );
+  };
+
+  const uploadPhoto = async () => {
+    if (!selectedPhoto || photoUploading || newSaving) return;
+
+    setPhotoUploading(true);
+    setNewError('');
+
+    try {
+      const signResponse = await fetch('/api/admin/cloudinary/sign', {
+        method: 'POST',
+        credentials: 'same-origin',
+        cache: 'no-store',
+      });
+
+      const authorization = await signResponse.json().catch(() => ({}));
+
+      if (!signResponse.ok || !authorization.ok) {
+        throw new Error(
+          authorization.error || 'No se pudo autorizar la fotografía.'
+        );
+      }
+
+      if (authorization.cloud_name !== 'dkq95jus0') {
+        throw new Error('Configuración de Cloudinary incorrecta.');
+      }
+
+      const body = new FormData();
+      body.append('file', selectedPhoto);
+
+      for (const key of [
+        'api_key',
+        'timestamp',
+        'folder',
+        'allowed_formats',
+        'signature',
+      ]) {
+        body.append(key, String(authorization[key]));
+      }
+
+      const response = await fetch(
+        'https://api.cloudinary.com/v1_1/dkq95jus0/image/upload',
+        {
+          method: 'POST',
+          body,
+        }
+      );
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(
+          result.error?.message || 'Cloudinary rechazó la fotografía.'
+        );
+      }
+
+      if (
+        result.resource_type !== 'image' ||
+        typeof result.secure_url !== 'string' ||
+        !result.secure_url.startsWith(
+          'https://res.cloudinary.com/dkq95jus0/image/upload/'
+        )
+      ) {
+        throw new Error('Cloudinary devolvió una imagen no válida.');
+      }
+
+      setNewForm((current) =>
+        current
+          ? { ...current, image: result.secure_url }
+          : current
+      );
+
+      setSelectedPhoto(null);
+      setNewError('');
+    } catch (error) {
+      setNewError(
+        error.message || 'No se pudo subir la fotografía.'
+      );
+    } finally {
+      setPhotoUploading(false);
+    }
+  };
+
   const openNew = () => {
     setNewError('');
     setNotice('');
+    setSelectedPhoto(null);
     setNewForm({
       name: '',
       brand: '',
@@ -178,7 +298,7 @@ export default function Admin() {
 
   const createProduct = async (event) => {
     event.preventDefault();
-    if (!newForm || newSaving) return;
+    if (!newForm || newSaving || photoUploading) return;
 
     const rawPrice = newForm.price.trim();
     const rawStock = newForm.stock.trim();
@@ -451,8 +571,11 @@ export default function Admin() {
               </div>
               <button
                 type="button"
-                onClick={() => setNewForm(null)}
-                disabled={newSaving}
+                onClick={() => {
+                  setNewForm(null);
+                  setSelectedPhoto(null);
+                }}
+                disabled={newSaving || photoUploading}
                 className="p-2 disabled:opacity-50"
                 aria-label="Cerrar formulario"
               >
@@ -578,6 +701,60 @@ export default function Admin() {
               />
             </label>
 
+            <div className="space-y-2 rounded-xl border border-white/10 bg-white/5 p-3">
+              <p className="text-sm font-semibold">
+                Fotografía desde tu celular
+              </p>
+
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                onChange={selectPhoto}
+                disabled={newSaving || photoUploading}
+                className="block w-full text-xs text-gray-300 file:mr-3 file:rounded-lg file:border-0 file:bg-accent file:px-3 file:py-2 file:text-white"
+              />
+
+              {selectedPhoto && (
+                <p className="text-xs text-gray-400">
+                  {selectedPhoto.name}
+                </p>
+              )}
+
+              {(photoPreview || newForm.image) && (
+                <div className="flex justify-center rounded-lg bg-white p-2">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={photoPreview || newForm.image}
+                    alt="Vista previa del producto"
+                    className="max-h-48 w-full object-contain"
+                  />
+                </div>
+              )}
+
+              {selectedPhoto && (
+                <button
+                  type="button"
+                  onClick={uploadPhoto}
+                  disabled={photoUploading || newSaving}
+                  className="w-full rounded-lg bg-accent py-2.5 text-sm font-semibold disabled:opacity-50"
+                >
+                  {photoUploading
+                    ? 'Subiendo fotografía...'
+                    : 'Subir fotografía a Cloudinary'}
+                </button>
+              )}
+
+              {newForm.image && !selectedPhoto && (
+                <p className="text-xs text-emerald-300">
+                  Fotografía lista para guardar con el producto.
+                </p>
+              )}
+
+              <p className="text-[11px] text-gray-400">
+                Formatos JPG, PNG o WebP. Máximo 8 MB.
+              </p>
+            </div>
+
             <label className="block space-y-1">
               <span className="text-xs text-gray-300">
                 URL de fotografía de Cloudinary *
@@ -592,7 +769,8 @@ export default function Admin() {
                 placeholder="https://res.cloudinary.com/..."
               />
               <span className="block text-[11px] text-gray-400">
-                Por ahora se pega la URL. La subida desde el celular vendrá después.
+                Se completa automáticamente al subir una foto.
+                También puedes pegar una URL manualmente.
               </span>
             </label>
 
@@ -607,10 +785,14 @@ export default function Admin() {
 
             <button
               type="submit"
-              disabled={newSaving}
+              disabled={newSaving || photoUploading}
               className="w-full rounded-lg bg-accent py-3 text-sm font-semibold disabled:opacity-50"
             >
-              {newSaving ? 'Registrando en Neon...' : 'Guardar producto'}
+              {newSaving
+                ? 'Registrando en Neon...'
+                : photoUploading
+                  ? 'Subiendo fotografía...'
+                  : 'Guardar producto'}
             </button>
           </form>
         </div>
