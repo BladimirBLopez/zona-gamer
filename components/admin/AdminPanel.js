@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Search, Plus, Pencil, X, Package, AlertTriangle, Ban, RotateCcw, LayoutGrid, Tag } from 'lucide-react';
 import { fmt, stockInfo } from '../../lib/utils';
-import ManageProductModal from './ManageProductModal';
+import ProductFormModal from './ProductFormModal';
 import CategoriesModule from './CategoriesModule';
 
 export default function Admin() {
@@ -14,12 +14,7 @@ export default function Admin() {
   const [q, setQ] = useState('');
   const [cat, setCat] = useState('Todas');
   const [managing, setManaging] = useState(null);
-  const [newForm, setNewForm] = useState(null);
-  const [newSaving, setNewSaving] = useState(false);
-  const [newError, setNewError] = useState('');
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
-  const [photoPreview, setPhotoPreview] = useState('');
-  const [photoUploading, setPhotoUploading] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
   const [notice, setNotice] = useState('');
   const [categoryList, setCategoryList] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
@@ -160,230 +155,9 @@ export default function Admin() {
     }
   };
 
-  useEffect(() => {
-    if (!selectedPhoto) {
-      setPhotoPreview('');
-      return;
-    }
-
-    const url = URL.createObjectURL(selectedPhoto);
-    setPhotoPreview(url);
-
-    return () => URL.revokeObjectURL(url);
-  }, [selectedPhoto]);
-
-  const selectPhoto = (event) => {
-    const file = event.target.files?.[0];
-    event.target.value = '';
-
-    if (!file) return;
-
-    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-      setNewError('Selecciona una fotografía JPG, PNG o WebP.');
-      return;
-    }
-
-    if (file.size > 8 * 1024 * 1024) {
-      setNewError('La fotografía debe pesar máximo 8 MB.');
-      return;
-    }
-
-    setNewError('');
-    setSelectedPhoto(file);
-    setNewForm((current) =>
-      current ? { ...current, image: '' } : current
-    );
-  };
-
-  const uploadPhoto = async () => {
-    if (!selectedPhoto) {
-      throw new Error('Selecciona una fotografía.');
-    }
-
-    setPhotoUploading(true);
-    setNewError('');
-
-    try {
-      const signResponse = await fetch('/api/admin/cloudinary/sign', {
-        method: 'POST',
-        credentials: 'same-origin',
-        cache: 'no-store',
-      });
-
-      const authorization = await signResponse.json().catch(() => ({}));
-
-      if (!signResponse.ok || !authorization.ok) {
-        throw new Error(
-          authorization.error || 'No se pudo autorizar la fotografía.'
-        );
-      }
-
-      if (authorization.cloud_name !== 'dkq95jus0') {
-        throw new Error('Configuración de Cloudinary incorrecta.');
-      }
-
-      const body = new FormData();
-      body.append('file', selectedPhoto);
-
-      for (const key of [
-        'api_key',
-        'timestamp',
-        'folder',
-        'allowed_formats',
-        'signature',
-      ]) {
-        body.append(key, String(authorization[key]));
-      }
-
-      const response = await fetch(
-        'https://api.cloudinary.com/v1_1/dkq95jus0/image/upload',
-        {
-          method: 'POST',
-          body,
-        }
-      );
-
-      const result = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(
-          result.error?.message || 'Cloudinary rechazó la fotografía.'
-        );
-      }
-
-      if (
-        result.resource_type !== 'image' ||
-        typeof result.secure_url !== 'string' ||
-        !result.secure_url.startsWith(
-          'https://res.cloudinary.com/dkq95jus0/image/upload/'
-        )
-      ) {
-        throw new Error('Cloudinary devolvió una imagen no válida.');
-      }
-
-      setNewForm((current) =>
-        current
-          ? { ...current, image: result.secure_url }
-          : current
-      );
-
-      setSelectedPhoto(null);
-      setNewError('');
-      return result.secure_url;
-    } catch (error) {
-      throw new Error(
-        error.message || 'No se pudo subir la fotografía.'
-      );
-    } finally {
-      setPhotoUploading(false);
-    }
-  };
-
   const openNew = () => {
-    setNewError('');
     setNotice('');
-    setSelectedPhoto(null);
-    setNewForm({
-      name: '',
-      brand: '',
-      category: '',
-      price: '0',
-      stock: '0',
-      colors: '',
-      description: '',
-      features: '',
-      image: '',
-    });
-  };
-
-  const updateNew = (key) => (event) => {
-    setNewForm((current) => ({
-      ...current,
-      [key]: event.target.value,
-    }));
-  };
-
-  const createProduct = async (event) => {
-    event.preventDefault();
-    if (!newForm || newSaving || photoUploading) return;
-
-    const rawPrice = newForm.price.trim();
-    const rawStock = newForm.stock.trim();
-    const price = Number(rawPrice);
-    const stock = Number(rawStock);
-
-    if (
-      !/^\d+(?:\.\d{1,2})?$/.test(rawPrice) ||
-      !Number.isFinite(price) ||
-      price > 10000000
-    ) {
-      setNewError('El precio debe ser válido y tener máximo 2 decimales.');
-      return;
-    }
-
-    if (
-      !/^\d+$/.test(rawStock) ||
-      !Number.isSafeInteger(stock) ||
-      stock > 1000000
-    ) {
-      setNewError('El stock debe ser un número entero válido.');
-      return;
-    }
-
-    const payload = {
-      name: newForm.name.trim(),
-      brand: newForm.brand.trim(),
-      category: newForm.category.trim(),
-      price,
-      stock,
-      colors: newForm.colors.trim(),
-      description: newForm.description.trim(),
-      features: newForm.features
-        .split('\n')
-        .map((value) => value.trim())
-        .filter(Boolean),
-      image: newForm.image.trim(),
-    };
-
-    if (
-      !payload.name ||
-      !payload.brand ||
-      !payload.category ||
-      (!selectedPhoto && !payload.image)
-    ) {
-      setNewError('Completa nombre, marca, categoría y fotografía.');
-      return;
-    }
-
-    setNewSaving(true);
-    setNewError('');
-
-    try {
-      if (!payload.image) {
-        payload.image = await uploadPhoto();
-      }
-
-      const response = await fetch('/api/admin/products/create', {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      const result = await response.json().catch(() => ({}));
-
-      if (!response.ok || !result.ok) {
-        throw new Error(result.error || 'No se pudo crear el producto.');
-      }
-
-      setNewForm(null);
-      setNotice(`Producto "${result.product.name}" registrado en Neon.`);
-      await loadProducts();
-    } catch (error) {
-      setNewError(error.message || 'Error al registrar el producto.');
-    } finally {
-      setNewSaving(false);
-    }
+    setFormOpen(true);
   };
 
   const input = 'w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm outline-none focus:border-accent';
@@ -642,12 +416,7 @@ export default function Admin() {
           categories={categoryList}
           onClose={() => setShowCategories(false)}
           onReload={loadCategories}
-          onCreated={(name) => {
-            setCreatedCategory({ name });
-            setNewForm((current) =>
-              current ? { ...current, category: name } : current
-            );
-          }}
+          onCreated={(name) => setCreatedCategory({ name })}
         />
       )}
 
@@ -696,241 +465,30 @@ export default function Admin() {
         </button>
       )}
 
-      {newForm && (
-        <div className="fixed inset-0 z-30 flex items-end justify-center bg-black/70 sm:items-center">
-          <form
-            onSubmit={createProduct}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Registrar nuevo producto"
-            className="w-full max-h-[92vh] overflow-y-auto rounded-t-2xl border border-white/10 bg-card p-4 space-y-3 sm:max-w-lg sm:rounded-2xl"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="font-display text-lg font-bold">
-                  Nuevo producto
-                </h2>
-                <p className="text-xs text-gray-400">
-                  Se guardará directamente en Neon
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setNewForm(null);
-                  setSelectedPhoto(null);
-                }}
-                disabled={newSaving || photoUploading}
-                className="p-2 disabled:opacity-50"
-                aria-label="Cerrar formulario"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <label className="block space-y-1">
-              <span className="text-xs text-gray-300">Nombre *</span>
-              <input
-                required
-                maxLength={160}
-                className={input}
-                value={newForm.name}
-                onChange={updateNew('name')}
-                placeholder="Nombre del producto"
-              />
-            </label>
-
-            <div className="grid grid-cols-2 gap-2">
-              <label className="space-y-1">
-                <span className="text-xs text-gray-300">Marca *</span>
-                <input
-                  required
-                  maxLength={80}
-                  className={input}
-                  value={newForm.brand}
-                  onChange={updateNew('brand')}
-                  placeholder="Ej. Cougar"
-                  list="zg-new-brands"
-                />
-              </label>
-
-              <div className="space-y-1">
-                <label
-                  htmlFor="zg-new-category"
-                  className="block text-xs text-gray-300"
-                >
-                  Categoría *
-                </label>
-                <select
-                  id="zg-new-category"
-                  required
-                  className={input}
-                  style={{ colorScheme: 'dark' }}
-                  value={newForm.category}
-                  onChange={updateNew('category')}
-                >
-                  <option value="">Selecciona...</option>
-                  {categoryNames.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-                <button
-                  type="button"
-                  onClick={openCategories}
-                  className="text-[11px] font-semibold text-neon"
-                >
-                  + Nueva categoría
-                </button>
-              </div>
-            </div>
-
-            <datalist id="zg-new-brands">
-              {[...new Set(items.map((p) => p.brand).filter(Boolean))]
-                .map((brand) => (
-                  <option key={brand} value={brand} />
-                ))}
-            </datalist>
-
-            <div className="grid grid-cols-2 gap-2">
-              <label className="space-y-1">
-                <span className="text-xs text-gray-300">Precio Bs *</span>
-                <input
-                  required
-                  type="number"
-                  min="0"
-                  max="10000000"
-                  step="0.01"
-                  className={input}
-                  value={newForm.price}
-                  onChange={updateNew('price')}
-                />
-              </label>
-              <label className="space-y-1">
-                <span className="text-xs text-gray-300">Existencias *</span>
-                <input
-                  required
-                  type="number"
-                  min="0"
-                  max="1000000"
-                  step="1"
-                  className={input}
-                  value={newForm.stock}
-                  onChange={updateNew('stock')}
-                />
-              </label>
-            </div>
-
-            <label className="block space-y-1">
-              <span className="text-xs text-gray-300">Colores</span>
-              <input
-                maxLength={300}
-                className={input}
-                value={newForm.colors}
-                onChange={updateNew('colors')}
-                placeholder="Negro, azul, rojo..."
-              />
-            </label>
-
-            <label className="block space-y-1">
-              <span className="text-xs text-gray-300">Descripción</span>
-              <textarea
-                rows={3}
-                maxLength={4000}
-                className={input}
-                value={newForm.description}
-                onChange={updateNew('description')}
-                placeholder="Descripción del producto"
-              />
-            </label>
-
-            <label className="block space-y-1">
-              <span className="text-xs text-gray-300">
-                Características (una por línea)
-              </span>
-              <textarea
-                rows={4}
-                className={input}
-                value={newForm.features}
-                onChange={updateNew('features')}
-                placeholder="Material resistente&#10;Diseño ergonómico"
-              />
-            </label>
-
-            <div className="space-y-2 rounded-xl border border-white/10 bg-white/5 p-3">
-              <p className="text-sm font-semibold">
-                Fotografía desde tu celular
-              </p>
-
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                onChange={selectPhoto}
-                disabled={newSaving || photoUploading}
-                className="block w-full text-xs text-gray-300 file:mr-3 file:rounded-lg file:border-0 file:bg-accent file:px-3 file:py-2 file:text-white"
-              />
-
-              {selectedPhoto && (
-                <p className="text-xs text-gray-400">
-                  {selectedPhoto.name}
-                </p>
-              )}
-
-              {(photoPreview || newForm.image) && (
-                <div className="flex justify-center rounded-lg bg-white p-2">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={photoPreview || newForm.image}
-                    alt="Vista previa del producto"
-                    className="max-h-48 w-full object-contain"
-                  />
-                </div>
-              )}
-
-
-              {newForm.image && !selectedPhoto && (
-                <p className="text-xs text-emerald-300">
-                  Fotografía lista para guardar con el producto.
-                </p>
-              )}
-
-              <p className="text-[11px] text-gray-400">
-                JPG, PNG o WebP. Máximo 8 MB. Se subirá automáticamente al guardar.
-              </p>
-            </div>
-
-
-            {newError && (
-              <p
-                role="alert"
-                className="rounded-lg border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200"
-              >
-                {newError}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={newSaving || photoUploading}
-              className="w-full rounded-lg bg-accent py-3 text-sm font-semibold disabled:opacity-50"
-            >
-              {newSaving
-                ? photoUploading
-                  ? 'Subiendo fotografía...'
-                  : 'Guardando producto...'
-                : 'Guardar producto'}
-            </button>
-          </form>
-        </div>
+      {formOpen && (
+        <ProductFormModal
+          mode="create"
+          categories={categoryNames}
+          brands={[...new Set(items.map((p) => p.brand).filter(Boolean))].sort((x, y) => x.localeCompare(y, 'es'))}
+          onOpenCategories={openCategories}
+          createdCategory={createdCategory}
+          onClose={() => setFormOpen(false)}
+          onSaved={async (message) => {
+            setFormOpen(false);
+            setNotice(message);
+            await loadProducts();
+          }}
+        />
       )}
 
       {managing && (
-        <ManageProductModal
+        <ProductFormModal
+          mode="edit"
+          product={managing}
           categories={categoryNames}
+          brands={[...new Set(items.map((p) => p.brand).filter(Boolean))].sort((x, y) => x.localeCompare(y, 'es'))}
           onOpenCategories={openCategories}
           createdCategory={createdCategory}
-          product={managing}
           onClose={() => setManaging(null)}
           onSaved={async (message) => {
             setManaging(null);
