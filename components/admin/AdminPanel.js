@@ -455,6 +455,10 @@ export default function Admin() {
           onClose={() => setShowCategories(false)}
           onReload={loadCategories}
           onCreated={(name) => setCreatedCategory({ name })}
+          onRenamed={(from, to) => {
+            if (cat === from) setCat(to);
+            loadProducts();
+          }}
         />
       )}
 

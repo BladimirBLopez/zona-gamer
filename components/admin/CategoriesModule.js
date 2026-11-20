@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Tag, Plus } from 'lucide-react';
+import { X, Tag, Plus, Pencil, Trash2, Check } from 'lucide-react';
 
 export default function CategoriesModule({
   categories,
   onClose,
   onReload,
-  onCreated
+  onCreated,
+  onRenamed
 }) {
   const [name, setName] = useState('');
   const [saving, setSaving] = useState(false);
@@ -140,21 +141,12 @@ export default function CategoriesModule({
 
           <ul className="space-y-1.5">
             {categories.map((c) => (
-              <li
+              <CategoryRow
                 key={c.id}
-                className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5"
-              >
-                <span className="truncate text-sm font-medium">
-                  {c.name}
-                </span>
-                <span className="shrink-0 rounded-full bg-white/10 px-2 py-0.5 text-[11px] text-gray-300">
-                  {c.products === 0
-                    ? 'Sin productos'
-                    : c.products === 1
-                      ? '1 producto'
-                      : `${c.products} productos`}
-                </span>
-              </li>
+                c={c}
+                onReload={onReload}
+                onRenamed={onRenamed}
+              />
             ))}
           </ul>
 
@@ -170,5 +162,183 @@ export default function CategoriesModule({
         </p>
       </div>
     </div>
+  );
+}
+
+function CategoryRow({ c, onReload, onRenamed }) {
+  const [editing, setEditing] = useState(false);
+  const [value, setValue] = useState(c.name);
+  const [confirming, setConfirming] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState('');
+
+  const countLabel =
+    c.products === 0
+      ? 'Sin productos'
+      : c.products === 1
+        ? '1 producto'
+        : `${c.products} productos`;
+
+  async function call(method, body) {
+    const response = await fetch(`/api/admin/categories/${c.id}`, {
+      method,
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: body ? JSON.stringify(body) : undefined
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || !result.ok) {
+      throw new Error(result.error || 'No se pudo completar la acción.');
+    }
+    return result;
+  }
+
+  function startEdit() {
+    setValue(c.name);
+    setErr('');
+    setConfirming(false);
+    setEditing(true);
+  }
+
+  async function save(event) {
+    event.preventDefault();
+    if (busy) return;
+
+    const clean = value.replace(/\s+/g, ' ').trim();
+    if (clean.length < 2) {
+      setErr('Escribe al menos 2 letras.');
+      return;
+    }
+    if (clean === c.name) {
+      setEditing(false);
+      setErr('');
+      return;
+    }
+
+    setBusy(true);
+    setErr('');
+    try {
+      await call('PATCH', { name: clean });
+      setEditing(false);
+      await onReload();
+      if (onRenamed) onRenamed(c.name, clean);
+    } catch (e) {
+      setErr(e.message || 'No se pudo renombrar.');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function askDelete() {
+    setErr('');
+    if (c.products > 0) {
+      setErr(
+        `Tiene ${c.products} ${c.products === 1 ? 'producto' : 'productos'}. Muévelos a otra categoría antes de borrarla.`
+      );
+      return;
+    }
+    setConfirming(true);
+  }
+
+  async function remove() {
+    if (busy) return;
+    setBusy(true);
+    setErr('');
+    try {
+      await call('DELETE');
+      await onReload();
+    } catch (e) {
+      setErr(e.message || 'No se pudo borrar.');
+      setConfirming(false);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <li className="rounded-xl border border-white/10 bg-white/5 px-3 py-2.5">
+      {editing ? (
+        <form onSubmit={save} className="flex items-center gap-2">
+          <input
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            maxLength={60}
+            disabled={busy}
+            autoFocus
+            aria-label="Nombre de la categoría"
+            className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm outline-none focus:border-accent"
+          />
+          <button
+            type="submit"
+            disabled={busy}
+            aria-label="Guardar nombre"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent text-white disabled:opacity-60"
+          >
+            <Check size={16} />
+          </button>
+          <button
+            type="button"
+            onClick={() => { setEditing(false); setErr(''); }}
+            disabled={busy}
+            aria-label="Cancelar"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 text-gray-400"
+          >
+            <X size={16} />
+          </button>
+        </form>
+      ) : confirming ? (
+        <div className="flex items-center justify-between gap-3">
+          <span className="min-w-0 truncate text-sm">¿Borrar «{c.name}»?</span>
+          <div className="flex shrink-0 gap-2">
+            <button
+              type="button"
+              onClick={() => setConfirming(false)}
+              disabled={busy}
+              className="rounded-lg border border-white/10 px-3 py-1.5 text-xs font-semibold"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              onClick={remove}
+              disabled={busy}
+              className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-60"
+            >
+              {busy ? 'Borrando...' : 'Borrar'}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex items-center gap-2">
+          <span className="min-w-0 flex-1 truncate text-sm font-medium">
+            {c.name}
+          </span>
+          <span className="shrink-0 rounded-full bg-white/10 px-2 py-0.5 text-[11px] text-gray-300">
+            {countLabel}
+          </span>
+          <button
+            type="button"
+            onClick={startEdit}
+            aria-label={`Renombrar ${c.name}`}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400"
+          >
+            <Pencil size={16} />
+          </button>
+          <button
+            type="button"
+            onClick={askDelete}
+            aria-label={`Borrar ${c.name}`}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-red-300"
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
+      )}
+      {err && (
+        <p role="alert" className="mt-2 text-xs text-red-300">
+          {err}
+        </p>
+      )}
+    </li>
   );
 }
