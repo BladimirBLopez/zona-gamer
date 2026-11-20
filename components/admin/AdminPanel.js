@@ -15,6 +15,10 @@ export default function Admin() {
   const [q, setQ] = useState('');
   const [cat, setCat] = useState('Todas');
   const [status, setStatus] = useState('all');
+  const [limit, setLimit] = useState(15);
+  useEffect(() => {
+    setLimit(15);
+  }, [q, cat, status]);
   const [managing, setManaging] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
   const setNotice = (message) => {
@@ -282,7 +286,7 @@ export default function Admin() {
 
         {!loading && !error && (
           <div className="flex items-center justify-between px-1 text-xs text-gray-400">
-            <span>Mostrando {list.length} de {items.length} productos</span>
+            <span>Mostrando {Math.min(limit, list.length)} de {list.length} productos</span>
             {(status !== 'all' || cat !== 'Todas' || q) && (
               <button
                 type="button"
@@ -294,7 +298,7 @@ export default function Admin() {
             )}
           </div>
         )}
-        {!loading && !error && list.map((p) => {
+        {!loading && !error && list.slice(0, limit).map((p) => {
           const s = stockInfo(p.stock);
           const visible = p.active !== false;
           const busy = toggling === p.id;
@@ -302,79 +306,84 @@ export default function Admin() {
           return (
             <div
               key={p.id}
-              className={`rounded-xl bg-card border p-3 flex gap-3 transition-colors ${
+              className={`flex items-center gap-3 rounded-xl border bg-card p-2.5 transition-colors ${
                 visible ? 'border-white/10' : 'border-amber-400/30'
               }`}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={p.image}
-                alt={p.name}
-                className={`w-16 h-16 rounded-lg object-contain bg-black/40 shrink-0 transition ${
-                  visible ? '' : 'opacity-40 grayscale'
+              <button
+                type="button"
+                onClick={() => setManaging(p)}
+                aria-label={`Editar ${p.name}`}
+                className="flex min-w-0 flex-1 items-center gap-3 text-left"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={p.image}
+                  alt=""
+                  className={`h-14 w-14 shrink-0 rounded-lg bg-black/40 object-contain transition ${
+                    visible ? '' : 'opacity-40 grayscale'
+                  }`}
+                />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-semibold">{p.name}</span>
+                  <span className="block truncate text-[11px] text-gray-400">
+                    {p.brand} · {p.category}
+                  </span>
+                  <span className="mt-0.5 flex items-center gap-2">
+                    <span className="text-sm font-bold text-neon">
+                      {p.price > 0 ? `Bs ${fmt(p.price)}` : 'Consultar'}
+                    </span>
+                    <span className={`rounded-full px-2 py-0.5 text-[10px] ${s.cls}`}>
+                      {p.stock <= 0 ? 'Agotado' : `${p.stock} en stock`}
+                    </span>
+                  </span>
+                </span>
+                <Pencil size={14} className="shrink-0 text-gray-500" />
+              </button>
+
+              <button
+                type="button"
+                role="switch"
+                aria-checked={visible}
+                aria-label={`${visible ? 'Ocultar' : 'Mostrar'} ${p.name} en la tienda`}
+                onClick={() => toggleVisibility(p)}
+                disabled={toggling !== null}
+                className={`flex min-w-[3.5rem] shrink-0 flex-col items-center gap-1 disabled:opacity-60 ${
+                  busy ? 'animate-pulse' : ''
                 }`}
-              />
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold truncate">{p.name}</p>
-                <p className="text-[11px] text-gray-400 truncate">
-                  {p.brand} · {p.category}
-                </p>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-sm font-bold text-neon">
-                    {p.price > 0 ? `Bs ${fmt(p.price)}` : 'Consultar'}
-                  </span>
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full ${s.cls}`}>
-                    {s.label}
-                  </span>
-                </div>
-                <p className="mt-1 text-xs text-gray-400">
-                  Stock: {p.stock}
-                </p>
-                <div className="mt-2 flex items-center justify-between gap-2 border-t border-white/10 pt-2">
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={visible}
-                    aria-label={`${visible ? 'Ocultar' : 'Mostrar'} ${p.name} en la tienda`}
-                    onClick={() => toggleVisibility(p)}
-                    disabled={toggling !== null}
-                    className={`flex items-center gap-2 disabled:opacity-60 ${
-                      busy ? 'animate-pulse' : ''
+              >
+                <span
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                    visible ? 'bg-emerald-500' : 'bg-white/20'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                      visible ? 'translate-x-[22px]' : 'translate-x-0.5'
                     }`}
-                  >
-                    <span
-                      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${
-                        visible ? 'bg-emerald-500' : 'bg-white/20'
-                      }`}
-                    >
-                      <span
-                        className={`inline-block h-5 w-5 rounded-full bg-white shadow transition-transform ${
-                          visible ? 'translate-x-[22px]' : 'translate-x-0.5'
-                        }`}
-                      />
-                    </span>
-                    <span
-                      className={`text-xs font-semibold ${
-                        visible ? 'text-emerald-300' : 'text-amber-300'
-                      }`}
-                    >
-                      {busy ? 'Guardando...' : visible ? 'Visible' : 'Oculto'}
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setManaging(p)}
-                    className="flex items-center gap-1 rounded-lg bg-accent px-3 py-1.5 text-[11px] font-semibold"
-                    aria-label={`Editar todos los datos de ${p.name}`}
-                  >
-                    <Pencil size={12} />
-                    Editar todo
-                  </button>
-                </div>
-              </div>
+                  />
+                </span>
+                <span
+                  className={`text-[10px] font-semibold ${
+                    visible ? 'text-emerald-300' : 'text-amber-300'
+                  }`}
+                >
+                  {busy ? 'Guardando' : visible ? 'Visible' : 'Oculto'}
+                </span>
+              </button>
             </div>
           );
         })}
+
+        {!loading && !error && list.length > limit && (
+          <button
+            type="button"
+            onClick={() => setLimit((n) => n + 15)}
+            className="w-full rounded-xl border border-white/10 bg-white/5 py-3 text-sm font-semibold text-gray-200"
+          >
+            Ver más ({list.length - limit} restantes)
+          </button>
+        )}
 
         {!loading && !error && list.length === 0 && (
           <p className="text-center text-sm text-gray-500 py-10">
