@@ -174,6 +174,7 @@ export default function ProductFormModal({
   const [progress, setProgress] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [formError, setFormError] = useState('');
+  const [otherBrand, setOtherBrand] = useState(false);
 
   const bodyRef = useRef(null);
   const seenCategory = useRef(createdCategory);
@@ -229,6 +230,22 @@ export default function ProductFormModal({
   const change = (key) => (event) => {
     const value = event.target.value;
     setForm((current) => ({ ...current, [key]: value }));
+  };
+
+  const brandMode =
+    otherBrand || (form.brand !== '' && !brands.includes(form.brand))
+      ? '__otra'
+      : form.brand;
+
+  const changeBrandSelect = (event) => {
+    const value = event.target.value;
+    if (value === '__otra') {
+      setOtherBrand(true);
+      setForm((current) => ({ ...current, brand: '' }));
+    } else {
+      setOtherBrand(false);
+      setForm((current) => ({ ...current, brand: value }));
+    }
   };
 
   const bump = (delta) => {
@@ -442,22 +459,34 @@ export default function ProductFormModal({
 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <Field id="zg-brand" label="Marca" required error={shown.brand}>
-                <input
+                <select
                   id="zg-brand"
                   className={fieldClass}
-                  value={form.brand}
-                  onChange={change('brand')}
-                  maxLength={80}
+                  style={{ colorScheme: 'dark' }}
+                  value={brandMode}
+                  onChange={changeBrandSelect}
                   disabled={busy}
-                  autoComplete="off"
-                  list="zg-brands"
-                  placeholder="Ej. Cougar"
-                />
-                <datalist id="zg-brands">
+                >
+                  <option value="">Selecciona...</option>
                   {brands.map((b) => (
-                    <option key={b} value={b} />
+                    <option key={b} value={b}>
+                      {b}
+                    </option>
                   ))}
-                </datalist>
+                  <option value="__otra">Otra marca…</option>
+                </select>
+                {brandMode === '__otra' && (
+                  <input
+                    id="zg-brand-otra"
+                    className={fieldClass + ' mt-2'}
+                    value={form.brand}
+                    onChange={change('brand')}
+                    maxLength={80}
+                    disabled={busy}
+                    autoComplete="off"
+                    placeholder="Escribe la nueva marca"
+                  />
+                )}
               </Field>
 
               <Field
