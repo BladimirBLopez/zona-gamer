@@ -234,3 +234,18 @@ html body .admin-ui :is(form[role="dialog"], div[role="dialog"]) > div:first-chi
 
 html body .admin-ui.admin-login.bg-bg { background-color: #131318; }
 html body .admin-ui.admin-login form { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35); }
+
+/* ADMIN-UI-FIX-1: modales sin deslizar el fondo, boton rosa y formulario */
+html:has(.admin-ui form[role="dialog"]),
+html:has(.admin-ui div[role="dialog"]),
+body:has(.admin-ui form[role="dialog"]),
+body:has(.admin-ui div[role="dialog"]) { overflow: hidden; overscroll-behavior: none; }
+html body .admin-ui div[role="presentation"] { overscroll-behavior: contain; }
+html body .admin-ui form[role="dialog"] > .overflow-y-auto { overflow-x: hidden; overscroll-behavior: contain; }
+html body .admin-ui div[role="dialog"] .overflow-y-auto { overscroll-behavior: contain; }
+html body .admin-ui .bg-accent { color: #ffffff; }
+html body .admin-ui .focus\:bg-white\/\[0\.07\]:focus { background-color: #ffffff; }
+html body .admin-ui :is(input, textarea, select):focus { box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.15); }
+html body .admin-ui :is(input, textarea)::placeholder { color: #9ca3af; }
+html body .admin-ui form[role="dialog"] > div:last-child { background-color: #ffffff; border-top-color: #dcdfe5; }
+html body .admin-ui form[role="dialog"] > div:last-child button[type="button"] { background-color: #ffffff; }
