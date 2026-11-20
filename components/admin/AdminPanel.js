@@ -210,10 +210,10 @@ export default function Admin() {
         </div>
       </header>
 
-      <section className="grid grid-cols-4 gap-2 px-4 pt-3">
+      <section className="px-4 pt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {[
-          { k: 'all', l: 'Total', v: stats.total, i: Package, c: 'text-neon' },
-          { k: 'low', l: 'Pocas', v: stats.low, i: AlertTriangle, c: 'text-amber-300' },
+          { k: 'all', l: 'Productos', v: stats.total, i: Package, c: 'text-neon' },
+          { k: 'low', l: 'Pocas unid.', v: stats.low, i: AlertTriangle, c: 'text-amber-300' },
           { k: 'out', l: 'Agotados', v: stats.out, i: Ban, c: 'text-red-300' },
           { k: 'hidden', l: 'Ocultos', v: stats.hidden, i: EyeOff, c: 'text-gray-300' },
         ].map((s) => (
@@ -222,15 +222,13 @@ export default function Admin() {
             type="button"
             onClick={() => setStatus(status === s.k ? 'all' : s.k)}
             aria-pressed={status === s.k}
-            className={'rounded-xl border px-2 py-2 text-left transition-colors ' + (status === s.k ? 'border-accent bg-accent/10' : 'border-white/10 bg-card')}
+            className={'rounded-xl border p-3 text-left transition-colors ' + (status === s.k ? 'border-accent bg-accent/10' : 'border-white/10 bg-card')}
           >
-            <span className="flex items-center gap-1.5">
-              <s.i size={14} className={s.c} />
-              <span className="text-lg font-bold leading-none">
-                {loading || error ? '—' : s.v}
-              </span>
-            </span>
-            <span className="mt-1 block truncate text-[10px] text-gray-400">{s.l}</span>
+            <s.i size={16} className={s.c} />
+            <p className="mt-1 text-xl font-bold">
+              {loading || error ? '—' : s.v}
+            </p>
+            <p className="text-[11px] text-gray-400">{s.l}</p>
           </button>
         ))}
       </section>
