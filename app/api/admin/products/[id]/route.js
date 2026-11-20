@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getSql } from '../../../../../lib/db';
+import { categoryExists } from '../../../../../lib/categories';
 import {
   hasAdminSession,
   sameOrigin
@@ -296,6 +297,10 @@ export async function POST(request, { params }) {
       } catch {
         return errorResponse('Fotografía inválida', 400);
       }
+    }
+
+    if (!(await categoryExists(sql, category))) {
+      return errorResponse('Selecciona una categoría de la lista.', 400);
     }
 
     const rows = await sql`

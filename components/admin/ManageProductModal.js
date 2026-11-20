@@ -7,7 +7,8 @@ const inputClass =
   'w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm outline-none focus:border-accent';
 
 export default function ManageProductModal({
-  product, onClose, onSaved
+  product, onClose, onSaved,
+  categories = [], onOpenCategories, createdCategory
 }) {
   const [form, setForm] = useState({
     name: product.name || '',
@@ -39,6 +40,15 @@ export default function ManageProductModal({
     setPreview(url);
     return () => URL.revokeObjectURL(url);
   }, [photo]);
+
+  useEffect(() => {
+    if (createdCategory?.name) {
+      setForm((current) => ({
+        ...current,
+        category: createdCategory.name
+      }));
+    }
+  }, [createdCategory]);
 
   const change = (key) => (event) => {
     setForm((current) => ({
@@ -260,15 +270,42 @@ export default function ManageProductModal({
               onChange={change('brand')}
             />
           </label>
-          <label className="space-y-1">
-            <span className="text-xs">Categoría *</span>
-            <input
-              required maxLength={100}
+          <div className="space-y-1">
+            <label
+              htmlFor="zg-edit-category"
+              className="block text-xs"
+            >
+              Categoría *
+            </label>
+            <select
+              id="zg-edit-category"
+              required
               className={inputClass}
+              style={{ colorScheme: 'dark' }}
               value={form.category}
               onChange={change('category')}
-            />
-          </label>
+            >
+              <option value="">Selecciona...</option>
+              {(
+                !form.category || categories.includes(form.category)
+                  ? categories
+                  : [form.category, ...categories]
+              ).map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+            {onOpenCategories && (
+              <button
+                type="button"
+                onClick={onOpenCategories}
+                className="text-[11px] font-semibold text-neon"
+              >
+                + Nueva categoría
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-2">

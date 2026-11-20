@@ -1,9 +1,10 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Search, Plus, Pencil, X, Package, AlertTriangle, Ban, RotateCcw } from 'lucide-react';
+import { Search, Plus, Pencil, X, Package, AlertTriangle, Ban, RotateCcw, LayoutGrid, Tag } from 'lucide-react';
 import { fmt, stockInfo } from '../../lib/utils';
 import ManageProductModal from './ManageProductModal';
+import CategoriesModule from './CategoriesModule';
 
 export default function Admin() {
   const [items, setItems] = useState([]);
@@ -20,6 +21,10 @@ export default function Admin() {
   const [photoPreview, setPhotoPreview] = useState('');
   const [photoUploading, setPhotoUploading] = useState(false);
   const [notice, setNotice] = useState('');
+  const [categoryList, setCategoryList] = useState([]);
+  const [showMenu, setShowMenu] = useState(false);
+  const [showCategories, setShowCategories] = useState(false);
+  const [createdCategory, setCreatedCategory] = useState(null);
 
   const loadProducts = useCallback(async () => {
     setLoading(true);
@@ -55,6 +60,33 @@ export default function Admin() {
   useEffect(() => {
     loadProducts();
   }, [loadProducts]);
+
+  const loadCategories = useCallback(async () => {
+    try {
+      const response = await fetch('/api/admin/categories', {
+        cache: 'no-store',
+        credentials: 'same-origin',
+      });
+      const data = await response.json().catch(() => ({}));
+
+      if (response.ok && data.ok && Array.isArray(data.categories)) {
+        setCategoryList(data.categories);
+      }
+    } catch {
+      /* el selector queda con la última lista cargada */
+    }
+  }, []);
+
+  useEffect(() => {
+    loadCategories();
+  }, [loadCategories]);
+
+  const categoryNames = categoryList.map((c) => c.name);
+
+  const openCategories = () => {
+    loadCategories();
+    setShowCategories(true);
+  };
 
   const cats = useMemo(
     () => [...new Set(items.map((p) => p.category).filter(Boolean))]
@@ -367,7 +399,17 @@ export default function Admin() {
             Administración de productos
           </p>
         </div>
-        <button
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShowMenu(true)}
+            className="flex items-center gap-1.5 rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-gray-200"
+            aria-label="Abrir módulos"
+          >
+            <LayoutGrid size={16} />
+            Módulos
+          </button>
+          <button
           onClick={loadProducts}
           disabled={loading}
           className="p-2 rounded-lg bg-white/5 text-gray-300 disabled:opacity-50"
@@ -376,6 +418,7 @@ export default function Admin() {
         >
           <RotateCcw size={18} className={loading ? 'animate-spin' : ''} />
         </button>
+        </div>
       </header>
 
       <section className="px-4 pt-4 grid grid-cols-3 gap-2">
@@ -541,6 +584,73 @@ export default function Admin() {
         </p>
       )}
 
+      {showMenu && (
+        <div
+          className="fixed inset-0 z-40 bg-black/60"
+          role="presentation"
+          onClick={() => setShowMenu(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Módulos del panel"
+            onClick={(event) => event.stopPropagation()}
+            className="absolute right-3 top-14 w-72 rounded-2xl border border-white/10 bg-card p-2 shadow-2xl"
+          >
+            <p className="px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+              Módulos
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowMenu(false)}
+              className="flex w-full items-center gap-3 rounded-xl bg-white/5 px-3 py-3 text-left"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/20 text-neon">
+                <Package size={18} />
+              </span>
+              <span>
+                <span className="block text-sm font-semibold">Productos</span>
+                <span className="block text-[11px] text-gray-400">
+                  Catálogo, precios y stock
+                </span>
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setShowMenu(false);
+                openCategories();
+              }}
+              className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left hover:bg-white/5"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/20 text-neon">
+                <Tag size={18} />
+              </span>
+              <span>
+                <span className="block text-sm font-semibold">Categorías</span>
+                <span className="block text-[11px] text-gray-400">
+                  Organiza tu catálogo
+                </span>
+              </span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showCategories && (
+        <CategoriesModule
+          categories={categoryList}
+          onClose={() => setShowCategories(false)}
+          onReload={loadCategories}
+          onCreated={(name) => {
+            setCreatedCategory({ name });
+            setNewForm((current) =>
+              current ? { ...current, category: name } : current
+            );
+          }}
+        />
+      )}
+
       {toggleError && (
         <div
           role="alert"
@@ -644,18 +754,36 @@ export default function Admin() {
                 />
               </label>
 
-              <label className="space-y-1">
-                <span className="text-xs text-gray-300">Categoría *</span>
-                <input
+              <div className="space-y-1">
+                <label
+                  htmlFor="zg-new-category"
+                  className="block text-xs text-gray-300"
+                >
+                  Categoría *
+                </label>
+                <select
+                  id="zg-new-category"
                   required
-                  maxLength={100}
                   className={input}
+                  style={{ colorScheme: 'dark' }}
                   value={newForm.category}
                   onChange={updateNew('category')}
-                  placeholder="Ej. Sillas gamer"
-                  list="zg-new-categories"
-                />
-              </label>
+                >
+                  <option value="">Selecciona...</option>
+                  {categoryNames.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={openCategories}
+                  className="text-[11px] font-semibold text-neon"
+                >
+                  + Nueva categoría
+                </button>
+              </div>
             </div>
 
             <datalist id="zg-new-brands">
@@ -663,12 +791,6 @@ export default function Admin() {
                 .map((brand) => (
                   <option key={brand} value={brand} />
                 ))}
-            </datalist>
-
-            <datalist id="zg-new-categories">
-              {cats.map((category) => (
-                <option key={category} value={category} />
-              ))}
             </datalist>
 
             <div className="grid grid-cols-2 gap-2">
@@ -805,6 +927,9 @@ export default function Admin() {
 
       {managing && (
         <ManageProductModal
+          categories={categoryNames}
+          onOpenCategories={openCategories}
+          createdCategory={createdCategory}
           product={managing}
           onClose={() => setManaging(null)}
           onSaved={async (message) => {

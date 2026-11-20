@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getSql } from '../../../../../lib/db';
+import { categoryExists } from '../../../../../lib/categories';
 import {
   hasAdminSession,
   sameOrigin
@@ -161,6 +162,10 @@ export async function POST(request) {
     }
 
     const sql = getSql();
+
+    if (!(await categoryExists(sql, category))) {
+      return fail('Selecciona una categoría de la lista.', 400);
+    }
 
     const rows = await sql`
       WITH new_product AS (
