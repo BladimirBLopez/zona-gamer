@@ -133,21 +133,50 @@ html[data-theme='light'] .hover\:text-accent:hover { color: #c2410c; }
   pointer-events: none;
 }
 
-/* ===== ADMIN-UI: paleta del panel (no afecta la tienda) ===== */
-html[data-theme='dark'] .admin-ui.bg-bg { background-color: #0b0b0f; }
-html[data-theme='dark'] .admin-ui .bg-bg { background-color: #111116; }
-html[data-theme='dark'] .admin-ui .bg-bg\/95 { background-color: rgba(17, 17, 22, 0.94); }
-html[data-theme='dark'] .admin-ui .bg-card { background-color: #17171d; }
-html[data-theme='dark'] .admin-ui .bg-white\/5 { background-color: #1f1f27; }
-html[data-theme='dark'] .admin-ui .bg-white\/10 { background-color: #2a2a34; }
-html[data-theme='dark'] .admin-ui .border-white\/10 { border-color: #2a2a34; }
-html[data-theme='dark'] .admin-ui .text-gray-300 { color: #d4d4d8; }
-html[data-theme='dark'] .admin-ui .text-gray-400 { color: #a1a1aa; }
-html[data-theme='dark'] .admin-ui .text-gray-500 { color: #8b8b95; }
-html[data-theme='dark'] .admin-ui img.bg-black\/40 { background-color: #ffffff; }
-html[data-theme='dark'] .admin-ui section.sticky button.rounded-full:not(.bg-accent) { background-color: #17171d; }
-html[data-theme='dark'] .admin-ui > header { position: relative; }
-html[data-theme='dark'] .admin-ui > header::after {
+/* ===== ADMIN-UI: panel claro profesional (no afecta la tienda) ===== */
+html body .admin-ui { color-scheme: light; }
+html body .admin-ui.bg-bg { background-color: #f4f5f7; }
+html body .admin-ui.text-gray-100,
+html body .admin-ui .text-gray-100 { color: #18181b; }
+html body .admin-ui .bg-bg { background-color: #ffffff; }
+html body .admin-ui .bg-bg\/95 { background-color: rgba(244, 245, 247, 0.95); }
+html body .admin-ui nav.bg-bg\/95 { background-color: rgba(255, 255, 255, 0.97); }
+html body .admin-ui .bg-card { background-color: #ffffff; }
+html body .admin-ui .bg-white\/5 { background-color: #f4f4f5; }
+html body .admin-ui .bg-white\/10 { background-color: #e4e4e7; }
+html body .admin-ui .bg-white\/20 { background-color: #d4d4d8; }
+html body .admin-ui .bg-white\/\[0\.02\],
+html body .admin-ui .bg-white\/\[0\.03\],
+html body .admin-ui .bg-white\/\[0\.04\] { background-color: #fafafa; }
+html body .admin-ui .active\:bg-white\/5:active { background-color: #f4f4f5; }
+html body .admin-ui .border-white\/5,
+html body .admin-ui .border-white\/10,
+html body .admin-ui .border-white\/15 { border-color: #e4e4e7; }
+html body .admin-ui .border-white\/20 { border-color: #d4d4d8; }
+html body .admin-ui .text-gray-200 { color: #27272a; }
+html body .admin-ui .text-gray-300 { color: #3f3f46; }
+html body .admin-ui .text-gray-400 { color: #71717a; }
+html body .admin-ui .text-gray-500 { color: #71717a; }
+html body .admin-ui .text-gray-600 { color: #a1a1aa; }
+html body .admin-ui .text-neon { color: #e11d48; }
+html body .admin-ui .text-emerald-300 { color: #047857; }
+html body .admin-ui .text-amber-300 { color: #b45309; }
+html body .admin-ui .text-red-300,
+html body .admin-ui .text-red-200 { color: #b91c1c; }
+html body .admin-ui .bg-emerald-500\/20 { background-color: #ecfdf5; }
+html body .admin-ui .bg-amber-500\/20,
+html body .admin-ui .bg-amber-500\/10 { background-color: #fffbeb; }
+html body .admin-ui .bg-red-500\/20,
+html body .admin-ui .bg-red-500\/10 { background-color: #fef2f2; }
+html body .admin-ui .bg-accent\/10 { background-color: #fff1f2; }
+html body .admin-ui .bg-accent\/20 { background-color: #ffe4e6; }
+html body .admin-ui .border-amber-400\/30 { border-color: #fde68a; }
+html body .admin-ui .border-red-400\/30 { border-color: #fecaca; }
+html body .admin-ui .bg-black\/75 { background-color: rgba(24, 24, 27, 0.5); }
+html body .admin-ui img.bg-black\/40 { background-color: #ffffff; border: 1px solid #e4e4e7; }
+html body .admin-ui section.sticky button.rounded-full:not(.bg-accent) { background-color: #ffffff; }
+html body .admin-ui > header { position: relative; }
+html body .admin-ui > header::after {
   content: '';
   position: absolute;
   left: 0;
@@ -155,6 +184,6 @@ html[data-theme='dark'] .admin-ui > header::after {
   bottom: -1px;
   height: 2px;
   background: linear-gradient(90deg, transparent, #e11d48 50%, transparent);
-  opacity: 0.8;
+  opacity: 0.85;
   pointer-events: none;
 }

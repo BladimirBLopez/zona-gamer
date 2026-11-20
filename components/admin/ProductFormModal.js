@@ -464,7 +464,7 @@ export default function ProductFormModal({
                 <select
                   id="zg-brand"
                   className={fieldClass}
-                  style={{ colorScheme: 'dark' }}
+                  style={{ colorScheme: 'light' }}
                   value={brandMode}
                   onChange={changeBrandSelect}
                   disabled={busy}
@@ -500,7 +500,7 @@ export default function ProductFormModal({
                 <select
                   id="zg-category"
                   className={fieldClass}
-                  style={{ colorScheme: 'dark' }}
+                  style={{ colorScheme: 'light' }}
                   value={form.category}
                   onChange={change('category')}
                   disabled={busy}

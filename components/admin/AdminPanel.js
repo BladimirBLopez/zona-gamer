@@ -369,7 +369,7 @@ export default function Admin() {
                     {p.brand} · {p.category}
                   </span>
                   <span className="mt-0.5 flex items-center gap-2">
-                    <span className="text-sm font-bold text-white">
+                    <span className="text-sm font-bold text-gray-100">
                       {p.price > 0 ? `Bs ${fmt(p.price)}` : 'Consultar'}
                     </span>
                     <span className={`rounded-full px-2 py-0.5 text-[10px] ${s.cls}`}>
@@ -447,7 +447,7 @@ export default function Admin() {
         </p>
       )}
 
-      <Toaster theme="dark" position="top-center" richColors closeButton />
+      <Toaster theme="light" position="top-center" richColors closeButton />
 
       {showCategories && (
         <CategoriesModule
