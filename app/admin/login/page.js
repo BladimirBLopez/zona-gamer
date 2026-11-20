@@ -46,7 +46,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-bg px-4 py-10 text-gray-100">
+    <main className="admin-ui admin-login flex min-h-screen items-center justify-center bg-bg px-4 py-10 text-gray-100">
       <form
         onSubmit={login}
         className="w-full max-w-sm space-y-5 rounded-2xl border border-white/10 bg-card p-6 shadow-xl"
