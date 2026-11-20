@@ -192,7 +192,9 @@ export default function Admin() {
   };
 
   const uploadPhoto = async () => {
-    if (!selectedPhoto || photoUploading || newSaving) return;
+    if (!selectedPhoto) {
+      throw new Error('Selecciona una fotografía.');
+    }
 
     setPhotoUploading(true);
     setNewError('');
@@ -263,8 +265,9 @@ export default function Admin() {
 
       setSelectedPhoto(null);
       setNewError('');
+      return result.secure_url;
     } catch (error) {
-      setNewError(
+      throw new Error(
         error.message || 'No se pudo subir la fotografía.'
       );
     } finally {
@@ -342,7 +345,7 @@ export default function Admin() {
       !payload.name ||
       !payload.brand ||
       !payload.category ||
-      !payload.image
+      (!selectedPhoto && !payload.image)
     ) {
       setNewError('Completa nombre, marca, categoría y fotografía.');
       return;
@@ -352,6 +355,10 @@ export default function Admin() {
     setNewError('');
 
     try {
+      if (!payload.image) {
+        payload.image = await uploadPhoto();
+      }
+
       const response = await fetch('/api/admin/products/create', {
         method: 'POST',
         credentials: 'same-origin',
@@ -731,18 +738,6 @@ export default function Admin() {
                 </div>
               )}
 
-              {selectedPhoto && (
-                <button
-                  type="button"
-                  onClick={uploadPhoto}
-                  disabled={photoUploading || newSaving}
-                  className="w-full rounded-lg bg-accent py-2.5 text-sm font-semibold disabled:opacity-50"
-                >
-                  {photoUploading
-                    ? 'Subiendo fotografía...'
-                    : 'Subir fotografía a Cloudinary'}
-                </button>
-              )}
 
               {newForm.image && !selectedPhoto && (
                 <p className="text-xs text-emerald-300">
@@ -751,28 +746,10 @@ export default function Admin() {
               )}
 
               <p className="text-[11px] text-gray-400">
-                Formatos JPG, PNG o WebP. Máximo 8 MB.
+                JPG, PNG o WebP. Máximo 8 MB. Se subirá automáticamente al guardar.
               </p>
             </div>
 
-            <label className="block space-y-1">
-              <span className="text-xs text-gray-300">
-                URL de fotografía de Cloudinary *
-              </span>
-              <input
-                required
-                type="url"
-                maxLength={2000}
-                className={input}
-                value={newForm.image}
-                onChange={updateNew('image')}
-                placeholder="https://res.cloudinary.com/..."
-              />
-              <span className="block text-[11px] text-gray-400">
-                Se completa automáticamente al subir una foto.
-                También puedes pegar una URL manualmente.
-              </span>
-            </label>
 
             {newError && (
               <p
@@ -789,10 +766,10 @@ export default function Admin() {
               className="w-full rounded-lg bg-accent py-3 text-sm font-semibold disabled:opacity-50"
             >
               {newSaving
-                ? 'Registrando en Neon...'
-                : photoUploading
+                ? photoUploading
                   ? 'Subiendo fotografía...'
-                  : 'Guardar producto'}
+                  : 'Guardando producto...'
+                : 'Guardar producto'}
             </button>
           </form>
         </div>
