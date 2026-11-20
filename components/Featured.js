@@ -1,4 +1,5 @@
 'use client';
+import { optImg } from '../lib/img-url';
 import { useCallback } from 'react';
 import Link from 'next/link';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -45,7 +46,7 @@ export default function Featured({ products }) {
               >
                 <div className="flex aspect-[4/3] items-center justify-center bg-[#f1f1f4]">
                   <img
-                    src={p.image}
+                    src={optImg(p.image, 600)}
                     alt={p.name}
                     loading="lazy"
                     draggable={false}

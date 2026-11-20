@@ -1,4 +1,5 @@
 'use client';
+import { optImg } from '../lib/img-url';
 import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, MessageCircle, Check } from 'lucide-react';
@@ -40,7 +41,7 @@ export default function ProductModal({ p, onClose }) {
             className="relative max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-white/10 bg-[#0b1322] sm:rounded-3xl"
           >
             <div className="relative flex h-44 items-center justify-center bg-[#f1f1f4] text-8xl sm:h-56">
-              {p.image ? <img src={p.image} alt={p.name} className="h-full w-full object-contain p-3" /> : p.emoji}
+              {p.image ? <img src={optImg(p.image, 800)} alt={p.name} className="h-full w-full object-contain p-3" /> : p.emoji}
               <button
                 type="button"
                 onClick={onClose}

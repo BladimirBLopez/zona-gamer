@@ -1,4 +1,5 @@
 'use client';
+import { optImg } from '../lib/img-url';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
@@ -30,7 +31,7 @@ export default function ProductCard({ p, i }) {
         <div className="relative aspect-square w-full overflow-hidden bg-[#f1f1f4] sm:aspect-[4/3]">
           {p.image ? (
             <img
-              src={p.image}
+              src={optImg(p.image, 600)}
               alt={p.name}
               loading="lazy"
               className="h-full w-full object-contain scale-[1.1] transition duration-300 group-hover:scale-[1.15]"

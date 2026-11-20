@@ -1,3 +1,4 @@
+import { optImg } from '../lib/img-url';
 import Link from 'next/link';
 
 const choices = [
@@ -49,7 +50,7 @@ export default function HomeCategories({ products }) {
             <div className="flex aspect-[4/3] items-center justify-center bg-[#f1f1f4]">
               {c.image ? (
                 <img
-                  src={c.image}
+                  src={optImg(c.image, 600)}
                   alt={`Explorar ${c.name}`}
                   loading="lazy"
                   className="h-full w-full object-contain p-3 transition duration-300 group-hover:scale-105"

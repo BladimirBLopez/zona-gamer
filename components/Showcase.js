@@ -1,4 +1,5 @@
 'use client';
+import { optImg } from '../lib/img-url';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
@@ -30,7 +31,7 @@ export default function Showcase({ products }) {
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: c.delay }}
               >
-                <img src={c.p.image} alt={c.p.name} className="h-full w-full object-contain p-1" />
+                <img src={optImg(c.p.image, 700)} alt={c.p.name} className="h-full w-full object-contain p-1" />
               </motion.div>
             </Link>
           </div>
