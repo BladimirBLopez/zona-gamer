@@ -45,7 +45,7 @@ export async function GET() {
                 'url', i.image_url,
                 'position', i.position
               )
-              ORDER BY i.position
+              ORDER BY COALESCE(i.is_primary, FALSE) DESC, i.position ASC
             )
             FROM product_images i
             WHERE i.product_id = p.id

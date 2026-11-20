@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Search, Plus, Pencil, X, Package, AlertTriangle, Ban, RotateCcw } from 'lucide-react';
 import { fmt, stockInfo } from '../../lib/utils';
+import ManageProductModal from './ManageProductModal';
 
 export default function Admin() {
   const [items, setItems] = useState([]);
@@ -11,6 +12,7 @@ export default function Admin() {
   const [unauthorized, setUnauthorized] = useState(false);
   const [q, setQ] = useState('');
   const [cat, setCat] = useState('Todas');
+  const [managing, setManaging] = useState(null);
   const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
@@ -392,7 +394,7 @@ export default function Admin() {
             Panel <span className="text-neon">Zona Gamer</span>
           </h1>
           <p className="text-[11px] text-gray-400">
-            Productos reales de Neon · Solo lectura
+            Administración de productos
           </p>
         </div>
         <button
@@ -486,6 +488,11 @@ export default function Admin() {
               />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold truncate">{p.name}</p>
+                {p.active === false && (
+                  <p className="text-[11px] font-semibold text-amber-300">
+                    Oculto de la tienda
+                  </p>
+                )}
                 <p className="text-[11px] text-gray-400 truncate">
                   {p.brand} · {p.category}
                 </p>
@@ -501,15 +508,25 @@ export default function Admin() {
                   <span className="text-xs text-gray-400">
                     Stock: {p.stock}
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => openEditor(p)}
-                    className="flex items-center gap-1 rounded-lg bg-white/10 px-3 py-1.5 text-xs"
-                    aria-label={`Editar ${p.name}`}
-                  >
-                    <Pencil size={13} />
-                    Editar
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => openEditor(p)}
+                      className="rounded-lg bg-white/10 px-2 py-1.5 text-[11px]"
+                      aria-label={`Editar precio y stock de ${p.name}`}
+                    >
+                      Precio/stock
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setManaging(p)}
+                      className="flex items-center gap-1 rounded-lg bg-accent px-2 py-1.5 text-[11px]"
+                      aria-label={`Editar todos los datos de ${p.name}`}
+                    >
+                      <Pencil size={12} />
+                      Editar todo
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -525,8 +542,8 @@ export default function Admin() {
 
       {!loading && !error && (
         <p className="px-4 pt-5 text-center text-xs text-gray-500">
-          Los cambios de precio y stock se guardan en Neon.
-          Usa «Nuevo producto» para agregar productos al catálogo.
+          Agrega, edita, oculta y vuelve a publicar productos
+          desde este panel.
         </p>
       )}
 
@@ -775,6 +792,17 @@ export default function Admin() {
         </div>
       )}
 
+      {managing && (
+        <ManageProductModal
+          product={managing}
+          onClose={() => setManaging(null)}
+          onSaved={async (message) => {
+            setManaging(null);
+            setNotice(message);
+            await loadProducts();
+          }}
+        />
+      )}
       {editing && (
         <div
           className="fixed inset-0 z-30 bg-black/70 flex items-end sm:items-center justify-center"

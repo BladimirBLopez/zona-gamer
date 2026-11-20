@@ -36,7 +36,7 @@ export async function GET() {
         COALESCE(
           (
             SELECT json_agg(
-              i.image_url ORDER BY i.position
+              i.image_url ORDER BY COALESCE(i.is_primary, FALSE) DESC, i.position ASC
             )
             FROM product_images i
             WHERE i.product_id = p.id
