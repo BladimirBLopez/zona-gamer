@@ -48,7 +48,7 @@ export async function GET() {
               ORDER BY COALESCE(i.is_primary, FALSE) DESC, i.position ASC
             )
             FROM product_images i
-            WHERE i.product_id = p.id
+            WHERE i.product_id = p.id AND COALESCE(i.active, TRUE)
           ),
           '[]'::json
         ) AS images

@@ -39,10 +39,21 @@ export async function GET() {
               i.image_url ORDER BY COALESCE(i.is_primary, FALSE) DESC, i.position ASC
             )
             FROM product_images i
-            WHERE i.product_id = p.id
+            WHERE i.product_id = p.id AND COALESCE(i.active, TRUE)
           ),
           '[]'::json
-        ) AS image_urls
+        ) AS image_urls,
+        COALESCE(
+          (
+            SELECT json_agg(
+              json_build_object('id', i.id, 'url', i.image_url)
+              ORDER BY COALESCE(i.is_primary, FALSE) DESC, i.position ASC, i.id ASC
+            )
+            FROM product_images i
+            WHERE i.product_id = p.id AND COALESCE(i.active, TRUE)
+          ),
+          '[]'::json
+        ) AS photo_rows
       FROM products p
       ORDER BY p.sort_order, p.id
     `;
@@ -74,6 +85,11 @@ export async function GET() {
         active: p.active,
         sortOrder: p.sort_order,
         image: optimize(images[0], 1000),
+        photos: (p.photo_rows || []).map((row) => ({
+          id: row.id,
+          url: row.url,
+          thumb: optimize(row.url, 500)
+        })),
         gallery: images.length > 1
           ? images.map((url) => optimize(url, 1200))
           : undefined

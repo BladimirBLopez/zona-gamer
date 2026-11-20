@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Search, Plus, Pencil, X, Package, AlertTriangle, Ban, RotateCcw, LayoutGrid, Tag } from 'lucide-react';
 import { fmt, stockInfo } from '../../lib/utils';
 import ProductFormModal from './ProductFormModal';
+import { Toaster, toast } from 'sonner';
 import CategoriesModule from './CategoriesModule';
 
 export default function Admin() {
@@ -15,7 +16,9 @@ export default function Admin() {
   const [cat, setCat] = useState('Todas');
   const [managing, setManaging] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
-  const [notice, setNotice] = useState('');
+  const setNotice = (message) => {
+    if (message) toast.success(message);
+  };
   const [categoryList, setCategoryList] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
@@ -106,7 +109,9 @@ export default function Admin() {
   };
 
   const [toggling, setToggling] = useState(null);
-  const [toggleError, setToggleError] = useState('');
+  const setToggleError = (message) => {
+    if (message) toast.error(message);
+  };
 
   const toggleVisibility = async (product) => {
     if (toggling !== null) return;
@@ -358,6 +363,8 @@ export default function Admin() {
         </p>
       )}
 
+      <Toaster theme="dark" position="top-center" richColors closeButton />
+
       {showMenu && (
         <div
           className="fixed inset-0 z-40 bg-black/60"
@@ -418,40 +425,6 @@ export default function Admin() {
           onReload={loadCategories}
           onCreated={(name) => setCreatedCategory({ name })}
         />
-      )}
-
-      {toggleError && (
-        <div
-          role="alert"
-          className="fixed left-4 right-4 top-16 z-40 mx-auto flex max-w-lg items-start justify-between gap-3 rounded-xl border border-red-400/30 bg-red-950 p-3 text-sm text-red-100 shadow-xl"
-        >
-          <span>{toggleError}</span>
-          <button
-            type="button"
-            onClick={() => setToggleError('')}
-            aria-label="Cerrar aviso"
-            className="shrink-0 rounded-lg p-1"
-          >
-            <X size={16} />
-          </button>
-        </div>
-      )}
-
-      {notice && (
-        <div
-          role="status"
-          className="fixed left-4 right-4 top-16 z-40 mx-auto flex max-w-lg items-start justify-between gap-3 rounded-xl border border-emerald-500/30 bg-[#123227] p-3 text-sm text-emerald-100 shadow-xl"
-        >
-          <span>{notice}</span>
-          <button
-            type="button"
-            onClick={() => setNotice('')}
-            aria-label="Cerrar aviso"
-            className="shrink-0 rounded-lg p-1"
-          >
-            <X size={16} />
-          </button>
-        </div>
       )}
 
       {!loading && !error && (

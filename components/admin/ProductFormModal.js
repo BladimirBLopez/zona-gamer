@@ -1,13 +1,9 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { X, Camera, ImagePlus, Loader2, Minus, Plus } from 'lucide-react';
-
-const CLOUD = 'dkq95jus0';
-const UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`;
-const ACCEPTED = ['image/jpeg', 'image/png', 'image/webp'];
-const MAX_PICK = 25 * 1024 * 1024;
-const MAX_UPLOAD = 8 * 1024 * 1024;
+import { X, Loader2, Minus, Plus } from 'lucide-react';
+import PhotoManager from './PhotoManager';
+import { uploadPhoto } from './photo-tools';
 
 const fieldClass =
   'w-full rounded-xl bg-white/5 border border-white/10 px-3.5 py-3 text-base outline-none transition focus:border-accent focus:bg-white/[0.07] disabled:opacity-60';
@@ -37,7 +33,17 @@ function initialForm(product) {
   };
 }
 
-function validate(form, hasPhoto, needPhoto) {
+function initialPhotos(product) {
+  return Array.isArray(product?.photos)
+    ? product.photos.map((p) => ({
+        key: `e${p.id}`,
+        id: p.id,
+        preview: p.thumb || p.url
+      }))
+    : [];
+}
+
+function validate(form, photoCount) {
   const e = {};
   const name = form.name.trim();
   const brand = form.brand.trim();
@@ -70,87 +76,20 @@ function validate(form, hasPhoto, needPhoto) {
     e.features = 'Máximo 30 características de 200 caracteres cada una.';
   }
 
-  if (needPhoto && !hasPhoto) e.photo = 'Agrega una fotografía del producto.';
+  if (photoCount < 1) e.photo = 'Agrega al menos una fotografía del producto.';
 
   return e;
 }
 
-async function prepareImage(file) {
-  const MAX = 1600;
-  let url = '';
+async function postJson(url, body) {
+  let response;
 
   try {
-    url = URL.createObjectURL(file);
-
-    const img = await new Promise((resolve, reject) => {
-      const el = new Image();
-      el.onload = () => resolve(el);
-      el.onerror = reject;
-      el.src = url;
-    });
-
-    const scale = Math.min(
-      1,
-      MAX / Math.max(img.naturalWidth, img.naturalHeight)
-    );
-    const w = Math.max(1, Math.round(img.naturalWidth * scale));
-    const h = Math.max(1, Math.round(img.naturalHeight * scale));
-
-    const canvas = document.createElement('canvas');
-    canvas.width = w;
-    canvas.height = h;
-
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, w, h);
-    ctx.drawImage(img, 0, 0, w, h);
-
-    const blob = await new Promise((resolve) =>
-      canvas.toBlob(resolve, 'image/jpeg', 0.86)
-    );
-
-    if (blob && blob.size < file.size) {
-      return new File([blob], 'producto.jpg', { type: 'image/jpeg' });
-    }
-  } catch {
-    /* si no se puede reducir, se usa la original */
-  } finally {
-    if (url) URL.revokeObjectURL(url);
-  }
-
-  return file;
-}
-
-async function fetchRetry(url, options, tries = 2) {
-  let last;
-
-  for (let i = 0; i < tries; i += 1) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 60000);
-
-    try {
-      return await fetch(url, { ...options, signal: controller.signal });
-    } catch (error) {
-      last = error;
-      if (i < tries - 1) {
-        await new Promise((resolve) => setTimeout(resolve, 800));
-      }
-    } finally {
-      clearTimeout(timer);
-    }
-  }
-
-  throw last;
-}
-
-async function uploadPhoto(file) {
-  let sign;
-
-  try {
-    sign = await fetchRetry('/api/admin/cloudinary/sign', {
+    response = await fetch(url, {
       method: 'POST',
       credentials: 'same-origin',
-      cache: 'no-store'
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
     });
   } catch {
     throw new Error(
@@ -158,60 +97,17 @@ async function uploadPhoto(file) {
     );
   }
 
-  const auth = await sign.json().catch(() => ({}));
+  const result = await response.json().catch(() => ({}));
 
-  if (sign.status === 401) {
+  if (response.status === 401) {
     throw new Error('Tu sesión expiró. Vuelve a iniciar sesión.');
   }
 
-  if (!sign.ok || !auth.ok) {
-    throw new Error(
-      auth.error || 'No se pudo autorizar la subida de la fotografía.'
-    );
+  if (!response.ok || !result.ok) {
+    throw new Error(result.error || 'No se pudo guardar.');
   }
 
-  if (auth.cloud_name !== CLOUD) {
-    throw new Error('Configuración de fotografías incorrecta.');
-  }
-
-  const data = new FormData();
-  data.append('file', file);
-
-  for (const key of [
-    'api_key', 'timestamp', 'folder', 'allowed_formats', 'signature'
-  ]) {
-    data.append(key, String(auth[key]));
-  }
-
-  let response;
-
-  try {
-    response = await fetchRetry(UPLOAD_URL, { method: 'POST', body: data });
-  } catch {
-    throw new Error(
-      'No se pudo conectar con el servicio de fotografías. Revisa tu internet o desactiva el bloqueador de contenido e inténtalo de nuevo.'
-    );
-  }
-
-  const result = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(
-      result.error?.message || 'No se pudo subir la fotografía.'
-    );
-  }
-
-  const url = result.secure_url;
-
-  if (
-    result.resource_type !== 'image' ||
-    typeof url !== 'string' ||
-    !url.startsWith(`https://res.cloudinary.com/${CLOUD}/image/upload/`)
-  ) {
-    throw new Error('La fotografía recibida no es válida.');
-  }
-
-  return url;
+  return result;
 }
 
 function Section({ title, subtitle, children }) {
@@ -258,36 +154,44 @@ export default function ProductFormModal({
   onSaved
 }) {
   const isEdit = mode === 'edit' && Boolean(product);
+
   const initial = useMemo(
     () => initialForm(isEdit ? product : null),
     [isEdit, product]
   );
+  const initialKeys = useMemo(
+    () => initialPhotos(isEdit ? product : null).map((p) => p.key).join(','),
+    [isEdit, product]
+  );
 
   const [form, setForm] = useState(initial);
-  const [photo, setPhoto] = useState(null);
-  const [preview, setPreview] = useState('');
-  const [uploadedUrl, setUploadedUrl] = useState('');
+  const [photos, setPhotos] = useState(() =>
+    initialPhotos(isEdit ? product : null)
+  );
   const [preparing, setPreparing] = useState(false);
   const [photoError, setPhotoError] = useState('');
   const [step, setStep] = useState('');
+  const [progress, setProgress] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [formError, setFormError] = useState('');
 
-  const fileRef = useRef(null);
   const bodyRef = useRef(null);
   const seenCategory = useRef(createdCategory);
+  const createdRef = useRef(null);
+  const photosRef = useRef(photos);
+  photosRef.current = photos;
 
   const busy = step !== '';
 
   const errors = useMemo(
-    () => validate(form, Boolean(photo || uploadedUrl), !isEdit),
-    [form, photo, uploadedUrl, isEdit]
+    () => validate(form, photos.length),
+    [form, photos.length]
   );
   const shown = submitted ? errors : {};
 
   const dirty =
     JSON.stringify(form) !== JSON.stringify(initial) ||
-    Boolean(photo || uploadedUrl);
+    photos.map((p) => p.key).join(',') !== initialKeys;
 
   const categoryOptions = useMemo(
     () =>
@@ -298,18 +202,6 @@ export default function ProductFormModal({
   );
 
   useEffect(() => {
-    if (!photo) {
-      setPreview('');
-      return undefined;
-    }
-
-    const url = URL.createObjectURL(photo);
-    setPreview(url);
-
-    return () => URL.revokeObjectURL(url);
-  }, [photo]);
-
-  useEffect(() => {
     const previous = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
@@ -317,6 +209,15 @@ export default function ProductFormModal({
       document.body.style.overflow = previous;
     };
   }, []);
+
+  useEffect(
+    () => () => {
+      photosRef.current.forEach((p) => {
+        if (p.local) URL.revokeObjectURL(p.preview);
+      });
+    },
+    []
+  );
 
   useEffect(() => {
     if (createdCategory && createdCategory !== seenCategory.current) {
@@ -337,39 +238,6 @@ export default function ProductFormModal({
       return { ...current, stock: String(next) };
     });
   };
-
-  async function onPick(event) {
-    const file = event.target.files?.[0];
-    event.target.value = '';
-
-    if (!file) return;
-
-    if (!ACCEPTED.includes(file.type)) {
-      setPhotoError('Usa una fotografía JPG, PNG o WebP.');
-      return;
-    }
-
-    if (file.size > MAX_PICK) {
-      setPhotoError('La fotografía es demasiado grande (máximo 25 MB).');
-      return;
-    }
-
-    setPhotoError('');
-    setFormError('');
-    setPreparing(true);
-
-    const ready = await prepareImage(file);
-
-    setPreparing(false);
-
-    if (ready.size > MAX_UPLOAD) {
-      setPhotoError('La fotografía sigue siendo muy pesada. Prueba con otra.');
-      return;
-    }
-
-    setPhoto(ready);
-    setUploadedUrl('');
-  }
 
   function requestClose() {
     if (busy) return;
@@ -413,48 +281,61 @@ export default function ProductFormModal({
     };
 
     try {
-      let image = uploadedUrl;
+      let list = [...photos];
+      const pending = list.filter((p) => p.file && !p.remoteUrl).length;
 
-      if (photo && !image) {
+      if (pending > 0) {
         setStep('upload');
-        image = await uploadPhoto(photo);
-        setUploadedUrl(image);
+        let done = 0;
+
+        for (let i = 0; i < list.length; i += 1) {
+          if (list[i].file && !list[i].remoteUrl) {
+            done += 1;
+            setProgress(`${done} de ${pending}`);
+
+            const url = await uploadPhoto(list[i].file);
+            list[i] = { ...list[i], remoteUrl: url };
+            setPhotos([...list]);
+          }
+        }
       }
 
-      if (image) payload.image = image;
+      const items = list.map((p) =>
+        p.id ? { id: p.id } : { url: p.remoteUrl }
+      );
 
       setStep('save');
 
-      let response;
+      if (isEdit) {
+        await postJson(`/api/admin/products/${product.id}`, {
+          action: 'update',
+          ...payload
+        });
 
-      try {
-        response = await fetch(
-          isEdit
-            ? `/api/admin/products/${product.id}`
-            : '/api/admin/products/create',
-          {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(
-              isEdit ? { action: 'update', ...payload } : payload
-            )
+        await postJson(`/api/admin/products/${product.id}/photos`, {
+          items
+        });
+      } else {
+        if (!createdRef.current) {
+          const created = await postJson('/api/admin/products/create', {
+            ...payload,
+            image: items[0].url
+          });
+          createdRef.current = created.product.id;
+        }
+
+        if (items.length > 1) {
+          try {
+            await postJson(
+              `/api/admin/products/${createdRef.current}/photos`,
+              { items }
+            );
+          } catch (error) {
+            throw new Error(
+              `El producto ya se guardó, pero las fotografías no. ${error.message}`
+            );
           }
-        );
-      } catch {
-        throw new Error(
-          'No hay conexión con el servidor. El producto no se guardó; revisa tu internet e inténtalo de nuevo.'
-        );
-      }
-
-      const result = await response.json().catch(() => ({}));
-
-      if (response.status === 401) {
-        throw new Error('Tu sesión expiró. Vuelve a iniciar sesión.');
-      }
-
-      if (!response.ok || !result.ok) {
-        throw new Error(result.error || 'No se pudo guardar el producto.');
+        }
       }
 
       await onSaved(
@@ -466,16 +347,17 @@ export default function ProductFormModal({
       setFormError(error.message || 'No se pudo guardar el producto.');
     } finally {
       setStep('');
+      setProgress('');
     }
   }
 
   const stockNumber = /^\d+$/.test(form.stock) ? Number(form.stock) : 0;
   const photoMessage = shown.photo || photoError;
-  const shownPhoto = preview || (isEdit ? product.image : '');
+  const hasPending = photos.some((p) => p.file && !p.remoteUrl);
 
   const submitLabel =
     step === 'upload'
-      ? 'Subiendo fotografía...'
+      ? `Subiendo fotografía ${progress}...`
       : step === 'save'
         ? 'Guardando...'
         : isEdit
@@ -520,101 +402,32 @@ export default function ProductFormModal({
           className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4"
         >
           <Section
-            title="Fotografía"
-            subtitle="Se mostrará en la tienda como imagen principal"
+            title="Fotografías"
+            subtitle="La primera es la portada. Ordénalas con el ícono ⠿ o las flechas."
           >
-            <input
-              ref={fileRef}
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              onChange={onPick}
-              className="hidden"
-            />
-
             <div data-error={photoMessage ? 'true' : undefined}>
-              <button
-                type="button"
-                onClick={() => fileRef.current?.click()}
-                disabled={busy || preparing}
-                aria-label={
-                  shownPhoto ? 'Cambiar fotografía' : 'Agregar fotografía'
-                }
-                className={`relative flex aspect-[4/3] max-h-64 w-full items-center justify-center overflow-hidden rounded-xl border transition disabled:opacity-70 ${
-                  shownPhoto
-                    ? 'border-white/10 bg-white'
-                    : photoMessage
-                      ? 'border-dashed border-red-400/60 bg-red-500/5'
-                      : 'border-dashed border-white/20 bg-white/5'
-                }`}
-              >
-                {shownPhoto ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={shownPhoto}
-                    alt="Fotografía del producto"
-                    className="h-full w-full object-contain"
-                  />
-                ) : (
-                  <span className="flex flex-col items-center gap-2 text-gray-300">
-                    <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/20 text-neon">
-                      <ImagePlus size={24} />
-                    </span>
-                    <span className="text-sm font-semibold">
-                      Agregar fotografía
-                    </span>
-                    <span className="text-[11px] text-gray-500">
-                      Toca para elegirla de tu galería
-                    </span>
-                  </span>
-                )}
-
-                {shownPhoto && !preparing && (
-                  <span className="absolute bottom-2 right-2 flex items-center gap-1.5 rounded-full bg-black/70 px-3 py-1.5 text-[11px] font-semibold text-white">
-                    <Camera size={13} />
-                    Cambiar
-                  </span>
-                )}
-
-                {preparing && (
-                  <span className="absolute inset-0 flex items-center justify-center gap-2 bg-black/60 text-sm font-semibold text-white">
-                    <Loader2 size={18} className="animate-spin" />
-                    Preparando...
-                  </span>
-                )}
-              </button>
+              <PhotoManager
+                items={photos}
+                onChange={setPhotos}
+                onError={setPhotoError}
+                onPreparing={setPreparing}
+                disabled={busy}
+              />
             </div>
 
             {photoMessage && (
               <p className="text-xs text-red-300">{photoMessage}</p>
             )}
 
-            {!photoMessage && uploadedUrl && (
-              <p className="text-xs text-emerald-300">
-                Fotografía subida correctamente.
-              </p>
-            )}
-
-            {!photoMessage && photo && !uploadedUrl && (
+            {!photoMessage && hasPending && (
               <p className="text-xs text-gray-400">
-                Lista para subir ({Math.max(1, Math.round(photo.size / 1024))}{' '}
-                KB). Se sube al guardar.
-              </p>
-            )}
-
-            {!photoMessage && !photo && isEdit && (
-              <p className="text-xs text-gray-400">
-                Si no eliges otra, se conserva la fotografía actual.
+                Las fotografías nuevas se suben al guardar.
               </p>
             )}
           </Section>
 
           <Section title="Información">
-            <Field
-              id="zg-name"
-              label="Nombre"
-              required
-              error={shown.name}
-            >
+            <Field id="zg-name" label="Nombre" required error={shown.name}>
               <input
                 id="zg-name"
                 className={fieldClass}
@@ -628,12 +441,7 @@ export default function ProductFormModal({
             </Field>
 
             <div className="grid grid-cols-2 gap-3">
-              <Field
-                id="zg-brand"
-                label="Marca"
-                required
-                error={shown.brand}
-              >
+              <Field id="zg-brand" label="Marca" required error={shown.brand}>
                 <input
                   id="zg-brand"
                   className={fieldClass}
@@ -690,12 +498,7 @@ export default function ProductFormModal({
 
           <Section title="Precio y existencias">
             <div className="grid grid-cols-2 gap-3">
-              <Field
-                id="zg-price"
-                label="Precio"
-                required
-                error={shown.price}
-              >
+              <Field id="zg-price" label="Precio" required error={shown.price}>
                 <div className="relative">
                   <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-gray-400">
                     Bs
