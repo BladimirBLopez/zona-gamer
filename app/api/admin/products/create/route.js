@@ -91,7 +91,7 @@ export async function POST(request) {
 
     const allowed = new Set([
       'name', 'brand', 'category', 'price', 'stock',
-      'colors', 'description', 'features', 'image'
+      'colors', 'description', 'features', 'image', 'images'
     ]);
 
     if (Object.keys(data).some((key) => !allowed.has(key))) {
@@ -148,11 +148,26 @@ export async function POST(request) {
       return fail('Características inválidas', 400);
     }
 
-    if (!image || !validCloudinaryUrl(image)) {
-      return fail(
-        'La fotografía debe ser una URL válida de Cloudinary de Zona Gamer',
-        400
-      );
+    const images = data.images === undefined
+      ? [image]
+      : data.images;
+
+    if (
+      !Array.isArray(images) ||
+      images.length < 1 ||
+      images.length > 10 ||
+      images.some((url) =>
+        typeof url !== 'string' ||
+        url.length > 2000 ||
+        !validCloudinaryUrl(url)
+      ) ||
+      new Set(images).size !== images.length
+    ) {
+      return fail('Fotografías inválidas o repetidas.', 400);
+    }
+
+    if (image !== images[0]) {
+      return fail('La portada no coincide.', 400);
     }
 
     const slug = slugify(name);
@@ -198,21 +213,25 @@ export async function POST(request) {
         )
         RETURNING id, name, slug, price, stock
       ),
-      new_image AS (
-        INSERT INTO product_images (
-          product_id,
-          image_url,
-          position,
-          is_primary
+        new_image AS (
+          INSERT INTO product_images (
+            product_id,
+            image_url,
+            position,
+            is_primary
+          )
+          SELECT
+            np.id,
+            v.url,
+            (v.ord - 1)::integer,
+            (v.ord = 1)
+          FROM new_product np
+          CROSS JOIN LATERAL
+            jsonb_array_elements_text(
+              ${JSON.stringify(images)}::jsonb
+            ) WITH ORDINALITY AS v(url, ord)
+          RETURNING product_id
         )
-        SELECT
-          id,
-          ${image},
-          0,
-          TRUE
-        FROM new_product
-        RETURNING product_id
-      )
       SELECT
         p.id,
         p.name,
@@ -220,7 +239,11 @@ export async function POST(request) {
         p.price,
         p.stock
       FROM new_product p
-      JOIN new_image i ON i.product_id = p.id
+        WHERE EXISTS (
+          SELECT 1
+          FROM new_image i
+          WHERE i.product_id = p.id
+        )
     `;
 
     if (rows.length !== 1) {

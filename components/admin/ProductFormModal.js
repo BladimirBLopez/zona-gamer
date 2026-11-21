@@ -181,6 +181,7 @@ export default function ProductFormModal({
   const bodyRef = useRef(null);
   const seenCategory = useRef(createdCategory);
   const createdRef = useRef(null);
+  const submittingRef = useRef(false);
   const photosRef = useRef(photos);
   photosRef.current = photos;
 
@@ -273,7 +274,7 @@ export default function ProductFormModal({
 
   async function submit(event) {
     event.preventDefault();
-    if (busy || preparing) return;
+    if (busy || preparing || submittingRef.current) return;
 
     setSubmitted(true);
     setFormError('');
@@ -299,8 +300,10 @@ export default function ProductFormModal({
       features: parseFeatures(form.features)
     };
 
+    submittingRef.current = true;
+
     try {
-      let list = [...photos];
+      const list = [...photos];
       const pending = list.filter((p) => p.file && !p.remoteUrl).length;
 
       if (pending > 0) {
@@ -319,42 +322,43 @@ export default function ProductFormModal({
         }
       }
 
+      if (list.length < 1 || list.length > 10) {
+        throw new Error('Cada producto debe tener entre 1 y 10 fotografías.');
+      }
+
+      if (list.some((p) => !p.id && !p.remoteUrl)) {
+        throw new Error('Hay fotografías sin subir. Intenta de nuevo.');
+      }
+
       const items = list.map((p) =>
         p.id ? { id: p.id } : { url: p.remoteUrl }
       );
 
       setStep('save');
 
-      if (isEdit) {
-        await postJson(`/api/admin/products/${product.id}`, {
-          action: 'update',
-          ...payload
-        });
+      const existingId = isEdit ? product.id : createdRef.current;
 
-        await postJson(`/api/admin/products/${product.id}/photos`, {
-          items
+      if (existingId) {
+        // Datos del producto y fotografías en una sola transacción.
+        await postJson(`/api/admin/products/${existingId}/photos`, {
+          items,
+          product: payload
         });
       } else {
-        if (!createdRef.current) {
-          const created = await postJson('/api/admin/products/create', {
-            ...payload,
-            image: items[0].url
-          });
-          createdRef.current = created.product.id;
+        const urls = items.map((item) => item.url);
+
+        if (urls.some((url) => !url)) {
+          throw new Error('Fotografías inválidas. Revisa la lista.');
         }
 
-        if (items.length > 1) {
-          try {
-            await postJson(
-              `/api/admin/products/${createdRef.current}/photos`,
-              { items }
-            );
-          } catch (error) {
-            throw new Error(
-              `El producto ya se guardó, pero las fotografías no. ${error.message}`
-            );
-          }
-        }
+        // Producto y todas sus fotografías en una sola sentencia SQL.
+        const created = await postJson('/api/admin/products/create', {
+          ...payload,
+          image: urls[0],
+          images: urls
+        });
+
+        createdRef.current = created.product.id;
       }
 
       await onSaved(
@@ -365,6 +369,7 @@ export default function ProductFormModal({
     } catch (error) {
       setFormError(error.message || 'No se pudo guardar el producto.');
     } finally {
+      submittingRef.current = false;
       setStep('');
       setProgress('');
     }
