@@ -315,7 +315,14 @@ export default function ProductFormModal({
             done += 1;
             setProgress(`${done} de ${pending}`);
 
-            const url = await uploadPhoto(list[i].file);
+            let url;
+            try {
+              url = await uploadPhoto(list[i].file);
+            } catch (uploadError) {
+              throw new Error(
+                `${uploadError.message} Las fotografías ya subidas no se repiten: toca de nuevo para continuar.`
+              );
+            }
             list[i] = { ...list[i], remoteUrl: url };
             setPhotos([...list]);
           }
@@ -381,7 +388,7 @@ export default function ProductFormModal({
 
   const submitLabel =
     step === 'upload'
-      ? `Subiendo fotografía ${progress}...`
+      ? `Subiendo foto ${progress} (no salgas)`
       : step === 'save'
         ? 'Guardando...'
         : isEdit

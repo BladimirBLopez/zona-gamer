@@ -52,19 +52,23 @@ export async function prepareImage(file) {
   return file;
 }
 
-async function fetchRetry(url, options, tries = 2) {
+async function fetchRetry(url, options, tries = 3) {
   let last;
 
   for (let i = 0; i < tries; i += 1) {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 60000);
+    const timer = setTimeout(() => controller.abort(), 45000);
 
     try {
-      return await fetch(url, { ...options, signal: controller.signal });
+      const res = await fetch(url, { ...options, signal: controller.signal });
+      if ((res.status >= 500 || res.status === 429) && i < tries - 1) {
+        throw new Error('HTTP ' + res.status);
+      }
+      return res;
     } catch (error) {
       last = error;
       if (i < tries - 1) {
-        await new Promise((resolve) => setTimeout(resolve, 800));
+        await new Promise((resolve) => setTimeout(resolve, 1200 * (i + 1)));
       }
     } finally {
       clearTimeout(timer);
@@ -72,6 +76,16 @@ async function fetchRetry(url, options, tries = 2) {
   }
 
   throw last;
+}
+
+function uploadFailMessage(error) {
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+    return 'Sin conexión a internet. Conéctate e inténtalo de nuevo.';
+  }
+  if (error && error.name === 'AbortError') {
+    return 'La subida tardó demasiado. Prueba con mejor señal.';
+  }
+  return 'No se pudo conectar con el servicio de fotografías. Revisa tu internet e inténtalo de nuevo. Si sigue igual, desactiva el bloqueador de contenido.';
 }
 
 export async function uploadPhoto(file) {
@@ -118,10 +132,8 @@ export async function uploadPhoto(file) {
 
   try {
     response = await fetchRetry(UPLOAD_URL, { method: 'POST', body: data });
-  } catch {
-    throw new Error(
-      'No se pudo conectar con el servicio de fotografías. Revisa tu internet o desactiva el bloqueador de contenido e inténtalo de nuevo.'
-    );
+  } catch (error) {
+    throw new Error(uploadFailMessage(error));
   }
 
   const result = await response.json().catch(() => ({}));
